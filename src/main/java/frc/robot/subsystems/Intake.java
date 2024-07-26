@@ -7,12 +7,30 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
+  talonfx rollerMotor;
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+    rollerMotor = new TalonFX(mapIntake.ROLLER_CAN, "rio");
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  
+  
+  
+  
   }
+  public void setIntakeRollerSpeed(double speed) {
+    rollerMotor.set(speed);
+  }
+
+  /**
+   * Sets the rollers to neutral.
+   */
+  public void setRollerNeutralOutput() {
+    rollerMotor.setControl(new NeutralOut());
+  }
+
+
 }
-h
