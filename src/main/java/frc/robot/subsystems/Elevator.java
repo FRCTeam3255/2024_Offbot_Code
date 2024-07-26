@@ -12,6 +12,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.constElevator;
 import frc.robot.RobotMap.mapElevator;
 import frc.robot.RobotPreferences.prefElevator;
 
@@ -36,6 +37,12 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.Slot0.kP = prefElevator.elevatorShooterP.getValue();
     elevatorConfig.Slot0.kI = prefElevator.elevatorShooterI.getValue();
     elevatorConfig.Slot0.kD = prefElevator.elevatorShooterD.getValue();
+
+    elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+    elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constElevator.FORWARD_LIMIT.in(Units.Rotations);
+
+    elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constElevator.FORWARD_LIMIT.in(Units.Rotations);
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);
   }

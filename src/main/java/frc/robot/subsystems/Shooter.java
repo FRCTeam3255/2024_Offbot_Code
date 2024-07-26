@@ -23,7 +23,7 @@ import frc.robot.RobotMap.mapShooter;
 import frc.robot.RobotPreferences.prefShooter;
 
 public class Shooter extends SubsystemBase {
-  TalonFX leftMotor, rightMotor, pivotMotor, feederMotor;
+  TalonFX leftMotor, rightMotor, pivotMotor;
   TalonFXConfiguration leftConfig, rightConfig, pivotConfig;
 
   MotionMagicVelocityVoltage motionMagicRequest;
@@ -41,7 +41,6 @@ public class Shooter extends SubsystemBase {
     leftMotor = new TalonFX(mapShooter.SHOOTER_LEFT_MOTOR_CAN, "rio");
     rightMotor = new TalonFX(mapShooter.SHOOTER_RIGHT_MOTOR_CAN, "rio");
     pivotMotor = new TalonFX(mapShooter.SHOOTER_PIVOT_MOTOR_CAN, "rio");
-    feederMotor = new TalonFX(mapShooter.SHOOTER_FEEDER_MOTOR_CAN, "rio");
 
     leftConfig = new TalonFXConfiguration();
     rightConfig = new TalonFXConfiguration();
@@ -82,6 +81,12 @@ public class Shooter extends SubsystemBase {
     pivotConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
     pivotConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
     pivotConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
+
+    pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+    pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
+
+    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
 
     leftMotor.getConfigurator().apply(leftConfig);
     rightMotor.getConfigurator().apply(rightConfig);
@@ -192,10 +197,6 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterPosition(Measure<Angle> position) {
     pivotMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
-  }
-
-  public void setFeederSpeed(double speed) {
-    feederMotor.set(speed);
   }
 
   @Override

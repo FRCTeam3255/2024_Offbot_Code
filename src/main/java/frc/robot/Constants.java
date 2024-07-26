@@ -107,6 +107,10 @@ public final class Constants {
     public static final boolean LEFT_INVERT = true;
     public static final boolean RIGHT_INVERT = false;
 
+    // - Angles -
+    public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Rotations.of(0);
+    public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Rotations.of(0);
+
     // - Velocities -
     public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(0.7);
 
@@ -126,6 +130,16 @@ public final class Constants {
 
     public static final Measure<Velocity<Angle>> LEFT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
     public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
+  }
+
+  public static class constClimber {
+    public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
+    public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
+  }
+
+  public static class constElevator {
+    public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
+    public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
   }
 
 }

@@ -38,12 +38,21 @@ public class RobotMap {
     public static final int SHOOTER_LEFT_MOTOR_CAN = 10;
     public static final int SHOOTER_RIGHT_MOTOR_CAN = 11;
     public static final int SHOOTER_PIVOT_MOTOR_CAN = 12;
-    public static final int SHOOTER_FEEDER_MOTOR_CAN = 13;
   }
 
-  // MOTORS: 20 -> 29
+  // MOTORS: 30 -> 39
   public static class mapElevator {
     public static final int ELEVATOR_MOTOR_CAN = 30;
     public static final int DRAINPIPE_MOTOR_CAN = 31;
+  }
+
+  // MOTORS: 40 -> 49
+  public static class mapClimber {
+    public static final int CLIMBER_MOTOR_CAN = 40;
+  }
+
+  // MOTORS: 50 -> 59
+  public static class mapTransfer {
+    public static final int TRANSFER_MOTOR_CAN = 50;
   }
 }
