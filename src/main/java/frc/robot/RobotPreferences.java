@@ -77,6 +77,16 @@ public class RobotPreferences {
     public static final SN_DoublePreference rightShooterP = new SN_DoublePreference("rightShooterP", 0.6);
     public static final SN_DoublePreference rightShooterI = new SN_DoublePreference("rightShooterI", 0);
     public static final SN_DoublePreference rightShooterD = new SN_DoublePreference("rightShooterD", 0.01);
+
+    public static final SN_DoublePreference pivotShooterP = new SN_DoublePreference("pivotShooterP", 0);
+    public static final SN_DoublePreference pivotShooterI = new SN_DoublePreference("pivotShooterI", 0);
+    public static final SN_DoublePreference pivotShooterD = new SN_DoublePreference("pivotShooterD", 0);
+  }
+
+  public static final class prefElevator {
+    public static final SN_DoublePreference elevatorShooterP = new SN_DoublePreference("elevatorShooterP", 0);
+    public static final SN_DoublePreference elevatorShooterI = new SN_DoublePreference("elevatorShooterI", 0);
+    public static final SN_DoublePreference elevatorShooterD = new SN_DoublePreference("elevatorShooterD", 0);
   }
 
   public static final class prefVision {
@@ -97,6 +107,5 @@ public class RobotPreferences {
      */
     public static final SN_DoublePreference multiTagStdDevsHeading = new SN_DoublePreference(
         "multiTagStdDevsHeading", 9999999);
-
   }
 }

@@ -37,5 +37,13 @@ public class RobotMap {
   public static class mapShooter {
     public static final int SHOOTER_LEFT_MOTOR_CAN = 10;
     public static final int SHOOTER_RIGHT_MOTOR_CAN = 11;
+    public static final int SHOOTER_PIVOT_MOTOR_CAN = 12;
+    public static final int SHOOTER_FEEDER_MOTOR_CAN = 13;
+  }
+
+  // MOTORS: 20 -> 29
+  public static class mapElevator {
+    public static final int ELEVATOR_MOTOR_CAN = 30;
+    public static final int DRAINPIPE_MOTOR_CAN = 31;
   }
 }

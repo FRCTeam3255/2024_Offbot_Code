@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -22,10 +23,11 @@ import frc.robot.RobotMap.mapShooter;
 import frc.robot.RobotPreferences.prefShooter;
 
 public class Shooter extends SubsystemBase {
-  TalonFX leftMotor, rightMotor;
-  TalonFXConfiguration leftConfig, rightConfig;
+  TalonFX leftMotor, rightMotor, pivotMotor, feederMotor;
+  TalonFXConfiguration leftConfig, rightConfig, pivotConfig;
 
   MotionMagicVelocityVoltage motionMagicRequest;
+  PositionVoltage positionRequest;
 
   VelocityVoltage velocityRequest;
   VoltageOut voltageRequest;
@@ -38,9 +40,12 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     leftMotor = new TalonFX(mapShooter.SHOOTER_LEFT_MOTOR_CAN, "rio");
     rightMotor = new TalonFX(mapShooter.SHOOTER_RIGHT_MOTOR_CAN, "rio");
+    pivotMotor = new TalonFX(mapShooter.SHOOTER_PIVOT_MOTOR_CAN, "rio");
+    feederMotor = new TalonFX(mapShooter.SHOOTER_FEEDER_MOTOR_CAN, "rio");
 
     leftConfig = new TalonFXConfiguration();
     rightConfig = new TalonFXConfiguration();
+    pivotConfig = new TalonFXConfiguration();
 
     leftInvert = constShooter.LEFT_INVERT;
     rightInvert = constShooter.RIGHT_INVERT;
@@ -48,6 +53,7 @@ public class Shooter extends SubsystemBase {
     voltageRequest = new VoltageOut(0);
     velocityRequest = new VelocityVoltage(0).withSlot(0);
     motionMagicRequest = new MotionMagicVelocityVoltage(0);
+    positionRequest = new PositionVoltage(0).withSlot(0);
 
     configure();
   }
@@ -73,8 +79,13 @@ public class Shooter extends SubsystemBase {
     rightConfig.MotionMagic.MotionMagicAcceleration = 400;
     rightConfig.MotionMagic.MotionMagicJerk = 4000;
 
+    pivotConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
+    pivotConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
+    pivotConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
+
     leftMotor.getConfigurator().apply(leftConfig);
     rightMotor.getConfigurator().apply(rightConfig);
+    pivotMotor.getConfigurator().apply(pivotConfig);
 
     leftMotor.setInverted(leftInvert);
     rightMotor.setInverted(rightInvert);
@@ -177,6 +188,14 @@ public class Shooter extends SubsystemBase {
 
   public void setIgnoreFlywheelSpeed(boolean ignoreFlywheelSpeed) {
     this.ignoreFlywheelSpeed = ignoreFlywheelSpeed;
+  }
+
+  public void setShooterPosition(Measure<Angle> position) {
+    pivotMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
+  }
+
+  public void setFeederSpeed(double speed) {
+    feederMotor.set(speed);
   }
 
   @Override
