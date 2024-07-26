@@ -5,22 +5,15 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Intake extends SubsystemBase {
-  talonfx rollerMotor;
+  TalonFX rollerMotor;
   /** Creates a new Intake. */
   public Intake() {
     rollerMotor = new TalonFX(mapIntake.ROLLER_CAN, "rio");
   }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
   
-  
-  
-  
-  }
   public void setIntakeRollerSpeed(double speed) {
     rollerMotor.set(speed);
   }
@@ -30,6 +23,14 @@ public class Intake extends SubsystemBase {
    */
   public void setRollerNeutralOutput() {
     rollerMotor.setControl(new NeutralOut());
+  }
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    
+    
+    
+  
   }
 
 
