@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.frcteam3255.components.swerve.SN_SuperSwerve;
-import com.frcteam3255.components.swerve.SN_SwerveConstants;
 import com.frcteam3255.components.swerve.SN_SwerveModule;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -16,7 +15,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.constDrivetrain;
 import frc.robot.Constants.constField;
 import frc.robot.RobotMap.mapDrivetrain;
