@@ -10,13 +10,25 @@ import com.frcteam3255.components.swerve.SN_SwerveModule;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.constDrivetrain;
 import frc.robot.Constants.constField;
+import frc.robot.Constants.constShooter;
 import frc.robot.RobotMap.mapDrivetrain;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.RobotPreferences.prefVision;
@@ -24,6 +36,14 @@ import frc.robot.RobotPreferences.prefVision;
 public class Drivetrain extends SN_SuperSwerve {
   private static TalonFXConfiguration driveConfiguration = new TalonFXConfiguration();
   private static TalonFXConfiguration steerConfiguration = new TalonFXConfiguration();
+  private static PIDController yawSnappingController;
+
+  StructPublisher<Pose2d> robotPosePublisher = NetworkTableInstance.getDefault()
+      .getStructTopic("/SmartDashboard/Drivetrain/Robot Pose", Pose2d.struct).publish();
+  StructArrayPublisher<SwerveModuleState> desiredStatesPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/SmartDashboard/Drivetrain/Desired States", SwerveModuleState.struct).publish();
+  StructArrayPublisher<SwerveModuleState> actualStatesPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/SmartDashboard/Drivetrain/Actual States", SwerveModuleState.struct).publish();
 
   private static SN_SwerveModule[] modules = new SN_SwerveModule[] {
       new SN_SwerveModule(0, mapDrivetrain.FRONT_LEFT_DRIVE_CAN, mapDrivetrain.FRONT_LEFT_STEER_CAN,
@@ -82,11 +102,65 @@ public class Drivetrain extends SN_SuperSwerve {
 
     SN_SwerveModule.driveConfiguration = driveConfiguration;
     SN_SwerveModule.steerConfiguration = steerConfiguration;
+
+    yawSnappingController = new PIDController(
+        prefDrivetrain.yawSnapP.getValue(),
+        prefDrivetrain.yawSnapI.getValue(),
+        prefDrivetrain.yawSnapD.getValue());
+    yawSnappingController.enableContinuousInput(0, 360);
+
     super.configure();
   }
 
   public void addEventToAutoMap(String key, Command command) {
     super.autoEventMap.put(key, command);
+  }
+
+  /**
+   * @param desiredYaw The desired yaw to snap to
+   * @return The desired velocity needed to snap.
+   */
+  public Measure<Velocity<Angle>> getVelocityToSnap(Rotation2d desiredYaw) {
+    double yawSetpoint = yawSnappingController.calculate(getRotation().getDegrees(), desiredYaw.getDegrees());
+
+    // limit the PID output to our maximum rotational speed
+    yawSetpoint = MathUtil.clamp(yawSetpoint, -prefDrivetrain.turnSpeed.getValue(),
+        prefDrivetrain.turnSpeed.getValue());
+
+    return Units.DegreesPerSecond.of(yawSetpoint);
+  }
+
+  /**
+   * Calculates the angle necessary for the drivetrain to face a given coordinate.
+   * 
+   * @param targetPose The coordinate to face
+   * @return The necessary angle, in the Field Coordinate System
+   */
+  public Rotation2d getAngleToTarget(Pose2d targetPose) {
+    // Field-relative robot pose
+    Pose2d robotPose = getPose();
+
+    // Move the robot pose to be relative to the target
+    Pose2d relativeToTarget = robotPose.relativeTo(targetPose);
+
+    // Get the angle of 0,0 to the turret pose
+    Rotation2d desiredLockingAngle = new Rotation2d(relativeToTarget.getX(), relativeToTarget.getY());
+
+    // Our shooter is physically mounted 180 degrees from the heading of our
+    // drivetrain :o
+    desiredLockingAngle = desiredLockingAngle.plus(constShooter.SHOOTER_TO_ROBOT);
+
+    return desiredLockingAngle;
+  }
+
+  /**
+   * Calculates the angle necessary for the drivetrain to face the speaker.
+   * 
+   * @return The necessary angle, in the Field Coordinate System
+   */
+  public Rotation2d getAngleToSpeaker() {
+    Pose2d speakerPose = constField.getFieldPositions().get()[0].toPose2d();
+    return getAngleToTarget(speakerPose);
   }
 
   @Override
@@ -95,14 +169,17 @@ public class Drivetrain extends SN_SuperSwerve {
 
     for (SN_SwerveModule mod : modules) {
       SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Desired Speed (FPS)",
-          Units.metersToFeet(Math.abs(getDesiredModuleStates()[mod.moduleNumber].speedMetersPerSecond)));
+          Units.Meters.convertFrom(Math.abs(getDesiredModuleStates()[mod.moduleNumber].speedMetersPerSecond),
+              Units.Feet));
       SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Actual Speed (FPS)",
-          Units.metersToFeet(Math.abs(getActualModuleStates()[mod.moduleNumber].speedMetersPerSecond)));
+          Units.Meters.convertFrom(Math.abs(getActualModuleStates()[mod.moduleNumber].speedMetersPerSecond),
+              Units.Feet));
 
       SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Desired Angle (Degrees)",
-          Math.abs(Units.metersToFeet(getDesiredModuleStates()[mod.moduleNumber].angle.getDegrees())));
+          Math.abs(
+              Units.Meters.convertFrom(getDesiredModuleStates()[mod.moduleNumber].angle.getDegrees(), Units.Feet)));
       SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Actual Angle (Degrees)",
-          Math.abs(Units.metersToFeet(getActualModuleStates()[mod.moduleNumber].angle.getDegrees())));
+          Math.abs(Units.Meters.convertFrom(getActualModuleStates()[mod.moduleNumber].angle.getDegrees(), Units.Feet)));
 
       SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Offset Absolute Encoder Angle (Rotations)",
           mod.getAbsoluteEncoder());
@@ -110,8 +187,10 @@ public class Drivetrain extends SN_SuperSwerve {
           mod.getRawAbsoluteEncoder());
     }
 
-    field.setRobotPose(getPose());
-    SmartDashboard.putData(field);
+    robotPosePublisher.set(getPose());
+    desiredStatesPublisher.set(getDesiredModuleStates());
+    actualStatesPublisher.set(getActualModuleStates());
+
     SmartDashboard.putNumber("Drivetrain Rotation", getRotation().getDegrees());
   }
 }

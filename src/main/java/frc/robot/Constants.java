@@ -5,12 +5,19 @@
 package frc.robot;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.frcteam3255.components.swerve.SN_SwerveConstants;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
@@ -33,10 +40,10 @@ public final class Constants {
     // In Rotations: Obtain by aligning all of the wheels in the correct direction
     // and
     // copy-pasting the Raw Absolute Encoder value
-    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = 0.322754;
-    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = -0.045410;
-    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = -0.192871;
-    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = -0.314941;
+    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = -0.152832;
+    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.032471;
+    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = -0.107666;
+    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = 0.095215;
 
     public static final InvertedValue DRIVE_MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final InvertedValue STEER_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
@@ -45,7 +52,7 @@ public final class Constants {
     public static final NeutralModeValue DRIVE_NEUTRAL_MODE = NeutralModeValue.Brake;
     public static final NeutralModeValue STEER_NEUTRAL_MODE = NeutralModeValue.Coast;
 
-    public static final double WHEEL_DIAMETER = Units.Meters.convertFrom(3.8, Units.Inches);
+    public static final double WHEEL_DIAMETER = 0.09779;
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
     // Taken from the online listing
@@ -66,24 +73,25 @@ public final class Constants {
      * Observed maximum translational speed while manually driving on the
      * Competition Robot.
      * </p>
-     * <b>Units:</b> Meters Per Second
      */
     public static final double DRIVE_SPEED = Units.Feet.convertFrom(15.1, Units.Meters);
     // Physically measured from center to center of the wheels
-    public static final double TRACK_WIDTH = Units.Meters.convertFrom(23.75, Units.Inches); // Distance between Left &
-                                                                                            // Right Wheels
-    public static final double WHEELBASE = Units.Meters.convertFrom(23.75, Units.Inches); // Distance between Front &
-                                                                                          // Back Wheels
+    // Distance between Left & Right Wheels
+    public static final double TRACK_WIDTH = Units.Meters.convertFrom(23.75, Units.Inches);
+    // Distance between Front & Back Wheels
+    public static final double WHEELBASE = Units.Meters.convertFrom(23.75, Units.Inches);
 
     public static final SN_SwerveConstants SWERVE_CONSTANTS = new SN_SwerveConstants(
         SN_SwerveConstants.MK4I.KRAKEN.L3.steerGearRatio,
-        0.09779 * Math.PI,
+        WHEEL_CIRCUMFERENCE,
         SN_SwerveConstants.MK4I.KRAKEN.L3.driveGearRatio,
         SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters);
   }
 
   public static class constField {
     public static Optional<Alliance> ALLIANCE = Optional.empty();
+
+    public static Measure<Distance> FIELD_LENGTH = Units.Meters.of(16.541);
 
     /**
      * Boolean that controls when the path will be mirrored for the red
@@ -101,9 +109,79 @@ public final class Constants {
       }
       return false;
     };
+
+    /**
+     * Gets the positions of all of the necessary field elements on the field. All
+     * coordinates are in meters and are relative to the blue alliance.
+     * 
+     * @see <a href=
+     *      https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#always-blue-origin">
+     *      Robot Coordinate Systems</a>
+     * @return An array of field element positions. Your Speaker, Amp, Source, Left
+     *         Stage, Center Stage, Right Stage
+     */
+    public static Supplier<Pose3d[]> getFieldPositions() {
+      if (ALLIANCE.isPresent() && ALLIANCE.get().equals(Alliance.Red)) {
+        return () -> new Pose3d[] { redConstants.SPEAKER_CENTER, redConstants.AMP, redConstants.SOURCE,
+            redConstants.LEFT_STAGE,
+            redConstants.CENTER_STAGE, redConstants.RIGHT_STAGE };
+
+      }
+      return () -> new Pose3d[] { blueConstants.SPEAKER_CENTER, blueConstants.AMP, blueConstants.SOURCE,
+          blueConstants.LEFT_STAGE,
+          blueConstants.CENTER_STAGE, blueConstants.RIGHT_STAGE };
+    }
+
+    private static final class blueConstants {
+      /**
+       * The coordinate of the center of the blue speaker, in meters
+       */
+      private static final Pose3d SPEAKER_CENTER = new Pose3d(0.457 / 2, 5.557034, 2.105 - (0.133 / 2),
+          new Rotation3d(0, 0, 0));
+      // HEIGHT = 2.105m to the TOP of our shot. Opening is 0.133m.
+
+      /**
+       * The coordinate of the center of the blue amp, in meters.
+       */
+      private static final Pose3d AMP = new Pose3d(1.827, 8.2112312, (0.457 / 2) + 0.660, new Rotation3d(0, 0, 0));
+      // 0.457m = The height of the AMP opening
+      // 0.660m = The height between the floor and the bottom of the opening
+
+      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(300)));
+      private static final Pose3d LEFT_STAGE = new Pose3d(
+          new Pose2d(4.541771411895752, 4.736017227172852, Rotation2d.fromDegrees(120)));
+      private static final Pose3d CENTER_STAGE = new Pose3d(
+          new Pose2d(5.554078578948975, 4.124814033508301, Rotation2d.fromDegrees(0)));
+      private static final Pose3d RIGHT_STAGE = new Pose3d(
+          new Pose2d(4.524875164031982, 3.488827705383301, Rotation2d.fromDegrees(240)));
+    }
+
+    private static final class redConstants {
+      /**
+       * The coordinate of the center of the red speaker, in meters
+       */
+      private static final Pose3d SPEAKER_CENTER = new Pose3d(FIELD_LENGTH.in(Units.Meters) - (0.457 / 2), 5.557034,
+          2.105 - (0.133 / 2),
+          new Rotation3d(0, 0, 0));
+
+      /**
+       * The coordinate of the center of the red amp, in meters
+       */
+      private static final Pose3d AMP = new Pose3d(14.706, 8.2112312, (0.457 / 2) + 0.660, new Rotation3d(0, 0, 0));
+
+      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(60)));
+      private static final Pose3d LEFT_STAGE = new Pose3d(
+          new Pose2d(12.0610990524292, 3.4952545166015625, Rotation2d.fromDegrees(300)));
+      private static final Pose3d CENTER_STAGE = new Pose3d(
+          new Pose2d(10.983105659484863, 4.096443176269531, Rotation2d.fromDegrees(180)));
+      private static final Pose3d RIGHT_STAGE = new Pose3d(
+          new Pose2d(12.021082878112793, 4.7371745109558105, Rotation2d.fromDegrees(60)));
+    }
   }
 
   public static class constShooter {
+    public static final Rotation2d SHOOTER_TO_ROBOT = new Rotation2d(Units.Degrees.of(180));
+
     public static final boolean LEFT_INVERT = true;
     public static final boolean RIGHT_INVERT = false;
 

@@ -5,6 +5,9 @@
 package frc.robot;
 
 import com.frcteam3255.joystick.SN_XboxController;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constControllers;
@@ -24,7 +27,8 @@ public class RobotContainer {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
 
     subDrivetrain
-        .setDefaultCommand(new Drive(subDrivetrain, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX));
+        .setDefaultCommand(new Drive(subDrivetrain, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
+            conDriver.btn_A));
 
     configureBindings();
 
@@ -33,12 +37,9 @@ public class RobotContainer {
 
   private void configureBindings() {
     conDriver.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
-    conDriver.btn_Back.onTrue(Commands.runOnce(() -> subDrivetrain.resetYaw()));
-
-    // Defaults to Field-Relative, is Robot-Relative while held
-    conDriver.btn_LeftBumper
-        .whileTrue(Commands.runOnce(() -> subDrivetrain.setRobotRelative()))
-        .onFalse(Commands.runOnce(() -> subDrivetrain.setFieldRelative()));
+    conDriver.btn_Start.onTrue(Commands.runOnce(() -> subDrivetrain.resetYaw(180)));
+    conDriver.btn_Back.onTrue(
+        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(180)))));
   }
 
   public Command getAutonomousCommand() {
