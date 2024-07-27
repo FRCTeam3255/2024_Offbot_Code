@@ -2,7 +2,7 @@ package frc.robot;
 
 import com.frcteam3255.preferences.SN_DoublePreference;
 
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Units;
 
 public class RobotPreferences {
   public static final class prefDrivetrain {
@@ -10,7 +10,8 @@ public class RobotPreferences {
         "minimumSteerSpeed", 0.01);
 
     // Translational speed (feet per second) while manually driving
-    public static final SN_DoublePreference driveSpeed = new SN_DoublePreference("driveSpeed", Constants.constDrivetrain.DRIVE_SPEED);
+    public static final SN_DoublePreference driveSpeed = new SN_DoublePreference("driveSpeed",
+        Constants.constDrivetrain.DRIVE_SPEED);
 
     // Rotational speed (degrees per second) while manually driving
     public static final SN_DoublePreference turnSpeed = new SN_DoublePreference("turnSpeed", 360);
@@ -36,30 +37,34 @@ public class RobotPreferences {
      * <b>Units:</b> Radians
      */
     public static final SN_DoublePreference measurementStdDevsHeading = new SN_DoublePreference(
-        "measurementStdDevsHeading", Units.degreesToRadians(5));
+        "measurementStdDevsHeading", Units.Degrees.convertFrom(5, Units.Radians));
 
     // This PID is implemented on each module, not the Drivetrain subsystem.
-    public static final SN_DoublePreference driveP = new SN_DoublePreference("driveP", 0);
+    public static final SN_DoublePreference driveP = new SN_DoublePreference("driveP", 0.18);
     public static final SN_DoublePreference driveI = new SN_DoublePreference("driveI", 0.0);
-    public static final SN_DoublePreference driveD = new SN_DoublePreference("driveD", 1);
-    
+    public static final SN_DoublePreference driveD = new SN_DoublePreference("driveD", 0);
 
-    public static final SN_DoublePreference steerP = new SN_DoublePreference("steerP", 1);
+    public static final SN_DoublePreference steerP = new SN_DoublePreference("steerP", 100);
     public static final SN_DoublePreference steerI = new SN_DoublePreference("steerI", 0.0);
-    public static final SN_DoublePreference steerD = new SN_DoublePreference("steerD", 0.0);
+    public static final SN_DoublePreference steerD = new SN_DoublePreference("steerD", 0.14414076246334312);
 
     public static final SN_DoublePreference driveKs = new SN_DoublePreference("driveKs", 0);
     public static final SN_DoublePreference driveKa = new SN_DoublePreference("driveKa", 0);
     public static final SN_DoublePreference driveKv = new SN_DoublePreference("driveKv", (1 / driveSpeed.getValue()));
 
     // This PID is implemented on the Drivetrain subsystem
-    public static final SN_DoublePreference autoDriveP = new SN_DoublePreference("autoDriveP", 2);
+    public static final SN_DoublePreference autoDriveP = new SN_DoublePreference("autoDriveP", 8);
     public static final SN_DoublePreference autoDriveI = new SN_DoublePreference("autoDriveI", 0);
     public static final SN_DoublePreference autoDriveD = new SN_DoublePreference("autoDriveD", 0);
 
-    public static final SN_DoublePreference autoSteerP = new SN_DoublePreference("autoSteerP", 0.5);
+    public static final SN_DoublePreference autoSteerP = new SN_DoublePreference("autoSteerP", 2.5);
     public static final SN_DoublePreference autoSteerI = new SN_DoublePreference("autoSteerI", 0.0);
     public static final SN_DoublePreference autoSteerD = new SN_DoublePreference("autoSteerD", 0.0);
+
+    // Teleop Snapping to Rotation (Yaw)
+    public static final SN_DoublePreference yawSnapP = new SN_DoublePreference("yawSnapP", 3);
+    public static final SN_DoublePreference yawSnapI = new SN_DoublePreference("yawSnapI", 0);
+    public static final SN_DoublePreference yawSnapD = new SN_DoublePreference("yawSnapD", 0);
   }
 
   public static final class prefVision {

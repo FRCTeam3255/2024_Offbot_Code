@@ -7,8 +7,9 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.subsystems.Drivetrain;
 
@@ -16,13 +17,15 @@ public class Drive extends Command {
   Drivetrain subDrivetrain;
   DoubleSupplier xAxis, yAxis, rotationAxis;
   boolean isOpenLoop;
+  Trigger aimAtSpeaker;
 
   public Drive(Drivetrain subDrivetrain, DoubleSupplier xAxis, DoubleSupplier yAxis,
-      DoubleSupplier rotationAxis) {
+      DoubleSupplier rotationAxis, Trigger aimAtSpeaker) {
     this.subDrivetrain = subDrivetrain;
     this.xAxis = xAxis;
     this.yAxis = yAxis;
     this.rotationAxis = rotationAxis;
+    this.aimAtSpeaker = aimAtSpeaker;
 
     isOpenLoop = true;
 
@@ -36,9 +39,19 @@ public class Drive extends Command {
   @Override
   public void execute() {
     // Get Joystick inputs
-    double xVelocity = xAxis.getAsDouble() * Units.feetToMeters(prefDrivetrain.driveSpeed.getValue());
-    double yVelocity = -yAxis.getAsDouble() * Units.feetToMeters(prefDrivetrain.driveSpeed.getValue());
-    double rVelocity = -rotationAxis.getAsDouble() * Units.degreesToRadians(prefDrivetrain.turnSpeed.getValue());
+    double xVelocity = xAxis.getAsDouble() * Units.Meters.convertFrom(prefDrivetrain.driveSpeed.getValue(), Units.Feet);
+    double yVelocity = -yAxis.getAsDouble()
+        * Units.Meters.convertFrom(prefDrivetrain.driveSpeed.getValue(), Units.Feet);
+    double rVelocity = -rotationAxis.getAsDouble()
+        * Units.Radians.convertFrom(prefDrivetrain.turnSpeed.getValue(), Units.Degrees);
+
+    // Previous codebase checks if the driver is rotating at all before doing
+    // this...
+    // TODO: Ask Kevin about his preference
+    // Snapping ignores previouly calculated rotational speeds
+    if (aimAtSpeaker.getAsBoolean()) {
+      rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker()).in(Units.RadiansPerSecond);
+    }
 
     subDrivetrain.drive(new Translation2d(xVelocity, yVelocity), rVelocity, isOpenLoop);
   }
