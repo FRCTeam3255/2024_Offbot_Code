@@ -40,6 +40,11 @@ public class RobotMap {
     public static final int SHOOTER_PIVOT_MOTOR_CAN = 12;
   }
 
+  // MOTORS: 20 -> 29
+  public static class mapIntake {
+    public static final int ROLLER_CAN = 20;
+  }
+
   // MOTORS: 30 -> 39
   public static class mapElevator {
     public static final int ELEVATOR_MOTOR_CAN = 30;
@@ -55,4 +60,5 @@ public class RobotMap {
   public static class mapTransfer {
     public static final int TRANSFER_MOTOR_CAN = 50;
   }
+
 }
