@@ -14,6 +14,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -131,35 +132,30 @@ public class Shooter extends SubsystemBase {
    * @return The current velocity of the left shooter motor. <b> Units: </b>
    *         Rotations per second
    */
-  public double getLeftShooterVelocity() {
-    return leftMotor.getVelocity().getValueAsDouble();
+  public Measure<Velocity<Angle>> getLeftShooterVelocity() {
+    return Units.RotationsPerSecond.of(leftMotor.getVelocity().getValueAsDouble());
   }
 
   /**
    * @return The current velocity of the right shooter motor. <b> Units: </b>
    *         Rotations per second
    */
-  public double getRightShooterVelocity() {
-    return rightMotor.getVelocity().getValueAsDouble();
+  public Measure<Velocity<Angle>> getRightShooterVelocity() {
+    return Units.RotationsPerSecond.of(rightMotor.getVelocity().getValueAsDouble());
   }
 
   /**
    * @return If the left shooter motor is at its desired velocity
    */
   public boolean isLeftShooterUpToSpeed() {
-    return (Math.abs(
-        getLeftShooterVelocity()
-            - desiredLeftVelocity.in(Units.RotationsPerSecond))) <= constShooter.UP_TO_SPEED_TOLERANCE
-                .in(Units.RotationsPerSecond);
+    return (getLeftShooterVelocity().minus(desiredLeftVelocity)).lte(constShooter.UP_TO_SPEED_TOLERANCE);
   }
 
   /**
    * @return If the right shooter motor is at its desired velocity
    */
   public boolean isRightShooterUpToSpeed() {
-    return (Math.abs(getRightShooterVelocity()
-        - desiredRightVelocity.in(Units.RotationsPerSecond))) <= constShooter.UP_TO_SPEED_TOLERANCE
-            .in(Units.RotationsPerSecond);
+    return (getRightShooterVelocity().minus(desiredRightVelocity)).lte(constShooter.UP_TO_SPEED_TOLERANCE);
   }
 
   /**
@@ -168,8 +164,10 @@ public class Shooter extends SubsystemBase {
    */
   public boolean areBothShootersUpToSpeed() {
     return (isLeftShooterUpToSpeed()
-        && isRightShooterUpToSpeed() && (getLeftShooterVelocity() != 0 || getRightShooterVelocity() != 0))
-        || ignoreFlywheelSpeed;
+        && isRightShooterUpToSpeed()
+        && !(getLeftShooterVelocity().equals(Units.RotationsPerSecond.zero()))
+        && !(getLeftShooterVelocity().equals(Units.RotationsPerSecond.zero()))
+        || ignoreFlywheelSpeed);
   }
 
   public void setLeftDesiredVelocity(Measure<Velocity<Angle>> desiredVelocity) {
@@ -202,11 +200,11 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shooter/Left/Velocity RPS", getLeftShooterVelocity());
+    SmartDashboard.putNumber("Shooter/Left/Velocity RPS", getLeftShooterVelocity().in(Units.RotationsPerSecond));
     SmartDashboard.putNumber("Shooter/Left/Desired Velocity RPS", desiredLeftVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Left/Up to Speed", isLeftShooterUpToSpeed());
 
-    SmartDashboard.putNumber("Shooter/Right/Velocity RPS", getRightShooterVelocity());
+    SmartDashboard.putNumber("Shooter/Right/Velocity RPS", getRightShooterVelocity().in(Units.RotationsPerSecond));
     SmartDashboard.putNumber("Shooter/Right/Desired Velocity RPS", desiredRightVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
 

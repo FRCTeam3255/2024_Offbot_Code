@@ -14,7 +14,7 @@ import frc.robot.RobotMap.mapClimber;
 
 public class Climber extends SubsystemBase {
   TalonFX climberMotor;
-  TalonFXConfiguration climberConfig;
+  TalonFXConfiguration climberConfig = new TalonFXConfiguration();
 
   /** Creates a new Climber. */
   public Climber() {
@@ -25,6 +25,7 @@ public class Climber extends SubsystemBase {
 
     climberConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     climberConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constClimber.FORWARD_LIMIT.in(Units.Rotations);
+    climberMotor.getConfigurator().apply(climberConfig);
   }
 
   public void setClimberSpeed(double speed) {
