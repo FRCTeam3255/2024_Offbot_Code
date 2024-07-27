@@ -7,9 +7,12 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.constField;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.subsystems.Drivetrain;
 
@@ -17,14 +20,24 @@ public class Drive extends Command {
   Drivetrain subDrivetrain;
   DoubleSupplier xAxis, yAxis, rotationAxis;
   boolean isOpenLoop;
-  Trigger aimAtSpeaker;
+  Trigger aimAtSpeaker, slowMode, north, south, east, west, chain;
+  Measure<Angle> northYaw;
+  double redAllianceMultiplier = 1;
+  double slowMultiplier = 0;
 
   public Drive(Drivetrain subDrivetrain, DoubleSupplier xAxis, DoubleSupplier yAxis,
-      DoubleSupplier rotationAxis, Trigger aimAtSpeaker) {
+      DoubleSupplier rotationAxis, Trigger slowMode, Trigger north, Trigger east, Trigger south, Trigger west,
+      Trigger chain, Trigger aimAtSpeaker) {
     this.subDrivetrain = subDrivetrain;
     this.xAxis = xAxis;
     this.yAxis = yAxis;
     this.rotationAxis = rotationAxis;
+    this.slowMode = slowMode;
+    this.north = north;
+    this.east = east;
+    this.south = south;
+    this.west = west;
+    this.chain = chain;
     this.aimAtSpeaker = aimAtSpeaker;
 
     isOpenLoop = true;
@@ -34,23 +47,50 @@ public class Drive extends Command {
 
   @Override
   public void initialize() {
+    northYaw = constField.isRedAlliance() ? Units.Degrees.of(180) : Units.Degrees.of(0);
+    redAllianceMultiplier = constField.isRedAlliance() ? -1 : 1;
   }
 
   @Override
   public void execute() {
+    if (slowMode.getAsBoolean()) {
+      slowMultiplier = prefDrivetrain.slowModeMultiplier.getValue();
+    } else {
+      slowMultiplier = 1;
+    }
+
     // Get Joystick inputs
-    double xVelocity = xAxis.getAsDouble() * Units.Meters.convertFrom(prefDrivetrain.driveSpeed.getValue(), Units.Feet);
-    double yVelocity = -yAxis.getAsDouble()
+    double transMultiplier = slowMultiplier * redAllianceMultiplier
         * Units.Meters.convertFrom(prefDrivetrain.driveSpeed.getValue(), Units.Feet);
+    double xVelocity = (xAxis.getAsDouble() * transMultiplier);
+    double yVelocity = (-yAxis.getAsDouble() * transMultiplier);
+
     double rVelocity = -rotationAxis.getAsDouble()
         * Units.Radians.convertFrom(prefDrivetrain.turnSpeed.getValue(), Units.Degrees);
 
     // Requesting snapping ignores any previously calculated rotational speeds
     if (aimAtSpeaker.getAsBoolean()) {
       rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker()).in(Units.RadiansPerSecond);
+
+      // im so sorry i cant come up with a better way to do this
+    } else if (north.getAsBoolean()) {
+      rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(0 + northYaw.in(Units.Degrees)))
+          .in(Units.RadiansPerSecond);
+    } else if (east.getAsBoolean()) {
+      rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(270 + northYaw.in(Units.Degrees)))
+          .in(Units.RadiansPerSecond);
+    } else if (south.getAsBoolean()) {
+      rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(180 + northYaw.in(Units.Degrees)))
+          .in(Units.RadiansPerSecond);
+    } else if (west.getAsBoolean()) {
+      rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(90 + northYaw.in(Units.Degrees)))
+          .in(Units.RadiansPerSecond);
+    } else if (chain.getAsBoolean()) {
+      rVelocity = subDrivetrain.getVelocityToChain().in(Units.RadiansPerSecond);
     }
 
-    subDrivetrain.drive(new Translation2d(xVelocity, yVelocity), rVelocity, isOpenLoop);
+    subDrivetrain.drive(new Translation2d(xVelocity, yVelocity), rVelocity,
+        isOpenLoop);
   }
 
   @Override

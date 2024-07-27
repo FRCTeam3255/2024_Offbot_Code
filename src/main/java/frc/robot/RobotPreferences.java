@@ -16,6 +16,14 @@ public class RobotPreferences {
     // Rotational speed (degrees per second) while manually driving
     public static final SN_DoublePreference turnSpeed = new SN_DoublePreference("turnSpeed", 360);
 
+    /**
+     * <p>
+     * Value to multiply with the translation velocity when slow mode is enabled
+     * </p>
+     * <b>Units:</b> Percentage from 0 to 1
+     */
+    public static final SN_DoublePreference slowModeMultiplier = new SN_DoublePreference("slowModeMultiplier", .5);
+
     public static final SN_DoublePreference autoMaxSpeedFeet = new SN_DoublePreference(
         "autoMaxSpeedFeet", 8);
     public static final SN_DoublePreference autoMaxAccelFeet = new SN_DoublePreference(
@@ -43,7 +51,6 @@ public class RobotPreferences {
     public static final SN_DoublePreference driveP = new SN_DoublePreference("driveP", 0.18);
     public static final SN_DoublePreference driveI = new SN_DoublePreference("driveI", 0.0);
     public static final SN_DoublePreference driveD = new SN_DoublePreference("driveD", 0);
-
 
     public static final SN_DoublePreference steerP = new SN_DoublePreference("steerP", 100);
     public static final SN_DoublePreference steerI = new SN_DoublePreference("steerI", 0.0);
