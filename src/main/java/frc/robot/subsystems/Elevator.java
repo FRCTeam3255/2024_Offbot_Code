@@ -18,7 +18,7 @@ import frc.robot.RobotPreferences.prefElevator;
 
 public class Elevator extends SubsystemBase {
   TalonFX elevatorMotor, drainpipeMotor;
-  TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
+  TalonFXConfiguration elevatorConfig;
 
   PositionVoltage positionRequest;
 
