@@ -18,7 +18,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
@@ -78,6 +81,7 @@ public final class Constants {
     // Distance between Front & Back Wheels
     public static final double WHEELBASE = Units.Meters.convertFrom(23.75, Units.Inches);
 
+
     public static final SN_SwerveConstants SWERVE_CONSTANTS = new SN_SwerveConstants(
         SN_SwerveConstants.MK4I.KRAKEN.L3.steerGearRatio,
         WHEEL_CIRCUMFERENCE,
@@ -89,7 +93,7 @@ public final class Constants {
     public static Optional<Alliance> ALLIANCE = Optional.empty();
 
     public static Measure<Distance> FIELD_LENGTH = Units.Meters.of(16.541);
-
+    
     /**
      * Boolean that controls when the path will be mirrored for the red
      * alliance. This will flip the path being followed to the red side of the
@@ -179,4 +183,44 @@ public final class Constants {
   public static class constShooter {
     public static final Rotation2d SHOOTER_TO_ROBOT = new Rotation2d(Units.Degrees.of(180));
   }
+
+  public static class constShooter {
+    public static final boolean LEFT_INVERT = true;
+    public static final boolean RIGHT_INVERT = false;
+
+    // - Angles -
+    public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Rotations.of(0);
+    public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Rotations.of(0);
+
+    // - Velocities -
+    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(0.7);
+
+    public static final Measure<Velocity<Angle>> LEFT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(60);
+    public static final Measure<Velocity<Angle>> RIGHT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(45);
+
+    // -- PRESETS --
+    /**
+     * Preset: Shooting while touching the subwoofer velocity
+     */
+    public static final Measure<Velocity<Angle>> LEFT_SUB_VELOCITY = Units.RotationsPerSecond.of(35);
+
+    /**
+     * Preset: Shooting while touching the subwoofer velocity
+     */
+    public static final Measure<Velocity<Angle>> RIGHT_SUB_VELOCITY = Units.RotationsPerSecond.of(35);
+
+    public static final Measure<Velocity<Angle>> LEFT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
+    public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
+  }
+
+  public static class constClimber {
+    public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
+    public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
+  }
+
+  public static class constElevator {
+    public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
+    public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
+  }
+
 }

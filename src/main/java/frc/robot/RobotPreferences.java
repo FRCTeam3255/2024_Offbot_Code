@@ -37,12 +37,13 @@ public class RobotPreferences {
      * <b>Units:</b> Radians
      */
     public static final SN_DoublePreference measurementStdDevsHeading = new SN_DoublePreference(
-        "measurementStdDevsHeading", Units.Degrees.convertFrom(5, Units.Radians));
+        "measurementStdDevsHeading", Units.Radians.convertFrom(5, Units.Degrees));
 
     // This PID is implemented on each module, not the Drivetrain subsystem.
     public static final SN_DoublePreference driveP = new SN_DoublePreference("driveP", 0.18);
     public static final SN_DoublePreference driveI = new SN_DoublePreference("driveI", 0.0);
     public static final SN_DoublePreference driveD = new SN_DoublePreference("driveD", 0);
+
 
     public static final SN_DoublePreference steerP = new SN_DoublePreference("steerP", 100);
     public static final SN_DoublePreference steerI = new SN_DoublePreference("steerI", 0.0);
@@ -67,6 +68,33 @@ public class RobotPreferences {
     public static final SN_DoublePreference yawSnapD = new SN_DoublePreference("yawSnapD", 0);
   }
 
+  public static final class prefShooter {
+    // - PID -
+    public static final SN_DoublePreference leftShooterS = new SN_DoublePreference("leftShooterS", 0.4);
+    public static final SN_DoublePreference leftShooterV = new SN_DoublePreference("leftShooterV", 0.12);
+    public static final SN_DoublePreference leftShooterA = new SN_DoublePreference("leftShooterA", 0.1);
+    public static final SN_DoublePreference leftShooterP = new SN_DoublePreference("leftShooterP", 0.6);
+    public static final SN_DoublePreference leftShooterI = new SN_DoublePreference("leftShooterI", 0);
+    public static final SN_DoublePreference leftShooterD = new SN_DoublePreference("leftShooterD", 0.01);
+
+    public static final SN_DoublePreference rightShooterS = new SN_DoublePreference("rightShooterS", 0.4);
+    public static final SN_DoublePreference rightShooterV = new SN_DoublePreference("rightShooterV", 0.1175);
+    public static final SN_DoublePreference rightShooterA = new SN_DoublePreference("rightShooterA", 0.1);
+    public static final SN_DoublePreference rightShooterP = new SN_DoublePreference("rightShooterP", 0.6);
+    public static final SN_DoublePreference rightShooterI = new SN_DoublePreference("rightShooterI", 0);
+    public static final SN_DoublePreference rightShooterD = new SN_DoublePreference("rightShooterD", 0.01);
+
+    public static final SN_DoublePreference pivotShooterP = new SN_DoublePreference("pivotShooterP", 0);
+    public static final SN_DoublePreference pivotShooterI = new SN_DoublePreference("pivotShooterI", 0);
+    public static final SN_DoublePreference pivotShooterD = new SN_DoublePreference("pivotShooterD", 0);
+  }
+
+  public static final class prefElevator {
+    public static final SN_DoublePreference elevatorShooterP = new SN_DoublePreference("elevatorShooterP", 0);
+    public static final SN_DoublePreference elevatorShooterI = new SN_DoublePreference("elevatorShooterI", 0);
+    public static final SN_DoublePreference elevatorShooterD = new SN_DoublePreference("elevatorShooterD", 0);
+  }
+
   public static final class prefVision {
     /**
      * <p>
@@ -85,6 +113,5 @@ public class RobotPreferences {
      */
     public static final SN_DoublePreference multiTagStdDevsHeading = new SN_DoublePreference(
         "multiTagStdDevsHeading", 9999999);
-
   }
 }
