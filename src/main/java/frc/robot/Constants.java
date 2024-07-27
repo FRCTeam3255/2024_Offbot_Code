@@ -81,7 +81,6 @@ public final class Constants {
     // Distance between Front & Back Wheels
     public static final double WHEELBASE = Units.Meters.convertFrom(23.75, Units.Inches);
 
-
     public static final SN_SwerveConstants SWERVE_CONSTANTS = new SN_SwerveConstants(
         SN_SwerveConstants.MK4I.KRAKEN.L3.steerGearRatio,
         WHEEL_CIRCUMFERENCE,
@@ -93,7 +92,7 @@ public final class Constants {
     public static Optional<Alliance> ALLIANCE = Optional.empty();
 
     public static Measure<Distance> FIELD_LENGTH = Units.Meters.of(16.541);
-    
+
     /**
      * Boolean that controls when the path will be mirrored for the red
      * alliance. This will flip the path being followed to the red side of the
@@ -182,9 +181,7 @@ public final class Constants {
 
   public static class constShooter {
     public static final Rotation2d SHOOTER_TO_ROBOT = new Rotation2d(Units.Degrees.of(180));
-  }
 
-  public static class constShooter {
     public static final boolean LEFT_INVERT = true;
     public static final boolean RIGHT_INVERT = false;
 
