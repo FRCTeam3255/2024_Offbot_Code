@@ -45,10 +45,7 @@ public class Drive extends Command {
     double rVelocity = -rotationAxis.getAsDouble()
         * Units.Radians.convertFrom(prefDrivetrain.turnSpeed.getValue(), Units.Degrees);
 
-    // Previous codebase checks if the driver is rotating at all before doing
-    // this...
-    // TODO: Ask Kevin about his preference
-    // Snapping ignores previouly calculated rotational speeds
+    // Requesting snapping ignores any previously calculated rotational speeds
     if (aimAtSpeaker.getAsBoolean()) {
       rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker()).in(Units.RadiansPerSecond);
     }
