@@ -220,4 +220,20 @@ public final class Constants {
     public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
   }
 
+  public static class constLimelight {
+
+    /**
+     * <p>
+     * Maximum rate of rotation before we begin rejecting pose updates
+     * </p>
+     */
+    public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY = Units.DegreesPerSecond.of(720);
+
+    /**
+     * The area that one tag (if its the only tag in the update) needs to exceed
+     * before being accepted
+     */
+    public static final double AREA_THRESHOLD = 0.1;
+  }
+
 }

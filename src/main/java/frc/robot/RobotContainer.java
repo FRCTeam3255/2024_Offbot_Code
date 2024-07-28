@@ -6,15 +6,14 @@ package frc.robot;
 
 import com.frcteam3255.joystick.SN_XboxController;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constControllers;
 import frc.robot.RobotMap.mapControllers;
+import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Limelight;
 
 public class RobotContainer {
 
@@ -22,13 +21,17 @@ public class RobotContainer {
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
 
   private final Drivetrain subDrivetrain = new Drivetrain();
+  private final Limelight subLimelight = new Limelight();
 
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
 
     subDrivetrain
         .setDefaultCommand(new Drive(subDrivetrain, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
-            conDriver.btn_A));
+            conDriver.btn_LeftBumper,
+            conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X,
+            conDriver.btn_LeftTrigger, conDriver.btn_RightTrigger));
+    subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain, subLimelight));
 
     configureBindings();
 
