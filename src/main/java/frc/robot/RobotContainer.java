@@ -19,6 +19,7 @@ public class RobotContainer {
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
 
   private final Drivetrain subDrivetrain = new Drivetrain();
+  public static robotState currentState = robotState.NONE;
 
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
@@ -43,5 +44,16 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return null;
+  }
+
+  public static enum robotState {
+    INTAKING,
+    STORE_FEEDER,
+    PREP_SHUFFLE,
+    PREP_SPEAKER,
+    PREP_AMP,
+    CLIMBING,
+    NONE,
+    SHOOTING
   }
 }

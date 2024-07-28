@@ -18,7 +18,7 @@ public class Intake extends SubsystemBase {
     rollerMotor = new TalonFX(mapIntake.ROLLER_CAN, "rio");
   }
 
-  public void setRollerOutput(double speed) {
+  public void setIntakeRollerSpeed(double speed) {
     rollerMotor.set(speed);
   }
 
