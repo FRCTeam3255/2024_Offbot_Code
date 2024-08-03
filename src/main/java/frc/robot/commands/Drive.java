@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.constField;
@@ -65,32 +66,25 @@ public class Drive extends Command {
     double xVelocity = (xAxis.getAsDouble() * transMultiplier);
     double yVelocity = (-yAxis.getAsDouble() * transMultiplier);
 
-    double rVelocity = -rotationAxis.getAsDouble()
-        * Units.Radians.convertFrom(prefDrivetrain.turnSpeed.getValue(), Units.Degrees);
+    Measure<Velocity<Angle>> rVelocity = Units.RadiansPerSecond.of(-rotationAxis.getAsDouble())
+        .times(prefDrivetrain.turnSpeed.getValue());
 
     // Requesting snapping ignores any previously calculated rotational speeds
     if (aimAtSpeaker.getAsBoolean()) {
-      rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker()).in(Units.RadiansPerSecond);
-
-      // im so sorry i cant come up with a better way to do this
+      rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
     } else if (north.getAsBoolean()) {
-      rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(0 + northYaw.in(Units.Degrees)))
-          .in(Units.RadiansPerSecond);
+      rVelocity = subDrivetrain.getVelocityToSnap(northYaw);
     } else if (east.getAsBoolean()) {
-      rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(270 + northYaw.in(Units.Degrees)))
-          .in(Units.RadiansPerSecond);
+      rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(270)));
     } else if (south.getAsBoolean()) {
-      rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(180 + northYaw.in(Units.Degrees)))
-          .in(Units.RadiansPerSecond);
+      rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(180)));
     } else if (west.getAsBoolean()) {
-      rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(90 + northYaw.in(Units.Degrees)))
-          .in(Units.RadiansPerSecond);
+      rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(90)));
     } else if (chain.getAsBoolean()) {
-      rVelocity = subDrivetrain.getVelocityToChain().in(Units.RadiansPerSecond);
+      rVelocity = subDrivetrain.getVelocityToChain();
     }
 
-    subDrivetrain.drive(new Translation2d(xVelocity, yVelocity), rVelocity,
-        isOpenLoop);
+    subDrivetrain.drive(new Translation2d(xVelocity, yVelocity), rVelocity.in(Units.RadiansPerSecond), isOpenLoop);
   }
 
   @Override
