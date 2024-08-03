@@ -9,9 +9,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference minimumSteerSpeedPercent = new SN_DoublePreference(
         "minimumSteerSpeed", 0.01);
 
-    // Translational speed (feet per second) while manually driving
+    // Translational speed (Meters per second) while manually driving
     public static final SN_DoublePreference driveSpeed = new SN_DoublePreference("driveSpeed",
-        Constants.constDrivetrain.DRIVE_SPEED);
+        Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while manually driving
     public static final SN_DoublePreference turnSpeed = new SN_DoublePreference("turnSpeed", 360);

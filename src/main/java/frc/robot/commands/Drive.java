@@ -8,9 +8,11 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.constField;
@@ -62,9 +64,10 @@ public class Drive extends Command {
 
     // Get Joystick inputs
     double transMultiplier = slowMultiplier * redAllianceMultiplier
-        * Units.Meters.convertFrom(prefDrivetrain.driveSpeed.getValue(), Units.Feet);
-    double xVelocity = (xAxis.getAsDouble() * transMultiplier);
-    double yVelocity = (-yAxis.getAsDouble() * transMultiplier);
+        * prefDrivetrain.driveSpeed.getValue();
+
+    Measure<Velocity<Distance>> xVelocity = Units.MetersPerSecond.of(xAxis.getAsDouble() * transMultiplier);
+    Measure<Velocity<Distance>> yVelocity = Units.MetersPerSecond.of(-yAxis.getAsDouble() * transMultiplier);
 
     Measure<Velocity<Angle>> rVelocity = Units.RadiansPerSecond.of(-rotationAxis.getAsDouble())
         .times(prefDrivetrain.turnSpeed.getValue());
@@ -83,8 +86,9 @@ public class Drive extends Command {
     } else if (chain.getAsBoolean()) {
       rVelocity = subDrivetrain.getVelocityToChain();
     }
-
-    subDrivetrain.drive(new Translation2d(xVelocity, yVelocity), rVelocity.in(Units.RadiansPerSecond), isOpenLoop);
+    SmartDashboard.putNumber("desired x velocity", xVelocity.in(Units.MetersPerSecond));
+    subDrivetrain.drive(new Translation2d(xVelocity.in(Units.MetersPerSecond), yVelocity.in(Units.MetersPerSecond)),
+        rVelocity.in(Units.RadiansPerSecond), isOpenLoop);
   }
 
   @Override

@@ -75,7 +75,7 @@ public final class Constants {
      * Competition Robot.
      * </p>
      */
-    public static final double DRIVE_SPEED = Units.Feet.convertFrom(15.1, Units.Meters);
+    public static final Measure<Velocity<Distance>> DRIVE_SPEED = Units.FeetPerSecond.of(15.1);
     // Physically measured from center to center of the wheels
     // Distance between Left & Right Wheels
     public static final double TRACK_WIDTH = Units.Meters.convertFrom(23.75, Units.Inches);
