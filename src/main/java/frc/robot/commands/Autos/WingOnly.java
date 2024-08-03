@@ -4,8 +4,12 @@
 
 package frc.robot.commands.Autos;
 
+import java.util.function.Supplier;
+
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
 
@@ -22,7 +26,14 @@ public class WingOnly extends SequentialCommandGroup {
     this.goesDown = goesDown;
 
     addCommands(
-        // just for testing the whole path
+        // Resetting pose
+        Commands.runOnce(() -> subDrivetrain.resetYaw(
+            getInitialPose().get().getRotation().getDegrees())),
+        Commands.runOnce(
+            () -> subDrivetrain.resetPoseToPose(getInitialPose().get())),
+
+        // just for testing the whole path, i wanted to see if the whole path
+        // works/needs tuning before splitting it up
         new PathPlannerAuto("PsW1sW2sW3s")
 
     // Intake
@@ -52,4 +63,8 @@ public class WingOnly extends SequentialCommandGroup {
     return (goesDown) ? "PsW1sW2sW3s" : "PsW3sW2sW1s";
   }
 
+  public Supplier<Pose2d> getInitialPose() {
+    // only for blue alliance at the moment
+    return () -> PathPlannerAuto.getStaringPoseFromAutoFile(determinePathName());
+  }
 }
