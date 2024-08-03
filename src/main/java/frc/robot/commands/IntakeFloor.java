@@ -28,6 +28,9 @@ public class IntakeFloor extends Command {
     RobotContainer.currentState = RobotContainer.robotState.INTAKING;
     this.subIntake.setIntakeRollerSpeed(0);
     this.subTransfer.setFeederSpeed(0);
+    // if subTransfer.DigitalInput();
+    // this.subIntake.setRollerNeutralOutput();
+    // this.subTransfer.setFeederNeutralOutput();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -26,6 +27,10 @@ public class Transfer extends SubsystemBase {
 
   public void setFeederSpeed(double speed) {
     feederMotor.set(speed);
+  }
+
+  public void setFeederNeutralOutput() {
+    feederMotor.setControl(new NeutralOut());
   }
 
   @Override
