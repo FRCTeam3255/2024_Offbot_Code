@@ -41,11 +41,8 @@ public class RobotContainer {
   private void configureBindings() {
     conDriver.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
 
-    // TODO: This is a workaround that will be implemented properly in SuperCORE
     conDriver.btn_Back.onTrue(
-        Commands.runOnce(() -> subDrivetrain.resetDriving(() -> constField.isRedAlliance()))
-            .andThen(Commands
-                .runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d()))));
+        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
   }
 
   public Command getAutonomousCommand() {
