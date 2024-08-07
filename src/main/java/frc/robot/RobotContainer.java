@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constControllers;
+import frc.robot.Constants.constField;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Drivetrain;
@@ -28,7 +29,9 @@ public class RobotContainer {
 
     subDrivetrain
         .setDefaultCommand(new Drive(subDrivetrain, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
-            conDriver.btn_A));
+            conDriver.btn_LeftBumper,
+            conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X,
+            conDriver.btn_LeftTrigger, conDriver.btn_RightTrigger));
 
     configureBindings();
 
@@ -37,9 +40,9 @@ public class RobotContainer {
 
   private void configureBindings() {
     conDriver.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
-    conDriver.btn_Start.onTrue(Commands.runOnce(() -> subDrivetrain.resetYaw(180)));
+
     conDriver.btn_Back.onTrue(
-        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(180)))));
+        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
   }
 
   public Command getAutonomousCommand() {
