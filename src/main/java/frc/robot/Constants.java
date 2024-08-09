@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.frcteam3255.components.swerve.SN_SwerveConstants;
 
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
@@ -142,4 +143,11 @@ public final class Constants {
     public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
   }
 
+  public static class constIntake {
+    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
+  }
+
+  public static class constTransfer {
+    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
+  }
 }

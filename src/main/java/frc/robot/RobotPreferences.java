@@ -110,12 +110,8 @@ public class RobotPreferences {
   }
 
   public static final class prefIntake {
-    public static final SN_DoublePreference setIntakeRollerSpeed = new SN_DoublePreference(null, 1);
-
   }
 
   public static final class prefTransfer {
-    public static final SN_DoublePreference setFeederSpeed = new SN_DoublePreference(null, 1);
-
   }
 }

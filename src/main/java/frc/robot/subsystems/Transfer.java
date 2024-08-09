@@ -9,7 +9,6 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.mapTransfer;
 
@@ -22,7 +21,7 @@ public class Transfer extends SubsystemBase {
   public Transfer() {
     feederMotor = new TalonFX(mapTransfer.TRANSFER_MOTOR_CAN, "rio");
     feederMotor.getConfigurator().apply(feederConfig);
-    noteSensor = new DigitalInput();
+    noteSensor = new DigitalInput(1);
   }
 
   public void setFeederSpeed(double speed) {
@@ -31,6 +30,10 @@ public class Transfer extends SubsystemBase {
 
   public void setFeederNeutralOutput() {
     feederMotor.setControl(new NeutralOut());
+  }
+
+  public boolean isGamePieceCollected() {
+    return false; // TODO: placeholder for now until we program the beam break sensor
   }
 
   @Override

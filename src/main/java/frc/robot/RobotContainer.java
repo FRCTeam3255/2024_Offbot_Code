@@ -10,8 +10,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constControllers;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.Drive;
+import frc.robot.commands.IntakeFloor;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Transfer;
 
 public class RobotContainer {
 
@@ -19,7 +22,10 @@ public class RobotContainer {
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
 
   private final Drivetrain subDrivetrain = new Drivetrain();
-  public static robotState currentState = robotState.NONE;
+  private final Intake subIntake = new Intake();
+  private final Transfer subTransfer = new Transfer();
+
+  public static RobotState currentState = RobotState.NONE;
 
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
@@ -27,26 +33,31 @@ public class RobotContainer {
     subDrivetrain
         .setDefaultCommand(new Drive(subDrivetrain, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX));
 
-    configureBindings();
+    configureDriverBindings(conDriver);
+    configureOperatorBindings(conOperator);
 
     subDrivetrain.resetModulesToAbsolute();
   }
 
-  private void configureBindings() {
-    conDriver.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
-    conDriver.btn_Back.onTrue(Commands.runOnce(() -> subDrivetrain.resetYaw()));
+  private void configureDriverBindings(SN_XboxController controller) {
+    controller.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
+    controller.btn_Back.onTrue(Commands.runOnce(() -> subDrivetrain.resetYaw()));
 
     // Defaults to Field-Relative, is Robot-Relative while held
-    conDriver.btn_LeftBumper
+    controller.btn_LeftBumper
         .whileTrue(Commands.runOnce(() -> subDrivetrain.setRobotRelative()))
         .onFalse(Commands.runOnce(() -> subDrivetrain.setFieldRelative()));
+  }
+
+  private void configureOperatorBindings(SN_XboxController controller) {
+    controller.btn_A.whileTrue(new IntakeFloor(subIntake, subTransfer));
   }
 
   public Command getAutonomousCommand() {
     return null;
   }
 
-  public static enum robotState {
+  public static enum RobotState {
     INTAKING,
     STORE_FEEDER,
     PREP_SHUFFLE,
@@ -55,5 +66,13 @@ public class RobotContainer {
     CLIMBING,
     NONE,
     SHOOTING
+  }
+
+  public static void setRobotState(RobotState robotState) {
+    currentState = robotState;
+  }
+
+  public RobotState getRobotState() {
+    return currentState;
   }
 }
