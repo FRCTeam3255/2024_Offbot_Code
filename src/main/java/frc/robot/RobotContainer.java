@@ -14,6 +14,7 @@ import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constField;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.Drive;
+import frc.robot.commands.Eject;
 import frc.robot.commands.IntakeFloor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -28,6 +29,7 @@ public class RobotContainer {
   private final Drivetrain subDrivetrain = new Drivetrain();
   private final Intake subIntake = new Intake();
   private final Transfer subTransfer = new Transfer();
+  private final Shooter subShooter = new Shooter();
 
   public static RobotState currentState = RobotState.NONE;
 
@@ -60,6 +62,7 @@ public class RobotContainer {
 
   private void configureOperatorBindings(SN_XboxController controller) {
     controller.btn_A.whileTrue(new IntakeFloor(subIntake, subTransfer));
+    controller.btn_B.whileTrue(new Eject(subIntake, subTransfer, subShooter));
   }
 
   public Command getAutonomousCommand() {
@@ -74,14 +77,15 @@ public class RobotContainer {
     PREP_AMP,
     CLIMBING,
     NONE,
-    SHOOTING
+    SHOOTING,
+    EJECTING
   }
 
   public static void setRobotState(RobotState robotState) {
     currentState = robotState;
   }
 
-  public RobotState getRobotState() {
+  public static RobotState getRobotState() {
     return currentState;
   }
 }

@@ -21,7 +21,6 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Dimensionless;
-import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -242,9 +241,11 @@ public final class Constants {
 
   public static class constIntake {
     public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
+    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
   }
 
   public static class constTransfer {
     public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
+    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
   }
 }

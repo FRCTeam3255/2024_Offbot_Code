@@ -20,9 +20,9 @@ public class IntakeFloor extends Command {
   /** Creates a new IntakeFloor. */
 
   public IntakeFloor(Intake subIntake, Transfer subTransfer) {
-    // Use addRequirements() here to declare subsystem dependencies.
     this.subIntake = subIntake;
     this.subTransfer = subTransfer;
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subIntake, subTransfer);
   }
 
