@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -40,10 +41,10 @@ public final class Constants {
     // In Rotations: Obtain by aligning all of the wheels in the correct direction
     // and
     // copy-pasting the Raw Absolute Encoder value
-    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = -0.152832;
-    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.032471;
-    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = -0.107666;
-    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = 0.095215;
+    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = -0.079834;
+    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.249268;
+    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = -0.240479;
+    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = 0.210449;
 
     public static final InvertedValue DRIVE_MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final InvertedValue STEER_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
@@ -74,7 +75,7 @@ public final class Constants {
      * Competition Robot.
      * </p>
      */
-    public static final double DRIVE_SPEED = Units.Feet.convertFrom(15.1, Units.Meters);
+    public static final Measure<Velocity<Distance>> DRIVE_SPEED = Units.FeetPerSecond.of(15.1);
     // Physically measured from center to center of the wheels
     // Distance between Left & Right Wheels
     public static final double TRACK_WIDTH = Units.Meters.convertFrom(23.75, Units.Inches);
@@ -118,18 +119,31 @@ public final class Constants {
      *      https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#always-blue-origin">
      *      Robot Coordinate Systems</a>
      * @return An array of field element positions. Your Speaker, Amp, Source, Left
-     *         Stage, Center Stage, Right Stage
+     *         Stage, Center Stage, Right Stage, Subwoofer
      */
     public static Supplier<Pose3d[]> getFieldPositions() {
       if (ALLIANCE.isPresent() && ALLIANCE.get().equals(Alliance.Red)) {
         return () -> new Pose3d[] { redConstants.SPEAKER_CENTER, redConstants.AMP, redConstants.SOURCE,
             redConstants.LEFT_STAGE,
-            redConstants.CENTER_STAGE, redConstants.RIGHT_STAGE };
+            redConstants.CENTER_STAGE, redConstants.RIGHT_STAGE, redConstants.SUBWOOFER };
 
       }
       return () -> new Pose3d[] { blueConstants.SPEAKER_CENTER, blueConstants.AMP, blueConstants.SOURCE,
           blueConstants.LEFT_STAGE,
-          blueConstants.CENTER_STAGE, blueConstants.RIGHT_STAGE };
+          blueConstants.CENTER_STAGE, blueConstants.RIGHT_STAGE, blueConstants.SUBWOOFER };
+    }
+
+    /**
+     * @return A list containing only the chain positions
+     */
+    public static List<Pose2d> getChainPositions() {
+      if (ALLIANCE.isPresent() && ALLIANCE.get().equals(Alliance.Red)) {
+        return List.of(redConstants.RIGHT_STAGE.toPose2d(), redConstants.CENTER_STAGE.toPose2d(),
+            redConstants.LEFT_STAGE.toPose2d());
+      } else {
+        return List.of(blueConstants.RIGHT_STAGE.toPose2d(), blueConstants.CENTER_STAGE.toPose2d(),
+            blueConstants.LEFT_STAGE.toPose2d());
+      }
     }
 
     private static final class blueConstants {
@@ -154,6 +168,8 @@ public final class Constants {
           new Pose2d(5.554078578948975, 4.124814033508301, Rotation2d.fromDegrees(0)));
       private static final Pose3d RIGHT_STAGE = new Pose3d(
           new Pose2d(4.524875164031982, 3.488827705383301, Rotation2d.fromDegrees(240)));
+
+      private static final Pose3d SUBWOOFER = new Pose3d(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(180)));
     }
 
     private static final class redConstants {
@@ -176,6 +192,9 @@ public final class Constants {
           new Pose2d(10.983105659484863, 4.096443176269531, Rotation2d.fromDegrees(180)));
       private static final Pose3d RIGHT_STAGE = new Pose3d(
           new Pose2d(12.021082878112793, 4.7371745109558105, Rotation2d.fromDegrees(60)));
+
+      private static final Pose3d SUBWOOFER = new Pose3d(
+          new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(0)));
     }
   }
 

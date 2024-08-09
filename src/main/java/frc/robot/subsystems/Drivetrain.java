@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.frcteam3255.components.swerve.SN_SuperSwerve;
 import com.frcteam3255.components.swerve.SN_SwerveModule;
@@ -23,6 +27,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
@@ -128,6 +133,10 @@ public class Drivetrain extends SN_SuperSwerve {
         prefDrivetrain.turnSpeed.getValue());
 
     return Units.DegreesPerSecond.of(yawSetpoint);
+  }
+
+  public Measure<Velocity<Angle>> getVelocityToSnap(Measure<Angle> desiredYaw) {
+    return getVelocityToSnap(Rotation2d.fromDegrees(desiredYaw.in(Units.Degrees)));
   }
 
   /**

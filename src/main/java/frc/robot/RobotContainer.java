@@ -9,6 +9,7 @@ import com.frcteam3255.joystick.SN_XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constControllers;
+import frc.robot.Constants.constField;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
@@ -40,9 +41,9 @@ public class RobotContainer {
 
   private void configureBindings() {
     conDriver.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
-    conDriver.btn_Start.onTrue(Commands.runOnce(() -> subDrivetrain.resetYaw(180)));
+
     conDriver.btn_Back.onTrue(
-        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(180)))));
+        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
   }
 
   public Command getAutonomousCommand() {
