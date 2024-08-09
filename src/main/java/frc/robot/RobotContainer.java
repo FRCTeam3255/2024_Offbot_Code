@@ -5,9 +5,13 @@
 package frc.robot;
 
 import com.frcteam3255.joystick.SN_XboxController;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constControllers;
+import frc.robot.Constants.constField;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.Drive;
 import frc.robot.commands.IntakeFloor;
@@ -31,7 +35,10 @@ public class RobotContainer {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
 
     subDrivetrain
-        .setDefaultCommand(new Drive(subDrivetrain, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX));
+        .setDefaultCommand(new Drive(subDrivetrain, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
+            conDriver.btn_LeftBumper,
+            conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X,
+            conDriver.btn_LeftTrigger, conDriver.btn_RightTrigger));
 
     configureDriverBindings(conDriver);
     configureOperatorBindings(conOperator);
@@ -41,12 +48,14 @@ public class RobotContainer {
 
   private void configureDriverBindings(SN_XboxController controller) {
     controller.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
-    controller.btn_Back.onTrue(Commands.runOnce(() -> subDrivetrain.resetYaw()));
+    controller.btn_Back.onTrue(
+        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
 
     // Defaults to Field-Relative, is Robot-Relative while held
     controller.btn_LeftBumper
         .whileTrue(Commands.runOnce(() -> subDrivetrain.setRobotRelative()))
         .onFalse(Commands.runOnce(() -> subDrivetrain.setFieldRelative()));
+
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
