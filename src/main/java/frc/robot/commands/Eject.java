@@ -36,21 +36,21 @@ public class Eject extends Command {
   public void initialize() {
     switch (RobotContainer.getRobotState()) {
       case STORE_FEEDER:
-        subIntake.setIntakeRollerSpeed(constIntake.EJECTING_SPEED.in(Units.Percent));
-        subTransfer.setFeederSpeed(constTransfer.EJECTING_SPEED.in(Units.Percent));
+        subIntake.setIntakeRollerSpeed(constIntake.EJECTING_SPEED);
+        subTransfer.setFeederSpeed(constTransfer.EJECTING_SPEED);
         break;
       case PREP_SHUFFLE:
-        subIntake.setIntakeRollerSpeed(constIntake.EJECTING_SPEED.in(Units.Percent));
-        subTransfer.setFeederSpeed(constTransfer.EJECTING_SPEED.in(Units.Percent));
+        subIntake.setIntakeRollerSpeed(constIntake.EJECTING_SPEED);
+        subTransfer.setFeederSpeed(constTransfer.EJECTING_SPEED);
         break;
       case PREP_SPEAKER:
-        subIntake.setIntakeRollerSpeed(constIntake.EJECTING_SPEED.in(Units.Percent));
-        subTransfer.setFeederSpeed(constTransfer.EJECTING_SPEED.in(Units.Percent));
+        subIntake.setIntakeRollerSpeed(constIntake.EJECTING_SPEED);
+        subTransfer.setFeederSpeed(constTransfer.EJECTING_SPEED);
         break;
       default: // if robot is in a state where it can't eject (or we don't want it to), then do
                // nothing
-        subIntake.setIntakeRollerSpeed(0);
-        subTransfer.setFeederSpeed(0);
+        subIntake.setIntakeRollerSpeed(Units.Percent.of(0));
+        subTransfer.setFeederSpeed(Units.Percent.of(0));
         canEject = false;
     }
   }

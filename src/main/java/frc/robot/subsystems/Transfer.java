@@ -8,8 +8,12 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.units.Dimensionless;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotMap;
 import frc.robot.RobotMap.mapTransfer;
 
 public class Transfer extends SubsystemBase {
@@ -21,11 +25,11 @@ public class Transfer extends SubsystemBase {
   public Transfer() {
     feederMotor = new TalonFX(mapTransfer.TRANSFER_MOTOR_CAN, "rio");
     feederMotor.getConfigurator().apply(feederConfig);
-    noteSensor = new DigitalInput(1);
+    noteSensor = new DigitalInput(mapTransfer.SENSOR_DIO);
   }
 
-  public void setFeederSpeed(double speed) {
-    feederMotor.set(speed);
+  public void setFeederSpeed(Measure<Dimensionless> speed) {
+    feederMotor.set(speed.in(Units.Percent));
   }
 
   public void setFeederNeutralOutput() {

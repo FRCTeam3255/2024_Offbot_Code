@@ -31,15 +31,15 @@ public class IntakeFloor extends Command {
   public void initialize() {
     RobotContainer.setRobotState(RobotState.INTAKING);
 
-    subIntake.setIntakeRollerSpeed(0);
-    subTransfer.setFeederSpeed(0);
+    subIntake.setIntakeRollerSpeed(Units.Percent.of(0));
+    subTransfer.setFeederSpeed(Units.Percent.of(0));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subIntake.setIntakeRollerSpeed(constIntake.INTAKING_SPEED.in(Units.Percent));
-    subTransfer.setFeederSpeed(constTransfer.INTAKING_SPEED.in(Units.Percent));
+    subIntake.setIntakeRollerSpeed(constIntake.INTAKING_SPEED);
+    subTransfer.setFeederSpeed(constTransfer.INTAKING_SPEED);
   }
 
   // Called once the command ends or is interrupted.
