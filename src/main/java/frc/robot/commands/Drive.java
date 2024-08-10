@@ -87,11 +87,10 @@ public class Drive extends Command {
     // >:(
     switch (RobotContainer.getRobotState()) {
       case PREP_SHUFFLE:
-        // TODO: Write Shuffling Implementation
+        rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
         break;
       case PREP_AMP:
-        // TODO: Write amp implementation. This is as simple as picking east or west
-        // depending on alliance
+        rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(270));
         break;
       case PREP_SPEAKER:
         rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());

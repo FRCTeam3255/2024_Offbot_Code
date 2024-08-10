@@ -20,16 +20,18 @@ public class PrepShuffle extends Command {
   public PrepShuffle(Shooter subShooter, Drivetrain subDrivetrain) {
     this.subShooter = subShooter;
     this.subDrivetrain = subDrivetrain;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subShooter, subDrivetrain);
+    addRequirements(subShooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     if (RobotContainer.getRobotState() == RobotState.STORE_FEEDER) {
-      // snap drivetrain
       subShooter.setShooterPosition(null);
+      // TODO: NULL POINTER EXCEPTION MY BELOVED!
+      // This will be an interpolating tree map in Constants one day
       canShuffle = true;
     }
   }

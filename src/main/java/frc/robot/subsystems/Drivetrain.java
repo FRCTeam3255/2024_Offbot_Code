@@ -173,6 +173,17 @@ public class Drivetrain extends SN_SuperSwerve {
   }
 
   /**
+   * Calculates the angle necessary for the drivetrain to face where we shuffle
+   * to.
+   * 
+   * @return The necessary angle, in the Field Coordinate System
+   */
+  public Rotation2d getAngleToShuffle() {
+    Pose2d shuffleTarget = constField.getFieldPositions().get()[7].toPose2d();
+    return getAngleToTarget(shuffleTarget);
+  }
+
+  /**
    * Calculates the velocity needed to snap to the nearest chain on your alliance
    * 
    * @return The necessary velocity
