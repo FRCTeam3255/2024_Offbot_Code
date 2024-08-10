@@ -254,4 +254,7 @@ public final class Constants {
     public static final double AREA_THRESHOLD = 0.1;
   }
 
+  public static class constTransfer {
+    public static final boolean NOTE_SENSOR_INVERT = true;
+  }
 }
