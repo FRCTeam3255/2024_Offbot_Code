@@ -20,7 +20,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -237,6 +236,22 @@ public final class Constants {
   public static class constElevator {
     public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
     public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
+  }
+
+  public static class constLimelight {
+
+    /**
+     * <p>
+     * Maximum rate of rotation before we begin rejecting pose updates
+     * </p>
+     */
+    public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY = Units.DegreesPerSecond.of(720);
+
+    /**
+     * The area that one tag (if its the only tag in the update) needs to exceed
+     * before being accepted
+     */
+    public static final double AREA_THRESHOLD = 0.1;
   }
 
 }
