@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constField;
 import frc.robot.RobotMap.mapControllers;
+import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.commands.Eject;
 import frc.robot.commands.IntakeFloor;
@@ -18,6 +19,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Transfer;
+import frc.robot.subsystems.Limelight;
 
 public class RobotContainer {
 
@@ -28,6 +30,7 @@ public class RobotContainer {
   private final Intake subIntake = new Intake();
   private final Transfer subTransfer = new Transfer();
   private final Shooter subShooter = new Shooter();
+  private final Limelight subLimelight = new Limelight();
 
   public static RobotState currentState = RobotState.NONE;
 
@@ -38,6 +41,8 @@ public class RobotContainer {
         .setDefaultCommand(new Drive(subDrivetrain, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
             conDriver.btn_LeftBumper,
             conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X));
+    
+    subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain, subLimelight));
 
     configureDriverBindings(conDriver);
     configureOperatorBindings(conOperator);
