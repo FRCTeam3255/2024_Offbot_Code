@@ -4,6 +4,7 @@ Jump into the code [`here!`](src/main/java/frc/robot)
 
 This robot will compete at the following competitions: 
 - Battle at the Border
+- [Beach Blitz](https://www.thebluealliance.com/event/2024cabl)
 
 ## View Our Robots in Action!
 - [Instagram](https://www.instagram.com/frcteam3255/) 
