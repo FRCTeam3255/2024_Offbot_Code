@@ -6,8 +6,6 @@ package frc.robot;
 
 import com.frcteam3255.joystick.SN_XboxController;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constControllers;
@@ -39,8 +37,7 @@ public class RobotContainer {
     subDrivetrain
         .setDefaultCommand(new Drive(subDrivetrain, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
             conDriver.btn_LeftBumper,
-            conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X,
-            conDriver.btn_LeftTrigger, conDriver.btn_RightTrigger));
+            conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X));
 
     configureDriverBindings(conDriver);
     configureOperatorBindings(conOperator);

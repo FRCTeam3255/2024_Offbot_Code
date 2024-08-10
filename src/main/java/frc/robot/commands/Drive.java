@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Angle;
@@ -12,9 +13,11 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.constField;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.subsystems.Drivetrain;
@@ -23,14 +26,13 @@ public class Drive extends Command {
   Drivetrain subDrivetrain;
   DoubleSupplier xAxis, yAxis, rotationAxis;
   boolean isOpenLoop;
-  Trigger aimAtSpeaker, slowMode, north, south, east, west, chain;
+  Trigger slowMode, north, south, east, west, chain;
   Measure<Angle> northYaw;
   double redAllianceMultiplier = 1;
   double slowMultiplier = 0;
 
   public Drive(Drivetrain subDrivetrain, DoubleSupplier xAxis, DoubleSupplier yAxis,
-      DoubleSupplier rotationAxis, Trigger slowMode, Trigger north, Trigger east, Trigger south, Trigger west,
-      Trigger chain, Trigger aimAtSpeaker) {
+      DoubleSupplier rotationAxis, Trigger slowMode, Trigger north, Trigger east, Trigger south, Trigger west) {
     this.subDrivetrain = subDrivetrain;
     this.xAxis = xAxis;
     this.yAxis = yAxis;
@@ -40,8 +42,6 @@ public class Drive extends Command {
     this.east = east;
     this.south = south;
     this.west = west;
-    this.chain = chain;
-    this.aimAtSpeaker = aimAtSpeaker;
 
     isOpenLoop = true;
 
@@ -73,9 +73,7 @@ public class Drive extends Command {
         .times(prefDrivetrain.turnSpeed.getValue());
 
     // Requesting snapping ignores any previously calculated rotational speeds
-    if (aimAtSpeaker.getAsBoolean()) {
-      rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
-    } else if (north.getAsBoolean()) {
+    if (north.getAsBoolean()) {
       rVelocity = subDrivetrain.getVelocityToSnap(northYaw);
     } else if (east.getAsBoolean()) {
       rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(270)));
@@ -83,10 +81,29 @@ public class Drive extends Command {
       rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(180)));
     } else if (west.getAsBoolean()) {
       rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(90)));
-    } else if (chain.getAsBoolean()) {
-      rVelocity = subDrivetrain.getVelocityToChain();
     }
-    SmartDashboard.putNumber("desired x velocity", xVelocity.in(Units.MetersPerSecond));
+
+    // Override any previously calculated rotational speeds if the robot demands it
+    // >:(
+    switch (RobotContainer.getRobotState()) {
+      case PREP_SHUFFLE:
+        // TODO: Write Shuffling Implementation
+        break;
+      case PREP_AMP:
+        // TODO: Write amp implementation. This is as simple as picking east or west
+        // depending on alliance
+        break;
+      case PREP_SPEAKER:
+        rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
+        break;
+      case CLIMBING:
+        rVelocity = subDrivetrain.getVelocityToChain();
+        break;
+
+      default:
+        break;
+    }
+
     subDrivetrain.drive(new Translation2d(xVelocity.in(Units.MetersPerSecond), yVelocity.in(Units.MetersPerSecond)),
         rVelocity.in(Units.RadiansPerSecond), isOpenLoop);
   }
