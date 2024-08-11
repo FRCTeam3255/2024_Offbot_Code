@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Angle;
@@ -13,17 +12,16 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
-import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.constField;
 import frc.robot.RobotPreferences.prefDrivetrain;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.StateMachine;
 
 public class Drive extends Command {
   Drivetrain subDrivetrain;
+  StateMachine subStateMachine;
   DoubleSupplier xAxis, yAxis, rotationAxis;
   boolean isOpenLoop;
   Trigger slowMode, north, south, east, west, chain;
@@ -31,7 +29,7 @@ public class Drive extends Command {
   double redAllianceMultiplier = 1;
   double slowMultiplier = 0;
 
-  public Drive(Drivetrain subDrivetrain, DoubleSupplier xAxis, DoubleSupplier yAxis,
+  public Drive(Drivetrain subDrivetrain, StateMachine subStateMachine, DoubleSupplier xAxis, DoubleSupplier yAxis,
       DoubleSupplier rotationAxis, Trigger slowMode, Trigger north, Trigger east, Trigger south, Trigger west) {
     this.subDrivetrain = subDrivetrain;
     this.xAxis = xAxis;
@@ -85,7 +83,7 @@ public class Drive extends Command {
 
     // Override any previously calculated rotational speeds if the robot demands it
     // >:(
-    switch (RobotContainer.getRobotState()) {
+    switch (subStateMachine.getRobotState()) {
       case PREP_SHUFFLE:
         rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
         break;
