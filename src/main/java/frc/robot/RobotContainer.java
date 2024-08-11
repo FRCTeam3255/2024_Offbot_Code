@@ -50,8 +50,7 @@ public class RobotContainer {
     configureOperatorBindings(conOperator);
 
     gamePieceTrigger
-        .onTrue(subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subIntake, subTransfer, subShooter)
-            .andThen(null));
+        .onTrue(subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subIntake, subTransfer, subShooter));
 
     subDrivetrain.resetModulesToAbsolute();
   }
