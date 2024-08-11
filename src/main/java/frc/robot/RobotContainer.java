@@ -15,6 +15,7 @@ import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Transfer;
 
 public class RobotContainer {
 
@@ -23,6 +24,7 @@ public class RobotContainer {
 
   private final Drivetrain subDrivetrain = new Drivetrain();
   private final Limelight subLimelight = new Limelight();
+  private final Transfer subTransfer = new Transfer();
 
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
