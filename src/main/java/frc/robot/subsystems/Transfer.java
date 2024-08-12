@@ -38,10 +38,6 @@ public class Transfer extends SubsystemBase {
     feederMotor.setControl(new NeutralOut());
   }
 
-  public boolean isGamePieceCollected() {
-    return false; // TODO: placeholder for now until we program the beam break sensor
-  }
-
   public boolean getGamePieceCollected() {
     return (constTransfer.NOTE_SENSOR_INVERT) ? !noteSensor.get() : noteSensor.get();
   }

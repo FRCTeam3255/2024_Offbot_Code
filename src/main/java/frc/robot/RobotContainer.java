@@ -34,7 +34,7 @@ public class RobotContainer {
   private final Shooter subShooter = new Shooter();
   private final Limelight subLimelight = new Limelight();
 
-  private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.isGamePieceCollected());
+  private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceCollected());
 
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
