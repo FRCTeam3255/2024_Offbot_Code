@@ -11,17 +11,23 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.constTransfer;
 import frc.robot.RobotMap.mapTransfer;
 
 public class Transfer extends SubsystemBase {
   TalonFX feederMotor;
   TalonFXConfiguration feederConfig = new TalonFXConfiguration();
+  DigitalInput noteSensor;
 
   /** Creates a new Transfer. */
   public Transfer() {
     feederMotor = new TalonFX(mapTransfer.TRANSFER_MOTOR_CAN, "rio");
     feederMotor.getConfigurator().apply(feederConfig);
+
+    noteSensor = new DigitalInput(mapTransfer.NOTE_SENSOR_DIO);
   }
 
   public void setFeederSpeed(Measure<Dimensionless> speed) {
@@ -36,8 +42,13 @@ public class Transfer extends SubsystemBase {
     return false; // TODO: placeholder for now until we program the beam break sensor
   }
 
+  public boolean getGamePieceCollected() {
+    return (constTransfer.NOTE_SENSOR_INVERT) ? !noteSensor.get() : noteSensor.get();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Transfer/Game Piece Detected", getGamePieceCollected());
   }
 }

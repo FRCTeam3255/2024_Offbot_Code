@@ -251,9 +251,13 @@ public final class Constants {
   }
 
   public static class constTransfer {
+    public static final boolean NOTE_SENSOR_INVERT = true;
+
     public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
     public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
+
   }
+
   public static class constLimelight {
 
     /**
