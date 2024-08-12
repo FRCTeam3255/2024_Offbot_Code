@@ -6,8 +6,8 @@ package frc.robot.commands.States;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constShooter;
-import frc.robot.RobotContainer.RobotState;
-import frc.robot.RobotContainer.TargetState;
+import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.TargetState;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 

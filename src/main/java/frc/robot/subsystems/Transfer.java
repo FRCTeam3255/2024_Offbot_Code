@@ -11,21 +11,17 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotMap;
 import frc.robot.RobotMap.mapTransfer;
 
 public class Transfer extends SubsystemBase {
   TalonFX feederMotor;
   TalonFXConfiguration feederConfig = new TalonFXConfiguration();
-  DigitalInput noteSensor;
 
   /** Creates a new Transfer. */
   public Transfer() {
     feederMotor = new TalonFX(mapTransfer.TRANSFER_MOTOR_CAN, "rio");
     feederMotor.getConfigurator().apply(feederConfig);
-    noteSensor = new DigitalInput(mapTransfer.SENSOR_DIO);
   }
 
   public void setFeederSpeed(Measure<Dimensionless> speed) {

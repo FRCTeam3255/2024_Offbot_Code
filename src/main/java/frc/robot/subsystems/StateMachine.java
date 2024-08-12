@@ -7,10 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer.RobotState;
-import frc.robot.RobotContainer.TargetState;
-import frc.robot.commands.States.Eject;
-import frc.robot.commands.States.IntakeFloor;
+import frc.robot.commands.States.Ejecting;
+import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.PrepShuffle;
 import frc.robot.commands.States.StoreFeeder;
 
@@ -48,7 +46,7 @@ public class StateMachine extends SubsystemBase {
         switch (currentState) {
           case NONE:
           case SHOOTING:
-            return new IntakeFloor(subStateMachine, subIntake, subTransfer);
+            return new Intaking(subStateMachine, subIntake, subTransfer);
         }
 
       case STORE_FEEDER:
@@ -60,10 +58,12 @@ public class StateMachine extends SubsystemBase {
       case EJECTING:
         switch (currentState) {
           case NONE:
+          case INTAKING:
+          case STORE_FEEDER:
           case PREP_NONE:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
-            return new Eject(subIntake, subTransfer, subStateMachine);
+            return new Ejecting(subStateMachine, subIntake, subTransfer);
         }
 
       case PREP_SHUFFLE:
@@ -82,6 +82,27 @@ public class StateMachine extends SubsystemBase {
         return new StoreFeeder(subStateMachine, subIntake, subTransfer); // placeholder for now
       // TODO: make a command when tryState is invalid (flashing LEDs?)
     }
+  }
+
+  public static enum RobotState {
+    NONE,
+    INTAKING,
+    STORE_FEEDER,
+    PREP_SHUFFLE,
+    PREP_SPEAKER,
+    PREP_AMP,
+    PREP_NONE,
+    CLIMBING,
+    SHOOTING,
+    EJECTING
+  }
+
+  public static enum TargetState {
+    NONE,
+    PREP_SHUFFLE,
+    PREP_SPEAKER,
+    PREP_AMP,
+    PREP_NONE
   }
 
   @Override

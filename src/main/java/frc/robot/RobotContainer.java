@@ -19,6 +19,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
+import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.Limelight;
 
 public class RobotContainer {
@@ -74,26 +75,5 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return null;
-  }
-
-  public static enum RobotState {
-    NONE,
-    INTAKING,
-    STORE_FEEDER,
-    PREP_SHUFFLE,
-    PREP_SPEAKER,
-    PREP_AMP,
-    PREP_NONE,
-    CLIMBING,
-    SHOOTING,
-    EJECTING
-  }
-
-  public static enum TargetState {
-    NONE,
-    PREP_SHUFFLE,
-    PREP_SPEAKER,
-    PREP_AMP,
-    PREP_NONE
   }
 }

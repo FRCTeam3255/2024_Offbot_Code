@@ -59,7 +59,6 @@ public class RobotMap {
   // MOTORS: 50 -> 59
   public static class mapTransfer {
     public static final int TRANSFER_MOTOR_CAN = 50;
-    public static final int SENSOR_DIO = 1;
   }
 
 }

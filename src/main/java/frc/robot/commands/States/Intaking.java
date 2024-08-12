@@ -7,21 +7,21 @@ package frc.robot.commands.States;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constIntake;
 import frc.robot.Constants.constTransfer;
-import frc.robot.RobotContainer.RobotState;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
+import frc.robot.subsystems.Intake;
 
-public class Eject extends Command {
+public class Intaking extends Command {
   StateMachine subStateMachine;
   Intake subIntake;
   Transfer subTransfer;
 
-  /** Creates a new Eject. */
-  public Eject(Intake subIntake, Transfer subTransfer, StateMachine subStateMachine) {
+  /** Creates a new Intake. */
+  public Intaking(StateMachine subStateMachine, Intake subIntake, Transfer subTransfer) {
+    this.subStateMachine = subStateMachine;
     this.subIntake = subIntake;
     this.subTransfer = subTransfer;
-    this.subStateMachine = subStateMachine;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subStateMachine);
@@ -30,9 +30,9 @@ public class Eject extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subStateMachine.setRobotState(RobotState.EJECTING);
-    subIntake.setIntakeRollerSpeed(constIntake.EJECTING_SPEED);
-    subTransfer.setFeederSpeed(constTransfer.EJECTING_SPEED);
+    subStateMachine.setRobotState(RobotState.INTAKING);
+    subIntake.setIntakeRollerSpeed(constIntake.INTAKING_SPEED);
+    subTransfer.setFeederSpeed(constTransfer.INTAKING_SPEED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,12 +43,14 @@ public class Eject extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    subStateMachine.setRobotState(RobotState.NONE);
+    if (interrupted) {
+      subStateMachine.setRobotState(RobotState.NONE);
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return subTransfer.isGamePieceCollected();
   }
 }
