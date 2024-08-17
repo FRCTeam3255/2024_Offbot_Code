@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
+import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepShuffle;
 import frc.robot.commands.States.StoreFeeder;
 
@@ -39,7 +40,7 @@ public class StateMachine extends SubsystemBase {
     return currentTargetState;
   }
 
-  public Command tryState(RobotState desiredState, StateMachine subStateMachine, Intake subIntake,
+  public Command tryState(RobotState desiredState, StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
       Transfer subTransfer, Shooter subShooter) {
     switch (desiredState) {
       case INTAKING:
@@ -79,7 +80,7 @@ public class StateMachine extends SubsystemBase {
         }
 
       default:
-        return new StoreFeeder(subStateMachine, subIntake, subTransfer); // placeholder for now
+        return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer); // placeholder for now
       // TODO: make a command when tryState is invalid (flashing LEDs?)
     }
   }

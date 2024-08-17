@@ -19,9 +19,15 @@
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
     "transitory": {
       "SmartDashboard": {
         "Field": {
+          "open": true
+        },
+        "Transfer": {
           "open": true
         },
         "open": true

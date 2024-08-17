@@ -15,6 +15,7 @@ import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
@@ -29,6 +30,7 @@ public class RobotContainer {
 
   private final StateMachine subStateMachine = new StateMachine();
   private final Drivetrain subDrivetrain = new Drivetrain();
+  private final Elevator subElevator = new Elevator();
   private final Intake subIntake = new Intake();
   private final Transfer subTransfer = new Transfer();
   private final Shooter subShooter = new Shooter();
@@ -45,13 +47,15 @@ public class RobotContainer {
                 conDriver.btn_LeftBumper,
                 conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X));
 
-    subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain, subLimelight));
+    // subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
+    // subLimelight));
 
     configureDriverBindings(conDriver);
     configureOperatorBindings(conOperator);
 
     gamePieceTrigger
-        .onTrue(subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subIntake, subTransfer, subShooter));
+        .onTrue(subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subElevator, subIntake, subTransfer,
+            subShooter));
 
     subDrivetrain.resetModulesToAbsolute();
   }
@@ -70,7 +74,20 @@ public class RobotContainer {
 
   private void configureOperatorBindings(SN_XboxController controller) {
     controller.btn_LeftTrigger
-        .whileTrue(subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subIntake, subTransfer, subShooter));
+        .whileTrue(subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subElevator, subIntake, subTransfer,
+            subShooter));
+
+    controller.btn_Y.onTrue(
+        subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake, subTransfer,
+            subShooter));
+
+    controller.btn_X.whileTrue(
+        subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine, subElevator, subIntake, subTransfer,
+            subShooter));
+
+    controller.btn_West.whileTrue(
+        subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
+            subShooter));
   }
 
   public Command getAutonomousCommand() {
