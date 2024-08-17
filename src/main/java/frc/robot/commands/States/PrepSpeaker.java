@@ -4,10 +4,10 @@
 
 package frc.robot.commands.States;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constShooter;
 import frc.robot.subsystems.StateMachine.RobotState;
-import frc.robot.subsystems.StateMachine.TargetState;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 
@@ -26,13 +26,12 @@ public class PrepSpeaker extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subStateMachine.setTargetState(TargetState.PREP_SPEAKER);
     if (subStateMachine.getRobotState() == RobotState.STORE_FEEDER) {
       subStateMachine.setRobotState(RobotState.PREP_SPEAKER);
       subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY, constShooter.RIGHT_SPEAKER_VELOCITY);
     }
     // TODO: actually put the calculated position
-    subShooter.setShooterPosition(null);
+    subShooter.setShooterPosition(Units.Rotations.zero());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

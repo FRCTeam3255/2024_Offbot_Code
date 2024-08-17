@@ -11,6 +11,7 @@ import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepShuffle;
+import frc.robot.commands.States.PrepSpeaker;
 import frc.robot.commands.States.StoreFeeder;
 
 public class StateMachine extends SubsystemBase {
@@ -44,40 +45,45 @@ public class StateMachine extends SubsystemBase {
       Transfer subTransfer, Shooter subShooter) {
     switch (desiredState) {
       case INTAKING:
-        switch (currentState) {
-          case NONE:
-          case SHOOTING:
-            return new Intaking(subStateMachine, subIntake, subTransfer);
-        }
+        return new Intaking(subStateMachine, subIntake, subTransfer);
+      // switch (currentState) {
+      // case NONE:
+      // case SHOOTING:
+      // return new Intaking(subStateMachine, subIntake, subTransfer);
+      // }
 
       case STORE_FEEDER:
-        switch (currentState) {
-          case INTAKING:
-            return new StoreFeeder(subStateMachine, subIntake, subTransfer);
-        }
+        return new StoreFeeder(subStateMachine, subIntake, subTransfer);
+      // switch (currentState) {
+      // case INTAKING:
+      // return new StoreFeeder(subStateMachine, subIntake, subTransfer);
+      // }
 
       case EJECTING:
-        switch (currentState) {
-          case NONE:
-          case INTAKING:
-          case STORE_FEEDER:
-          case PREP_NONE:
-          case PREP_SHUFFLE:
-          case PREP_SPEAKER:
-            return new Ejecting(subStateMachine, subIntake, subTransfer);
-        }
+        return new Ejecting(subStateMachine, subIntake, subTransfer);
+      // switch (currentState) {
+      // case NONE:
+      // case INTAKING:
+      // case STORE_FEEDER:
+      // case PREP_NONE:
+      // case PREP_SHUFFLE:
+      // case PREP_SPEAKER:
+      // return new Ejecting(subStateMachine, subIntake, subTransfer);
+      // }
 
       case PREP_SHUFFLE:
-        switch (currentState) {
-          case STORE_FEEDER:
-            return new PrepShuffle(subStateMachine, subShooter);
-        }
+        return new PrepShuffle(subStateMachine, subShooter);
+      // switch (currentState) {
+      // case STORE_FEEDER:
+      // return new PrepShuffle(subStateMachine, subShooter);
+      // }
 
       case PREP_SPEAKER:
-        switch (currentState) {
-          case STORE_FEEDER:
-            return new PrepShuffle(subStateMachine, subShooter);
-        }
+        return new PrepSpeaker(subStateMachine, subShooter);
+      // switch (currentState) {
+      // case STORE_FEEDER:
+      // return new PrepShuffle(subStateMachine, subShooter);
+      // }
 
       default:
         return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer); // placeholder for now
@@ -110,6 +116,7 @@ public class StateMachine extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putString("CURRENT ROBOT STATE", getRobotState().toString());
+    SmartDashboard.putString("CURRENT TARGET STATE", getTargetState().toString());
 
   }
 }

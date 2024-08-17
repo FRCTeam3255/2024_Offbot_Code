@@ -21,6 +21,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
 import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.TargetState;
 import frc.robot.subsystems.Limelight;
 
 public class RobotContainer {
@@ -77,12 +78,12 @@ public class RobotContainer {
         .whileTrue(subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subElevator, subIntake, subTransfer,
             subShooter));
 
-    controller.btn_Y.onTrue(
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER))).onTrue(
         subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake, subTransfer,
             subShooter));
 
-    controller.btn_X.whileTrue(
-        subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine, subElevator, subIntake, subTransfer,
+    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
+        .onTrue(subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine, subElevator, subIntake, subTransfer,
             subShooter));
 
     controller.btn_West.whileTrue(

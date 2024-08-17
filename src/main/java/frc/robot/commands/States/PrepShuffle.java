@@ -4,10 +4,10 @@
 
 package frc.robot.commands.States;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constShooter;
 import frc.robot.subsystems.StateMachine.RobotState;
-import frc.robot.subsystems.StateMachine.TargetState;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 
@@ -26,14 +26,14 @@ public class PrepShuffle extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subStateMachine.setTargetState(TargetState.PREP_SHUFFLE);
     if (subStateMachine.getRobotState() == RobotState.STORE_FEEDER) {
       subStateMachine.setRobotState(RobotState.PREP_SHUFFLE);
       subShooter.setDesiredVelocities(constShooter.LEFT_SHUFFLE_VELOCITY, constShooter.RIGHT_SHUFFLE_VELOCITY);
     }
+
     // TODO: NULL POINTER EXCEPTION MY BELOVED!
     // This will be an interpolating tree map in Constants one day
-    subShooter.setShooterPosition(null);
+    subShooter.setShooterPosition(Units.Rotations.zero());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
