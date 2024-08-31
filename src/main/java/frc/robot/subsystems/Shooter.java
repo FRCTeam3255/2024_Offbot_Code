@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
@@ -169,6 +170,21 @@ public class Shooter extends SubsystemBase {
         || ignoreFlywheelSpeed);
   }
 
+  /**
+   * @return The current position of the shooter in rotations
+   */
+  public double getShooterPosition() {
+    return pivotMotor.getPosition().getValueAsDouble();
+  }
+
+  /**
+   * @return If the shooter position is within tolerance of desired position
+   */
+  public boolean isShooterAtPosition(Measure<Angle> position) {
+    return (Math.abs(getShooterPosition() - position.in(Units.Rotations)) < constShooter.AT_POSITION_TOLERANCE
+        .in(Units.Rotations));
+  }
+
   public void setLeftDesiredVelocity(Measure<Velocity<Angle>> desiredVelocity) {
     desiredLeftVelocity = desiredVelocity;
   }
@@ -181,6 +197,11 @@ public class Shooter extends SubsystemBase {
       Measure<Velocity<Angle>> desiredRightVelocity) {
     setLeftDesiredVelocity(desiredLeftVelocity);
     setRightDesiredVelocity(desiredRightVelocity);
+  }
+
+  public void setShooterPercentOutput(Measure<Dimensionless> speed) {
+    leftMotor.set(speed.in(Units.Percent));
+    rightMotor.set(speed.in(Units.Percent));
   }
 
   public void setVoltage(double leftVoltage, double rightVoltage) {

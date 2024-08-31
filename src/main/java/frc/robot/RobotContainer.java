@@ -89,6 +89,9 @@ public class RobotContainer {
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
+    controller.btn_A.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
+        subElevator, subIntake, subTransfer, subShooter)));
+
     controller.btn_West.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
             subShooter)));

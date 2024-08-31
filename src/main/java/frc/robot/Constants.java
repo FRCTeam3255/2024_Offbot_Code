@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Time;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Units;
@@ -31,6 +32,8 @@ public final class Constants {
    * Volts
    */
   public static final double MAX_VOLTAGE = 12;
+
+  public static final Measure<Time> PREP_AMP_DELAY = Units.Seconds.of(2);
 
   public static class constControllers {
     public static final double DRIVER_LEFT_STICK_DEADBAND = 0.05;
@@ -214,6 +217,10 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Rotations.of(0);
     public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Rotations.of(0);
 
+    public static final Measure<Angle> PIVOT_AMP_ANGLE = Units.Rotations.of(0);
+
+    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Rotations.of(0);
+
     // - Velocities -
     public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(0.7);
 
@@ -233,6 +240,8 @@ public final class Constants {
 
     public static final Measure<Velocity<Angle>> LEFT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
     public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
+
+    public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
   }
 
   public static class constClimber {
@@ -243,6 +252,12 @@ public final class Constants {
   public static class constElevator {
     public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
     public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
+
+    public static final Measure<Angle> AMP_POSITION = Units.Rotations.of(0);
+
+    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Rotations.of(0);
+
+    public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0);
   }
 
   public static class constIntake {
@@ -255,6 +270,8 @@ public final class Constants {
 
     public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
     public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
+
+    public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
 
   }
 

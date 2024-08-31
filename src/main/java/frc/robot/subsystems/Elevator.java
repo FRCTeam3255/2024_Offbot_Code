@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -47,8 +48,8 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.getConfigurator().apply(elevatorConfig);
   }
 
-  public void setDrainpipeSpeed(double speed) {
-    drainpipeMotor.set(speed);
+  public void setDrainpipeSpeed(Measure<Dimensionless> speed) {
+    drainpipeMotor.set(speed.in(Units.Percent));
   }
 
   public void setElevatorSpeed(double speed) {
@@ -57,6 +58,21 @@ public class Elevator extends SubsystemBase {
 
   public void setElevatorPosition(Measure<Angle> position) {
     elevatorMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
+  }
+
+  /**
+   * @return The current position of the elevator in rotations
+   */
+  public double getElevatorPosition() {
+    return elevatorMotor.getPosition().getValueAsDouble();
+  }
+
+  /**
+   * @return If the elevator position is within tolerance of desired position
+   */
+  public boolean isElevatorAtPosition(Measure<Angle> position) {
+    return (Math.abs(getElevatorPosition() - position.in(Units.Rotations)) < constElevator.AT_POSITION_TOLERANCE
+        .in(Units.Rotations));
   }
 
   @Override
