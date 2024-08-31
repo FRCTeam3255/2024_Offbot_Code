@@ -39,9 +39,9 @@ public class NoneState extends Command {
   public void initialize() {
     subStateMachine.setRobotState(RobotState.NONE);
     subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
-    subIntake.setIntakeRollerSpeed(Units.Percent.of(0));
-    subTransfer.setFeederSpeed(Units.Percent.of(0));
-    subShooter.setDesiredVelocities(Units.RotationsPerSecond.of(0), Units.RotationsPerSecond.of(0));
+    subIntake.setIntakeRollerSpeed(Units.Percent.zero());
+    subTransfer.setFeederSpeed(Units.Percent.zero());
+    subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

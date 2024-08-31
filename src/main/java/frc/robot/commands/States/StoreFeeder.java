@@ -29,8 +29,8 @@ public class StoreFeeder extends Command {
   @Override
   public void initialize() {
     subStateMachine.setRobotState(RobotState.STORE_FEEDER);
-    subIntake.setIntakeRollerSpeed(Units.Percent.of(0));
-    subTransfer.setFeederSpeed(Units.Percent.of(0));
+    subIntake.setIntakeRollerSpeed(Units.Percent.zero());
+    subTransfer.setFeederSpeed(Units.Percent.zero());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -41,8 +41,6 @@ public class StateMachine extends SubsystemBase {
     return currentTargetState;
   }
 
-  // TODO: replace the NoneStates with a default command when previous state was
-  // invalid (flashing LEDs?)
   public Command tryState(RobotState desiredState, StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
       Transfer subTransfer, Shooter subShooter) {
     switch (desiredState) {
@@ -51,17 +49,15 @@ public class StateMachine extends SubsystemBase {
           case NONE:
           case SHOOTING:
             return new Intaking(subStateMachine, subIntake, subTransfer);
-          default:
-            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
         }
+        break;
 
       case STORE_FEEDER:
         switch (currentState) {
           case INTAKING:
             return new StoreFeeder(subStateMachine, subIntake, subTransfer);
-          default:
-            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
         }
+        break;
 
       case EJECTING:
         switch (currentState) {
@@ -72,9 +68,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
             return new Ejecting(subStateMachine, subIntake, subTransfer);
-          default:
-            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
         }
+        break;
 
       case PREP_SHUFFLE:
         switch (currentState) {
@@ -84,9 +79,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_NONE:
           case PREP_AMP:
             return new PrepShuffle(subStateMachine, subShooter);
-          default:
-            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
         }
+        break;
 
       case PREP_SPEAKER:
         switch (currentState) {
@@ -96,13 +90,12 @@ public class StateMachine extends SubsystemBase {
           case PREP_NONE:
           case PREP_AMP:
             return new PrepSpeaker(subStateMachine, subShooter);
-          default:
-            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
         }
-
-      default:
-        return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
+        break;
     }
+    // TODO: replace NoneState with a default command when previous states were
+    // invalid (flashing LEDs?)
+    return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
   }
 
   public static enum RobotState {
