@@ -8,44 +8,90 @@ import com.frcteam3255.joystick.SN_XboxController;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constField;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
+import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.TargetState;
+import frc.robot.subsystems.Limelight;
 
 public class RobotContainer {
 
   private final SN_XboxController conDriver = new SN_XboxController(mapControllers.DRIVER_USB);
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
 
+  private final StateMachine subStateMachine = new StateMachine();
   private final Drivetrain subDrivetrain = new Drivetrain();
-  private final Limelight subLimelight = new Limelight();
+  private final Elevator subElevator = new Elevator();
+  private final Intake subIntake = new Intake();
   private final Transfer subTransfer = new Transfer();
+  private final Shooter subShooter = new Shooter();
+  private final Limelight subLimelight = new Limelight();
+
+  private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceCollected());
 
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
 
     subDrivetrain
-        .setDefaultCommand(new Drive(subDrivetrain, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
-            conDriver.btn_LeftBumper,
-            conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X,
-            conDriver.btn_LeftTrigger, conDriver.btn_RightTrigger));
-    subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain, subLimelight));
+        .setDefaultCommand(
+            new Drive(subDrivetrain, subStateMachine, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
+                conDriver.btn_LeftBumper,
+                conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X));
 
-    configureBindings();
+    // subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
+    // subLimelight));
+
+    configureDriverBindings(conDriver);
+    configureOperatorBindings(conOperator);
+
+    gamePieceTrigger
+        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine,
+            subElevator, subIntake, subTransfer,
+            subShooter)));
 
     subDrivetrain.resetModulesToAbsolute();
   }
 
-  private void configureBindings() {
-    conDriver.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
-
-    conDriver.btn_Back.onTrue(
+  private void configureDriverBindings(SN_XboxController controller) {
+    controller.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
+    controller.btn_Back.onTrue(
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
+
+    // Defaults to Field-Relative, is Robot-Relative while held
+    controller.btn_LeftBumper
+        .whileTrue(Commands.runOnce(() -> subDrivetrain.setRobotRelative()))
+        .onFalse(Commands.runOnce(() -> subDrivetrain.setFieldRelative()));
+
+  }
+
+  private void configureOperatorBindings(SN_XboxController controller) {
+    controller.btn_LeftTrigger
+        .whileTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subElevator, subIntake, subTransfer,
+                subShooter)));
+
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake,
+                subTransfer, subShooter)));
+
+    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
+        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine,
+            subElevator, subIntake, subTransfer, subShooter)));
+
+    controller.btn_West.whileTrue(Commands.deferredProxy(
+        () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
+            subShooter)));
   }
 
   public Command getAutonomousCommand() {

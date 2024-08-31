@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -118,18 +119,18 @@ public final class Constants {
      *      https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#always-blue-origin">
      *      Robot Coordinate Systems</a>
      * @return An array of field element positions. Your Speaker, Amp, Source, Left
-     *         Stage, Center Stage, Right Stage, Subwoofer
+     *         Stage, Center Stage, Right Stage, Subwoofer, Shuffle
      */
     public static Supplier<Pose3d[]> getFieldPositions() {
       if (ALLIANCE.isPresent() && ALLIANCE.get().equals(Alliance.Red)) {
         return () -> new Pose3d[] { redConstants.SPEAKER_CENTER, redConstants.AMP, redConstants.SOURCE,
             redConstants.LEFT_STAGE,
-            redConstants.CENTER_STAGE, redConstants.RIGHT_STAGE, redConstants.SUBWOOFER };
+            redConstants.CENTER_STAGE, redConstants.RIGHT_STAGE, redConstants.SUBWOOFER, redConstants.SHUFFLE };
 
       }
       return () -> new Pose3d[] { blueConstants.SPEAKER_CENTER, blueConstants.AMP, blueConstants.SOURCE,
           blueConstants.LEFT_STAGE,
-          blueConstants.CENTER_STAGE, blueConstants.RIGHT_STAGE, blueConstants.SUBWOOFER };
+          blueConstants.CENTER_STAGE, blueConstants.RIGHT_STAGE, blueConstants.SUBWOOFER, blueConstants.SHUFFLE };
     }
 
     /**
@@ -169,6 +170,9 @@ public final class Constants {
           new Pose2d(4.524875164031982, 3.488827705383301, Rotation2d.fromDegrees(240)));
 
       private static final Pose3d SUBWOOFER = new Pose3d(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(180)));
+
+      private static final Pose3d SHUFFLE = new Pose3d(
+          new Pose2d(1.2991523742675781, 7.103456497192383, Rotation2d.fromDegrees(0)));
     }
 
     private static final class redConstants {
@@ -194,6 +198,9 @@ public final class Constants {
 
       private static final Pose3d SUBWOOFER = new Pose3d(
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(0)));
+
+      private static final Pose3d SHUFFLE = new Pose3d(
+          new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.2991523742675781, 7.103456497192383, Rotation2d.fromDegrees(0)));
     }
   }
 
@@ -238,6 +245,19 @@ public final class Constants {
     public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
   }
 
+  public static class constIntake {
+    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
+    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
+  }
+
+  public static class constTransfer {
+    public static final boolean NOTE_SENSOR_INVERT = true;
+
+    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
+    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
+
+  }
+
   public static class constLimelight {
 
     /**
@@ -252,9 +272,5 @@ public final class Constants {
      * before being accepted
      */
     public static final double AREA_THRESHOLD = 0.1;
-  }
-
-  public static class constTransfer {
-    public static final boolean NOTE_SENSOR_INVERT = true;
   }
 }

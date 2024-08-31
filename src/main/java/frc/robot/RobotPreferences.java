@@ -121,4 +121,10 @@ public class RobotPreferences {
     public static final SN_DoublePreference multiTagStdDevsHeading = new SN_DoublePreference(
         "multiTagStdDevsHeading", 9999999);
   }
+
+  public static final class prefIntake {
+  }
+
+  public static final class prefTransfer {
+  }
 }

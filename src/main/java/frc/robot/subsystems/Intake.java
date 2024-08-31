@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.units.Dimensionless;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.mapIntake;
 
@@ -18,8 +21,8 @@ public class Intake extends SubsystemBase {
     rollerMotor = new TalonFX(mapIntake.ROLLER_CAN, "rio");
   }
 
-  public void setRollerOutput(double speed) {
-    rollerMotor.set(speed);
+  public void setIntakeRollerSpeed(Measure<Dimensionless> speed) {
+    rollerMotor.set(speed.in(Units.Percent));
   }
 
   /**
