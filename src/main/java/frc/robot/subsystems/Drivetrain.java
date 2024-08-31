@@ -192,7 +192,6 @@ public class Drivetrain extends SN_SuperSwerve {
     }
   }
 
-  // TODO: Add the below methods to supercore
   /**
    * @return The current rate of rotation for the Pigeon 2. <b>Units:</b> Degrees
    *         per Second
