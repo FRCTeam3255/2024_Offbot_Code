@@ -26,10 +26,16 @@ public class PrepSpeaker extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (subStateMachine.getRobotState() == RobotState.STORE_FEEDER) {
-      subStateMachine.setRobotState(RobotState.PREP_SPEAKER);
-      subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY, constShooter.RIGHT_SPEAKER_VELOCITY);
+    // Only go to the real PREP_SPEAKER state if the robot is in these states:
+    switch (subStateMachine.getRobotState()) {
+      case STORE_FEEDER:
+      case PREP_SHUFFLE:
+      case PREP_NONE:
+        subStateMachine.setRobotState(RobotState.PREP_SPEAKER);
+        subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY, constShooter.RIGHT_SPEAKER_VELOCITY);
     }
+
+    // Otherwise, just set the angle of the shooter
     // TODO: actually put the calculated position
     subShooter.setShooterPosition(Units.Rotations.zero());
   }

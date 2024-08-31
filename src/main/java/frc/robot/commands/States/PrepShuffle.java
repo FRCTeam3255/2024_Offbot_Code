@@ -26,9 +26,13 @@ public class PrepShuffle extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (subStateMachine.getRobotState() == RobotState.STORE_FEEDER) {
-      subStateMachine.setRobotState(RobotState.PREP_SHUFFLE);
-      subShooter.setDesiredVelocities(constShooter.LEFT_SHUFFLE_VELOCITY, constShooter.RIGHT_SHUFFLE_VELOCITY);
+    // Only go to the real PREP_SHUFFLE state if the robot is in these states:
+    switch (subStateMachine.getRobotState()) {
+      case STORE_FEEDER:
+      case PREP_SPEAKER:
+      case PREP_NONE:
+        subStateMachine.setRobotState(RobotState.PREP_SHUFFLE);
+        subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY, constShooter.RIGHT_SPEAKER_VELOCITY);
     }
 
     // TODO: NULL POINTER EXCEPTION MY BELOVED!

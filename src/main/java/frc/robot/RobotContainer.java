@@ -55,8 +55,9 @@ public class RobotContainer {
     configureOperatorBindings(conOperator);
 
     gamePieceTrigger
-        .onTrue(subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subElevator, subIntake, subTransfer,
-            subShooter));
+        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine,
+            subElevator, subIntake, subTransfer,
+            subShooter)));
 
     subDrivetrain.resetModulesToAbsolute();
   }
@@ -75,20 +76,22 @@ public class RobotContainer {
 
   private void configureOperatorBindings(SN_XboxController controller) {
     controller.btn_LeftTrigger
-        .whileTrue(subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subElevator, subIntake, subTransfer,
-            subShooter));
+        .whileTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subElevator, subIntake, subTransfer,
+                subShooter)));
 
-    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER))).onTrue(
-        subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake, subTransfer,
-            subShooter));
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake,
+                subTransfer, subShooter)));
 
     controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
-        .onTrue(subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine, subElevator, subIntake, subTransfer,
-            subShooter));
+        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine,
+            subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_West.whileTrue(
-        subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
-            subShooter));
+    controller.btn_West.whileTrue(Commands.deferredProxy(
+        () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
+            subShooter)));
   }
 
   public Command getAutonomousCommand() {

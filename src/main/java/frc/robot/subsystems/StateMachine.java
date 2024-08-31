@@ -41,53 +41,67 @@ public class StateMachine extends SubsystemBase {
     return currentTargetState;
   }
 
+  // TODO: replace the NoneStates with a default command when previous state was
+  // invalid (flashing LEDs?)
   public Command tryState(RobotState desiredState, StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
       Transfer subTransfer, Shooter subShooter) {
     switch (desiredState) {
       case INTAKING:
-        return new Intaking(subStateMachine, subIntake, subTransfer);
-      // switch (currentState) {
-      // case NONE:
-      // case SHOOTING:
-      // return new Intaking(subStateMachine, subIntake, subTransfer);
-      // }
+        switch (currentState) {
+          case NONE:
+          case SHOOTING:
+            return new Intaking(subStateMachine, subIntake, subTransfer);
+          default:
+            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
+        }
 
       case STORE_FEEDER:
-        return new StoreFeeder(subStateMachine, subIntake, subTransfer);
-      // switch (currentState) {
-      // case INTAKING:
-      // return new StoreFeeder(subStateMachine, subIntake, subTransfer);
-      // }
+        switch (currentState) {
+          case INTAKING:
+            return new StoreFeeder(subStateMachine, subIntake, subTransfer);
+          default:
+            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
+        }
 
       case EJECTING:
-        return new Ejecting(subStateMachine, subIntake, subTransfer);
-      // switch (currentState) {
-      // case NONE:
-      // case INTAKING:
-      // case STORE_FEEDER:
-      // case PREP_NONE:
-      // case PREP_SHUFFLE:
-      // case PREP_SPEAKER:
-      // return new Ejecting(subStateMachine, subIntake, subTransfer);
-      // }
+        switch (currentState) {
+          case NONE:
+          case INTAKING:
+          case STORE_FEEDER:
+          case PREP_NONE:
+          case PREP_SHUFFLE:
+          case PREP_SPEAKER:
+            return new Ejecting(subStateMachine, subIntake, subTransfer);
+          default:
+            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
+        }
 
       case PREP_SHUFFLE:
-        return new PrepShuffle(subStateMachine, subShooter);
-      // switch (currentState) {
-      // case STORE_FEEDER:
-      // return new PrepShuffle(subStateMachine, subShooter);
-      // }
+        switch (currentState) {
+          case NONE:
+          case STORE_FEEDER:
+          case PREP_SPEAKER:
+          case PREP_NONE:
+          case PREP_AMP:
+            return new PrepShuffle(subStateMachine, subShooter);
+          default:
+            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
+        }
 
       case PREP_SPEAKER:
-        return new PrepSpeaker(subStateMachine, subShooter);
-      // switch (currentState) {
-      // case STORE_FEEDER:
-      // return new PrepShuffle(subStateMachine, subShooter);
-      // }
+        switch (currentState) {
+          case NONE:
+          case STORE_FEEDER:
+          case PREP_SHUFFLE:
+          case PREP_NONE:
+          case PREP_AMP:
+            return new PrepSpeaker(subStateMachine, subShooter);
+          default:
+            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
+        }
 
       default:
-        return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer); // placeholder for now
-      // TODO: make a command when tryState is invalid (flashing LEDs?)
+        return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
     }
   }
 
