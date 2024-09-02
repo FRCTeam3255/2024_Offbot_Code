@@ -257,7 +257,8 @@ public final class Constants {
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Rotations.of(0);
 
-    public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0);
+    public static final Measure<Dimensionless> DRAINPIPE_PREP_TO_AMP_SPEED = Units.Percent.of(0);
+    public static final Measure<Dimensionless> DRAINPIPE_SCORE_AMP_SPEED = Units.Percent.of(0);
   }
 
   public static class constIntake {
@@ -273,6 +274,7 @@ public final class Constants {
 
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
 
+    public static final Measure<Dimensionless> SHOOTING_SPEED = Units.Percent.of(0.5);
   }
 
   public static class constLimelight {

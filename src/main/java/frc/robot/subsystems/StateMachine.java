@@ -13,6 +13,7 @@ import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepAmp;
 import frc.robot.commands.States.PrepShuffle;
 import frc.robot.commands.States.PrepSpeaker;
+import frc.robot.commands.States.Shooting;
 import frc.robot.commands.States.StoreFeeder;
 
 public class StateMachine extends SubsystemBase {
@@ -101,6 +102,16 @@ public class StateMachine extends SubsystemBase {
             return new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer);
         }
         break;
+
+      case SHOOTING:
+        switch (currentState) {
+          case PREP_NONE:
+          case PREP_SPEAKER:
+          case PREP_SHUFFLE:
+          case PREP_AMP:
+          case SHOOTING:
+            return new Shooting(subStateMachine, subElevator, subShooter, subTransfer);
+        }
     }
     // TODO: replace NoneState with a default command when previous states were
     // invalid (flashing LEDs?)

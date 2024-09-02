@@ -49,7 +49,7 @@ public class PrepAmp extends SequentialCommandGroup {
         // Spin feeder, shooter, and drainpipe motors
         Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
         Commands.runOnce(() -> subShooter.setShooterPercentOutput(constShooter.PREP_TO_AMP_SPEED)),
-        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.PREP_TO_AMP_SPEED)),
+        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_PREP_TO_AMP_SPEED)),
 
         // Wait for the note to transfer to drainpipe
         Commands.waitSeconds(Constants.PREP_AMP_DELAY.in(Units.Seconds)),
@@ -57,6 +57,6 @@ public class PrepAmp extends SequentialCommandGroup {
         // Stop motors
         Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
         Commands.runOnce(() -> subShooter.setShooterPercentOutput(constShooter.PREP_TO_AMP_SPEED)),
-        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.PREP_TO_AMP_SPEED)));
+        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_PREP_TO_AMP_SPEED)));
   }
 }

@@ -32,17 +32,18 @@ public class PrepSpeaker extends Command {
       case PREP_SHUFFLE:
       case PREP_NONE:
         subStateMachine.setRobotState(RobotState.PREP_SPEAKER);
-        subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY, constShooter.RIGHT_SPEAKER_VELOCITY);
     }
 
     // Otherwise, just set the angle of the shooter
     // TODO: actually put the calculated position
     subShooter.setShooterPosition(Units.Rotations.zero());
+    subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY, constShooter.RIGHT_SPEAKER_VELOCITY);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    subShooter.getUpToSpeed();
   }
 
   // Called once the command ends or is interrupted.
