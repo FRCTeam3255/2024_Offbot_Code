@@ -38,12 +38,12 @@ public class PrepShuffle extends Command {
     // This will be an interpolating tree map in Constants one day
     subShooter.setShooterPosition(Units.Rotations.zero());
     subShooter.setDesiredVelocities(constShooter.LEFT_SHUFFLE_VELOCITY, constShooter.RIGHT_SHUFFLE_VELOCITY);
+    subShooter.getUpToSpeed();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subShooter.getUpToSpeed();
   }
 
   // Called once the command ends or is interrupted.

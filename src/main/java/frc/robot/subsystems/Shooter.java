@@ -173,16 +173,20 @@ public class Shooter extends SubsystemBase {
   /**
    * @return The current position of the shooter in rotations
    */
-  public double getShooterPosition() {
-    return pivotMotor.getPosition().getValueAsDouble();
+  public Measure<Angle> getShooterPosition() {
+    return Units.Rotations.of(pivotMotor.getPosition().getValueAsDouble());
   }
 
   /**
    * @return If the shooter position is within tolerance of desired position
    */
   public boolean isShooterAtPosition(Measure<Angle> position) {
-    return (Math.abs(getShooterPosition() - position.in(Units.Rotations)) < constShooter.AT_POSITION_TOLERANCE
+    return (Math.abs(getShooterPosition().minus(position).in(Units.Rotations)) < constShooter.AT_POSITION_TOLERANCE
         .in(Units.Rotations));
+
+    // TODO: test if the code below works and makes our lives easier
+    // return
+    // (getShooterPosition().minus(position).lte(constShooter.AT_POSITION_TOLERANCE));
   }
 
   public void setLeftDesiredVelocity(Measure<Velocity<Angle>> desiredVelocity) {

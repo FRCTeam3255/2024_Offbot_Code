@@ -63,16 +63,20 @@ public class Elevator extends SubsystemBase {
   /**
    * @return The current position of the elevator in rotations
    */
-  public double getElevatorPosition() {
-    return elevatorMotor.getPosition().getValueAsDouble();
+  public Measure<Angle> getElevatorPosition() {
+    return Units.Rotations.of(elevatorMotor.getPosition().getValueAsDouble());
   }
 
   /**
    * @return If the elevator position is within tolerance of desired position
    */
   public boolean isElevatorAtPosition(Measure<Angle> position) {
-    return (Math.abs(getElevatorPosition() - position.in(Units.Rotations)) < constElevator.AT_POSITION_TOLERANCE
+    return (Math.abs(getElevatorPosition().minus(position).in(Units.Rotations)) < constElevator.AT_POSITION_TOLERANCE
         .in(Units.Rotations));
+
+    // TODO: test if the code below works and makes our lives easier
+    // return
+    // (getElevatorPosition().minus(position)).lte(constElevator.AT_POSITION_TOLERANCE);
   }
 
   @Override

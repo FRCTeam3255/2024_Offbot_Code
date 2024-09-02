@@ -38,12 +38,12 @@ public class PrepSpeaker extends Command {
     // TODO: actually put the calculated position
     subShooter.setShooterPosition(Units.Rotations.zero());
     subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY, constShooter.RIGHT_SPEAKER_VELOCITY);
+    subShooter.getUpToSpeed();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subShooter.getUpToSpeed();
   }
 
   // Called once the command ends or is interrupted.

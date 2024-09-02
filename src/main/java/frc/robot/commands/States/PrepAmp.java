@@ -7,7 +7,6 @@ package frc.robot.commands.States;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constShooter;
 import frc.robot.Constants.constTransfer;
@@ -38,13 +37,13 @@ public class PrepAmp extends SequentialCommandGroup {
     addCommands(
         Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_AMP)),
 
-        // Set amp positions of shooter and elevator
-        Commands.runOnce(() -> subShooter.setShooterPosition(constShooter.PIVOT_AMP_ANGLE))
-            .alongWith(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION))),
-
-        // Wait until shooter and elevator are in their positions
-        Commands.waitUntil(() -> subShooter.isShooterAtPosition(constShooter.PIVOT_AMP_ANGLE)),
+        // Set amp position of elevator and wait until it's at position
+        Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION)),
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(constElevator.AMP_POSITION)),
+
+        // Set amp position of shooter and wait until it's at position
+        Commands.runOnce(() -> subShooter.setShooterPosition(constShooter.PIVOT_AMP_ANGLE)),
+        Commands.waitUntil(() -> subShooter.isShooterAtPosition(constShooter.PIVOT_AMP_ANGLE)),
 
         // Spin feeder, shooter, and drainpipe motors
         Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
@@ -52,7 +51,7 @@ public class PrepAmp extends SequentialCommandGroup {
         Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_PREP_TO_AMP_SPEED)),
 
         // Wait for the note to transfer to drainpipe
-        Commands.waitSeconds(Constants.PREP_AMP_DELAY.in(Units.Seconds)),
+        Commands.waitSeconds(constElevator.PREP_AMP_DELAY.in(Units.Seconds)),
 
         // Stop motors
         Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
