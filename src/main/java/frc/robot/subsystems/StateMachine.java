@@ -98,6 +98,18 @@ public class StateMachine extends SubsystemBase {
     return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
   }
 
+  public Command tryTargetState(StateMachine subStateMachine, Intake subIntake,
+      Shooter subShooter, Transfer subTransfer) {
+    switch (currentTargetState) {
+      case PREP_SHUFFLE:
+        return new PrepShuffle(subStateMachine, subShooter);
+      case PREP_SPEAKER:
+        return new PrepSpeaker(subStateMachine, subShooter);
+      default:
+        return new StoreFeeder(subStateMachine, subIntake, subShooter, subTransfer);
+    }
+  }
+
   public static enum RobotState {
     NONE,
     INTAKING,

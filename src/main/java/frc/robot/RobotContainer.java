@@ -56,8 +56,7 @@ public class RobotContainer {
 
     gamePieceTrigger
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine,
-            subElevator, subIntake, subTransfer,
-            subShooter)));
+            subElevator, subIntake, subTransfer, subShooter)));
 
     subDrivetrain.resetModulesToAbsolute();
   }
