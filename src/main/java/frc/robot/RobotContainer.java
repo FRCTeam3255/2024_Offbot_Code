@@ -14,6 +14,10 @@ import frc.robot.Constants.constField;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
+import frc.robot.commands.States.Ejecting;
+import frc.robot.commands.States.Intaking;
+import frc.robot.commands.States.PrepShuffle;
+import frc.robot.commands.States.PrepSpeaker;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -51,9 +55,6 @@ public class RobotContainer {
     // subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
     // subLimelight));
 
-    configureDriverBindings(conDriver);
-    configureOperatorBindings(conOperator);
-
     gamePieceTrigger
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine,
             subElevator, subIntake, subTransfer,
@@ -62,36 +63,42 @@ public class RobotContainer {
     subDrivetrain.resetModulesToAbsolute();
   }
 
-  private void configureDriverBindings(SN_XboxController controller) {
-    controller.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
-    controller.btn_Back.onTrue(
+  public void configureDriverBindings() {
+    conDriver.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
+    conDriver.btn_Back.onTrue(
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
 
     // Defaults to Field-Relative, is Robot-Relative while held
-    controller.btn_LeftBumper
+    conDriver.btn_LeftBumper
         .whileTrue(Commands.runOnce(() -> subDrivetrain.setRobotRelative()))
         .onFalse(Commands.runOnce(() -> subDrivetrain.setFieldRelative()));
-
   }
 
-  private void configureOperatorBindings(SN_XboxController controller) {
-    controller.btn_LeftTrigger
+  public void configureOperatorBindings() {
+    conOperator.btn_LeftTrigger
         .whileTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subElevator, subIntake, subTransfer,
                 subShooter)));
 
-    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
+    conOperator.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
         .onTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake,
                 subTransfer, subShooter)));
 
-    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
+    conOperator.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_West.whileTrue(Commands.deferredProxy(
+    conOperator.btn_West.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
             subShooter)));
+  }
+
+  public void configureTestBindings() {
+    conOperator.btn_LeftTrigger.whileTrue(new Intaking(subStateMachine, subIntake, subTransfer));
+    conOperator.btn_Y.onTrue(new PrepSpeaker(subStateMachine, subShooter));
+    conOperator.btn_X.onTrue(new PrepShuffle(subStateMachine, subShooter));
+    conOperator.btn_West.whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer));
   }
 
   public Command getAutonomousCommand() {
