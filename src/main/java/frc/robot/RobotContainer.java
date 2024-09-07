@@ -121,7 +121,7 @@ public class RobotContainer {
     controller.btn_A.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
         subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_LeftBumper.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,
+    controller.btn_B.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,
         subStateMachine, subElevator, subIntake, subTransfer, subShooter)));
 
     controller.btn_West.whileTrue(Commands.deferredProxy(
