@@ -14,6 +14,12 @@ import frc.robot.Constants.constField;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
+import frc.robot.commands.States.Ejecting;
+import frc.robot.commands.States.Intaking;
+import frc.robot.commands.States.PrepAmp;
+import frc.robot.commands.States.PrepShuffle;
+import frc.robot.commands.States.PrepSpeaker;
+import frc.robot.commands.States.Shooting;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -28,6 +34,7 @@ public class RobotContainer {
 
   private final SN_XboxController conDriver = new SN_XboxController(mapControllers.DRIVER_USB);
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
+  private final SN_XboxController conTestOperator = new SN_XboxController(mapControllers.TEST_OPERATOR_USB);
 
   private final StateMachine subStateMachine = new StateMachine();
   private final Drivetrain subDrivetrain = new Drivetrain();
@@ -51,15 +58,16 @@ public class RobotContainer {
     // subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
     // subLimelight));
 
-    configureDriverBindings(conDriver);
-    configureOperatorBindings(conOperator);
-
     gamePieceTrigger
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine,
             subElevator, subIntake, subTransfer,
             subShooter)));
 
     subDrivetrain.resetModulesToAbsolute();
+
+    configureDriverBindings(conDriver);
+    configureOperatorBindings(conOperator);
+    configureTestBindings(conTestOperator);
   }
 
   private void configureDriverBindings(SN_XboxController controller) {
@@ -71,7 +79,6 @@ public class RobotContainer {
     controller.btn_LeftBumper
         .whileTrue(Commands.runOnce(() -> subDrivetrain.setRobotRelative()))
         .onFalse(Commands.runOnce(() -> subDrivetrain.setFieldRelative()));
-
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
@@ -98,6 +105,26 @@ public class RobotContainer {
     controller.btn_West.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
             subShooter)));
+  }
+
+  private void configureTestBindings(SN_XboxController controller) {
+    controller.btn_LeftTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.INTAKING)))
+        .whileTrue(new Intaking(subStateMachine, subIntake, subTransfer));
+
+    controller.btn_RightTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.SHOOTING)))
+        .whileTrue(new Shooting(subStateMachine, subElevator, subShooter, subTransfer));
+
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SPEAKER)))
+        .onTrue(new PrepSpeaker(subStateMachine, subShooter));
+
+    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SHUFFLE)))
+        .onTrue(new PrepShuffle(subStateMachine, subShooter));
+
+    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_AMP)))
+        .onTrue(new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer));
+
+    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
+        .whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer));
   }
 
   public Command getAutonomousCommand() {
