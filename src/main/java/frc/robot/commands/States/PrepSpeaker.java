@@ -30,7 +30,6 @@ public class PrepSpeaker extends Command {
     switch (subStateMachine.getRobotState()) {
       case STORE_FEEDER:
       case PREP_SHUFFLE:
-      case PREP_NONE:
         subStateMachine.setRobotState(RobotState.PREP_SPEAKER);
     }
 
