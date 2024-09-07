@@ -20,6 +20,7 @@ public class Climber extends SubsystemBase {
   public Climber() {
     climberMotor = new TalonFX(mapClimber.CLIMBER_MOTOR_CAN, "rio");
 
+    climberConfig.Feedback.SensorToMechanismRatio = constClimber.GEAR_RATIO;
     climberConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     climberConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constClimber.FORWARD_LIMIT.in(Units.Rotations);
 

@@ -269,6 +269,9 @@ public final class Constants {
   public static class constClimber {
     public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
     public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
+    // TODO: Get real gear ratio values
+    public static final double GEAR_RATIO = 1;
+
   }
 
   public static class constElevator {
