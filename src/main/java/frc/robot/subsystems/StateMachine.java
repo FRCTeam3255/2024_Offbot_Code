@@ -66,7 +66,9 @@ public class StateMachine extends SubsystemBase {
       case STORE_FEEDER:
         switch (currentState) {
           case INTAKING:
-            return new StoreFeeder(subStateMachine, subIntake, subTransfer);
+          case PREP_SHUFFLE:
+          case PREP_SPEAKER:
+            return new StoreFeeder(subStateMachine, subIntake, subShooter, subTransfer);
         }
         break;
 
@@ -75,7 +77,6 @@ public class StateMachine extends SubsystemBase {
           case NONE:
           case INTAKING:
           case STORE_FEEDER:
-          case PREP_NONE:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
             return new Ejecting(subStateMachine, subIntake, subTransfer);
@@ -87,7 +88,6 @@ public class StateMachine extends SubsystemBase {
           case NONE:
           case STORE_FEEDER:
           case PREP_SPEAKER:
-          case PREP_NONE:
             return new PrepShuffle(subStateMachine, subShooter);
         }
         break;
@@ -97,7 +97,6 @@ public class StateMachine extends SubsystemBase {
           case NONE:
           case STORE_FEEDER:
           case PREP_SHUFFLE:
-          case PREP_NONE:
             return new PrepSpeaker(subStateMachine, subShooter);
         }
         break;
@@ -107,14 +106,12 @@ public class StateMachine extends SubsystemBase {
           case STORE_FEEDER:
           case PREP_SPEAKER:
           case PREP_SHUFFLE:
-          case PREP_NONE:
             return new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer);
         }
         break;
 
       case SHOOTING:
         switch (currentState) {
-          case PREP_NONE:
           case PREP_SPEAKER:
           case PREP_SHUFFLE:
           case PREP_AMP:
@@ -135,7 +132,7 @@ public class StateMachine extends SubsystemBase {
       case PREP_SPEAKER:
         return new PrepSpeaker(subStateMachine, subShooter);
       default:
-        return new StoreFeeder(subStateMachine, subIntake, subTransfer);
+        return new StoreFeeder(subStateMachine, subIntake, subShooter, subTransfer);
     }
   }
 
@@ -146,7 +143,6 @@ public class StateMachine extends SubsystemBase {
     PREP_SHUFFLE,
     PREP_SPEAKER,
     PREP_AMP,
-    PREP_NONE,
     CLIMBING,
     SHOOTING,
     EJECTING
@@ -156,7 +152,6 @@ public class StateMachine extends SubsystemBase {
     NONE,
     PREP_SHUFFLE,
     PREP_SPEAKER,
-    PREP_NONE
   }
 
   @Override
