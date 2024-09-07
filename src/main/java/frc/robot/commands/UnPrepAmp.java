@@ -44,7 +44,7 @@ public class UnPrepAmp extends SequentialCommandGroup {
         // piece is detected
         Commands.waitUntil(() -> !subTransfer.getGamePieceCollected())
 
-    // end the command and run the intaking command
+    // End this command and run the intaking command
     );
   }
 }

@@ -61,6 +61,7 @@ public class StateMachine extends SubsystemBase {
             return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+                .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter));
         }
         break;
@@ -76,6 +77,7 @@ public class StateMachine extends SubsystemBase {
             return new Ejecting(subStateMachine, subIntake, subTransfer);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+                .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
                 .andThen(new Ejecting(subStateMachine, subIntake, subTransfer));
         }
@@ -90,6 +92,7 @@ public class StateMachine extends SubsystemBase {
             return new PrepShuffle(subStateMachine, subShooter);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+                .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
                 .andThen(new PrepShuffle(subStateMachine, subShooter));
         }
@@ -104,6 +107,7 @@ public class StateMachine extends SubsystemBase {
             return new PrepSpeaker(subStateMachine, subShooter);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+                .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
                 .andThen(new PrepSpeaker(subStateMachine, subShooter));
         }
