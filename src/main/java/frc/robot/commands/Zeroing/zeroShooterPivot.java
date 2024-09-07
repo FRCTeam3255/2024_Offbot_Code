@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Zeroing;
 
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Time;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,7 +15,7 @@ import frc.robot.subsystems.Shooter;
 public class zeroShooterPivot extends Command {
   Shooter subShooter;
 
-  double zeroingTimestamp;
+  Measure<Time> zeroingTimestamp;
 
   public zeroShooterPivot(Shooter subShooter) {
     this.subShooter = subShooter;
@@ -25,7 +27,7 @@ public class zeroShooterPivot extends Command {
     subShooter.setPivotSoftwareLimits(false, true);
 
     subShooter.setPivotVoltage(Units.Volts.zero());
-    zeroingTimestamp = 0;
+    zeroingTimestamp = Units.Seconds.zero();
   }
 
   @Override
@@ -51,24 +53,23 @@ public class zeroShooterPivot extends Command {
   @Override
   public boolean isFinished() {
     // If the current velocity is low enough to be considered as zeroed
-
     // TODO: Test if we need a Math.Abs here; we had it last year but I don't think
     // its needed
     if (subShooter.getPivotVelocity().lte(constShooter.ZEROED_VELOCITY)) {
       // And this is the first loop it has happened, begin the timer
-      if (zeroingTimestamp == 0) {
-        zeroingTimestamp = Timer.getFPGATimestamp();
+      if (zeroingTimestamp.equals(Units.Seconds.zero())) {
+        zeroingTimestamp = Units.Seconds.of(Timer.getFPGATimestamp());
         return false;
       }
 
       // If this isn't the first loop, return if it has been below the threshold for
       // long enough
-      return (Timer.getFPGATimestamp() - zeroingTimestamp) >= constShooter.ZEROED_TIME.in(Units.Seconds);
+      return (Units.Seconds.of(Timer.getFPGATimestamp()).minus(zeroingTimestamp).gte(constShooter.ZEROED_TIME));
     }
 
     // If the above wasn't true, we have gained too much velocity, so we aren't at 0
     // & need to restart the timer
-    zeroingTimestamp = 0;
+    zeroingTimestamp = Units.Seconds.zero();
     return false;
   }
 }
