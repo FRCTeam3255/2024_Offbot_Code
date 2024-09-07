@@ -275,7 +275,9 @@ public final class Constants {
     public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     // TODO: Get real gear ratio values
     public static final double MECHANICAL_GEAR_RATIO = 1;
-    public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO * 1;
+    public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Meters.of(1);
+    public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO
+        * FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
 
     // -- Zeroing --
     /**
@@ -311,7 +313,9 @@ public final class Constants {
     public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     // TODO: Get real gear ratio values
     public static final double MECHANICAL_GEAR_RATIO = 1;
-    public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO * 1;
+    public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Meters.of(1);
+    public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO
+        * FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
 
     public static final Measure<Angle> AMP_POSITION = Units.Rotations.of(0);
 
