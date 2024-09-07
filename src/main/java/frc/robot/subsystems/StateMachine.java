@@ -68,7 +68,7 @@ public class StateMachine extends SubsystemBase {
           case INTAKING:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
-            return new StoreFeeder(subStateMachine, subIntake, subShooter, subTransfer);
+            return new StoreFeeder(subStateMachine, subIntake, subTransfer);
         }
         break;
 
@@ -132,7 +132,7 @@ public class StateMachine extends SubsystemBase {
       case PREP_SPEAKER:
         return new PrepSpeaker(subStateMachine, subShooter);
       default:
-        return new StoreFeeder(subStateMachine, subIntake, subShooter, subTransfer);
+        return new StoreFeeder(subStateMachine, subIntake, subTransfer);
     }
   }
 
