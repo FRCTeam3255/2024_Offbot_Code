@@ -4,55 +4,63 @@
 
 package frc.robot.commands.States;
 
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constElevator;
-import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.Constants.constTransfer;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
+import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.TargetState;
 
-public class NoneState extends Command {
+public class Shooting extends Command {
   StateMachine subStateMachine;
   Elevator subElevator;
-  Intake subIntake;
   Shooter subShooter;
   Transfer subTransfer;
 
-  /** Creates a new NoneState. */
-  public NoneState(StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
-      Shooter subShooter, Transfer subTransfer) {
+  /** Creates a new Shooting. */
+  public Shooting(StateMachine subStateMachine, Elevator subElevator, Shooter subShooter, Transfer subTransfer) {
     this.subStateMachine = subStateMachine;
     this.subElevator = subElevator;
-    this.subIntake = subIntake;
     this.subShooter = subShooter;
     this.subTransfer = subTransfer;
 
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subStateMachine);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subStateMachine.setRobotState(RobotState.NONE);
-    subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
-    subIntake.setIntakeRollerSpeed(Units.Percent.zero());
-    subTransfer.setFeederSpeed(Units.Percent.zero());
-    subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
-    subShooter.getUpToSpeed();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (subStateMachine.getRobotState() == RobotState.PREP_AMP
+        || subStateMachine.getRobotState() == RobotState.CLIMBING) {
+      // Score through drainpipe if in PREP_AMP or CLIMBING (for trap)
+      subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_SCORE_AMP_SPEED);
+      subStateMachine.setRobotState(RobotState.SHOOTING);
+    } else {
+      // Otherwise, shoot through the flywheels if they are up to speed
+      if (subShooter.areBothShootersUpToSpeed()) {
+        subTransfer.setFeederSpeed(constTransfer.SHOOTING_SPEED);
+        subStateMachine.setRobotState(RobotState.SHOOTING);
+      }
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // If we don't have a game piece anymore, set the state and target state back to
+    // NONE
+    if (!subTransfer.getGamePieceCollected()) {
+      subStateMachine.setRobotState(RobotState.NONE);
+      subStateMachine.setTargetState(TargetState.NONE);
+    }
   }
 
   // Returns true when the command should end.
