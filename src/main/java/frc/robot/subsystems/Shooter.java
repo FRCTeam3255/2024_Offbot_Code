@@ -81,6 +81,7 @@ public class Shooter extends SubsystemBase {
     rightConfig.MotionMagic.MotionMagicAcceleration = 400;
     rightConfig.MotionMagic.MotionMagicJerk = 4000;
 
+    pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
     pivotConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
     pivotConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
     pivotConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
@@ -119,19 +120,6 @@ public class Shooter extends SubsystemBase {
       leftMotor.setControl(motionMagicRequest.withVelocity(desiredLeftVelocity.in(Units.RotationsPerSecond)));
       rightMotor.setControl(motionMagicRequest.withVelocity(desiredRightVelocity.in(Units.RotationsPerSecond)));
     }
-  }
-
-  public void setLeftShooterIntakeVoltage(Measure<Voltage> voltage) {
-    leftMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
-
-  }
-
-  public void setRightShooterIntakeVoltage(Measure<Voltage> voltage) {
-    rightMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
-  }
-
-  public void setPivotVoltage(Measure<Voltage> voltage) {
-    pivotMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
   }
 
   /**
@@ -222,6 +210,19 @@ public class Shooter extends SubsystemBase {
   public void setShooterPercentOutput(Measure<Dimensionless> speed) {
     leftMotor.set(speed.in(Units.Percent));
     rightMotor.set(speed.in(Units.Percent));
+  }
+
+  public void setLeftShooterIntakeVoltage(Measure<Voltage> voltage) {
+    leftMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
+
+  }
+
+  public void setRightShooterIntakeVoltage(Measure<Voltage> voltage) {
+    rightMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
+  }
+
+  public void setPivotVoltage(Measure<Voltage> voltage) {
+    pivotMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
   }
 
   public void setVoltage(Measure<Voltage> leftVoltage, Measure<Voltage> rightVoltage) {
