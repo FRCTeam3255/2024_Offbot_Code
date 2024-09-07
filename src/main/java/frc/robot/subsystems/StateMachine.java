@@ -48,6 +48,15 @@ public class StateMachine extends SubsystemBase {
   public Command tryState(RobotState desiredState, StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
       Transfer subTransfer, Shooter subShooter) {
     switch (desiredState) {
+      case NONE:
+        switch (currentState) {
+          case INTAKING:
+          case EJECTING:
+          case SHOOTING:
+            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
+        }
+        break;
+
       case INTAKING:
         switch (currentState) {
           case NONE:
@@ -59,6 +68,8 @@ public class StateMachine extends SubsystemBase {
       case STORE_FEEDER:
         switch (currentState) {
           case INTAKING:
+          case PREP_SHUFFLE:
+          case PREP_SPEAKER:
             return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
@@ -73,7 +84,6 @@ public class StateMachine extends SubsystemBase {
           case NONE:
           case INTAKING:
           case STORE_FEEDER:
-          case PREP_NONE:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
             return new Ejecting(subStateMachine, subIntake, subTransfer);
@@ -91,7 +101,6 @@ public class StateMachine extends SubsystemBase {
           case NONE:
           case STORE_FEEDER:
           case PREP_SPEAKER:
-          case PREP_NONE:
             return new PrepShuffle(subStateMachine, subShooter);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
@@ -107,7 +116,6 @@ public class StateMachine extends SubsystemBase {
           case NONE:
           case STORE_FEEDER:
           case PREP_SHUFFLE:
-          case PREP_NONE:
             return new PrepSpeaker(subStateMachine, subShooter);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
@@ -123,14 +131,12 @@ public class StateMachine extends SubsystemBase {
           case STORE_FEEDER:
           case PREP_SPEAKER:
           case PREP_SHUFFLE:
-          case PREP_NONE:
             return new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer);
         }
         break;
 
       case SHOOTING:
         switch (currentState) {
-          case PREP_NONE:
           case PREP_SPEAKER:
           case PREP_SHUFFLE:
           case PREP_AMP:
@@ -143,6 +149,18 @@ public class StateMachine extends SubsystemBase {
     return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
   }
 
+  public Command tryTargetState(StateMachine subStateMachine, Intake subIntake,
+      Shooter subShooter, Transfer subTransfer) {
+    switch (currentTargetState) {
+      case PREP_SHUFFLE:
+        return new PrepShuffle(subStateMachine, subShooter);
+      case PREP_SPEAKER:
+        return new PrepSpeaker(subStateMachine, subShooter);
+      default:
+        return new StoreFeeder(subStateMachine, subIntake, subTransfer);
+    }
+  }
+
   public static enum RobotState {
     NONE,
     INTAKING,
@@ -150,7 +168,6 @@ public class StateMachine extends SubsystemBase {
     PREP_SHUFFLE,
     PREP_SPEAKER,
     PREP_AMP,
-    PREP_NONE,
     CLIMBING,
     SHOOTING,
     EJECTING
@@ -160,7 +177,6 @@ public class StateMachine extends SubsystemBase {
     NONE,
     PREP_SHUFFLE,
     PREP_SPEAKER,
-    PREP_NONE
   }
 
   @Override
