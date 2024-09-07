@@ -6,14 +6,29 @@ package frc.robot;
 
 import com.frcteam3255.joystick.SN_XboxController;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.constClimber;
 import frc.robot.Constants.constControllers;
+import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constField;
+import frc.robot.Constants.constShooter;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
+import frc.robot.commands.Zeroing.ZeroClimber;
+import frc.robot.commands.Zeroing.ZeroElevator;
+import frc.robot.commands.Zeroing.ZeroShooterPivot;
+import frc.robot.commands.States.Ejecting;
+import frc.robot.commands.States.Intaking;
+import frc.robot.commands.States.PrepAmp;
+import frc.robot.commands.States.PrepShuffle;
+import frc.robot.commands.States.PrepSpeaker;
+import frc.robot.commands.States.Shooting;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -28,14 +43,16 @@ public class RobotContainer {
 
   private final SN_XboxController conDriver = new SN_XboxController(mapControllers.DRIVER_USB);
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
+  private final SN_XboxController conTestOperator = new SN_XboxController(mapControllers.TEST_OPERATOR_USB);
 
-  private final StateMachine subStateMachine = new StateMachine();
-  private final Drivetrain subDrivetrain = new Drivetrain();
-  private final Elevator subElevator = new Elevator();
-  private final Intake subIntake = new Intake();
-  private final Transfer subTransfer = new Transfer();
-  private final Shooter subShooter = new Shooter();
-  private final Limelight subLimelight = new Limelight();
+  private final static StateMachine subStateMachine = new StateMachine();
+  private final static Climber subClimber = new Climber();
+  private final static Drivetrain subDrivetrain = new Drivetrain();
+  private final static Elevator subElevator = new Elevator();
+  private final static Intake subIntake = new Intake();
+  private final static Transfer subTransfer = new Transfer();
+  private final static Shooter subShooter = new Shooter();
+  private final static Limelight subLimelight = new Limelight();
 
   private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceCollected());
 
@@ -51,14 +68,15 @@ public class RobotContainer {
     // subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
     // subLimelight));
 
-    configureDriverBindings(conDriver);
-    configureOperatorBindings(conOperator);
-
     gamePieceTrigger
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
     subDrivetrain.resetModulesToAbsolute();
+
+    configureDriverBindings(conDriver);
+    configureOperatorBindings(conOperator);
+    configureTestBindings(conTestOperator);
   }
 
   private void configureDriverBindings(SN_XboxController controller) {
@@ -70,7 +88,6 @@ public class RobotContainer {
     controller.btn_LeftBumper
         .whileTrue(Commands.runOnce(() -> subDrivetrain.setRobotRelative()))
         .onFalse(Commands.runOnce(() -> subDrivetrain.setFieldRelative()));
-
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
@@ -83,6 +100,9 @@ public class RobotContainer {
                 subShooter))
             .unless(gamePieceTrigger));
 
+    controller.btn_RightTrigger.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.SHOOTING,
+        subStateMachine, subElevator, subIntake, subTransfer, subShooter)));
+
     controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
         .onTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake,
@@ -92,6 +112,9 @@ public class RobotContainer {
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
+    controller.btn_A.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
+        subElevator, subIntake, subTransfer, subShooter)));
+
     controller.btn_West.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
             subShooter)))
@@ -100,7 +123,48 @@ public class RobotContainer {
                 subShooter)));
   }
 
+  private void configureTestBindings(SN_XboxController controller) {
+    controller.btn_LeftTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.INTAKING)))
+        .whileTrue(new Intaking(subStateMachine, subIntake, subTransfer));
+
+    controller.btn_RightTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.SHOOTING)))
+        .whileTrue(new Shooting(subStateMachine, subElevator, subShooter, subTransfer));
+
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SPEAKER)))
+        .onTrue(new PrepSpeaker(subStateMachine, subShooter));
+
+    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SHUFFLE)))
+        .onTrue(new PrepShuffle(subStateMachine, subShooter));
+
+    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_AMP)))
+        .onTrue(new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer));
+
+    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
+        .whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer));
+  }
+
   public Command getAutonomousCommand() {
     return null;
   }
+
+  /**
+   * Returns the command to zero all subsystems. This will make all subsystems
+   * move
+   * themselves downwards until they see a current spike and cancel any incoming
+   * commands that
+   * require those motors. If the zeroing does not end within a certain time
+   * frame (set in constants), it will interrupt itself.
+   * 
+   * @return Parallel commands to zero the Climber, Elevator, and Shooter Pivot
+   */
+  public static Command zeroSubsystems() {
+    Command returnedCommand = new ParallelCommandGroup(
+        new ZeroClimber(subClimber).withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
+        new ZeroElevator(subElevator).withTimeout(constElevator.ZEROING_TIMEOUT.in(Units.Seconds)),
+        new ZeroShooterPivot(subShooter).withTimeout(constShooter.ZEROING_TIMEOUT.in(Units.Seconds)))
+        .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);
+    returnedCommand.addRequirements(subStateMachine);
+    return returnedCommand;
+  };
+
 }

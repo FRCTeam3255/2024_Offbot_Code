@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
+import frc.robot.commands.States.PrepAmp;
 import frc.robot.commands.States.PrepShuffle;
 import frc.robot.commands.States.PrepSpeaker;
+import frc.robot.commands.States.Shooting;
 import frc.robot.commands.States.StoreFeeder;
 
 public class StateMachine extends SubsystemBase {
@@ -86,7 +88,6 @@ public class StateMachine extends SubsystemBase {
           case STORE_FEEDER:
           case PREP_SPEAKER:
           case PREP_NONE:
-          case PREP_AMP:
             return new PrepShuffle(subStateMachine, subShooter);
         }
         break;
@@ -97,10 +98,29 @@ public class StateMachine extends SubsystemBase {
           case STORE_FEEDER:
           case PREP_SHUFFLE:
           case PREP_NONE:
-          case PREP_AMP:
             return new PrepSpeaker(subStateMachine, subShooter);
         }
         break;
+
+      case PREP_AMP:
+        switch (currentState) {
+          case STORE_FEEDER:
+          case PREP_SPEAKER:
+          case PREP_SHUFFLE:
+          case PREP_NONE:
+            return new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer);
+        }
+        break;
+
+      case SHOOTING:
+        switch (currentState) {
+          case PREP_NONE:
+          case PREP_SPEAKER:
+          case PREP_SHUFFLE:
+          case PREP_AMP:
+          case SHOOTING:
+            return new Shooting(subStateMachine, subElevator, subShooter, subTransfer);
+        }
     }
     // TODO: replace NoneState with a default command when previous states were
     // invalid (flashing LEDs?)
@@ -136,7 +156,6 @@ public class StateMachine extends SubsystemBase {
     NONE,
     PREP_SHUFFLE,
     PREP_SPEAKER,
-    PREP_AMP,
     PREP_NONE
   }
 

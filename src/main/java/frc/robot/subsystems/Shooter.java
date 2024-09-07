@@ -13,9 +13,11 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constShooter;
@@ -31,8 +33,6 @@ public class Shooter extends SubsystemBase {
 
   VelocityVoltage velocityRequest;
   VoltageOut voltageRequest;
-  boolean leftInvert, rightInvert;
-
   private boolean ignoreFlywheelSpeed = false;
   private Measure<Velocity<Angle>> desiredLeftVelocity = Units.RotationsPerSecond.of(0);
   private Measure<Velocity<Angle>> desiredRightVelocity = Units.RotationsPerSecond.of(0);
@@ -46,9 +46,6 @@ public class Shooter extends SubsystemBase {
     rightConfig = new TalonFXConfiguration();
     pivotConfig = new TalonFXConfiguration();
 
-    leftInvert = constShooter.LEFT_INVERT;
-    rightInvert = constShooter.RIGHT_INVERT;
-
     voltageRequest = new VoltageOut(0);
     velocityRequest = new VelocityVoltage(0).withSlot(0);
     motionMagicRequest = new MotionMagicVelocityVoltage(0);
@@ -58,6 +55,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void configure() {
+    leftConfig.MotorOutput.Inverted = constShooter.LEFT_INVERT;
     leftConfig.Slot0.kV = prefShooter.leftShooterV.getValue();
     leftConfig.Slot0.kS = prefShooter.leftShooterS.getValue();
     leftConfig.Slot0.kA = prefShooter.leftShooterA.getValue();
@@ -68,6 +66,7 @@ public class Shooter extends SubsystemBase {
     leftConfig.MotionMagic.MotionMagicAcceleration = 400;
     leftConfig.MotionMagic.MotionMagicJerk = 4000;
 
+    rightConfig.MotorOutput.Inverted = constShooter.RIGHT_INVERT;
     rightConfig.Slot0.kV = prefShooter.rightShooterV.getValue();
     rightConfig.Slot0.kS = prefShooter.rightShooterS.getValue();
     rightConfig.Slot0.kA = prefShooter.rightShooterA.getValue();
@@ -78,6 +77,8 @@ public class Shooter extends SubsystemBase {
     rightConfig.MotionMagic.MotionMagicAcceleration = 400;
     rightConfig.MotionMagic.MotionMagicJerk = 4000;
 
+    pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
+    pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
     pivotConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
     pivotConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
@@ -91,9 +92,12 @@ public class Shooter extends SubsystemBase {
     leftMotor.getConfigurator().apply(leftConfig);
     rightMotor.getConfigurator().apply(rightConfig);
     pivotMotor.getConfigurator().apply(pivotConfig);
+  }
 
-    leftMotor.setInverted(leftInvert);
-    rightMotor.setInverted(rightInvert);
+  public void setPivotSoftwareLimits(boolean reverse, boolean forward) {
+    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = reverse;
+    pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = forward;
+    pivotMotor.getConfigurator().apply(pivotConfig);
   }
 
   /**
@@ -110,15 +114,6 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public void setLeftShooterIntakeVoltage(double voltage) {
-    leftMotor.setControl(voltageRequest.withOutput(voltage));
-
-  }
-
-  public void setRightShooterIntakeVoltage(double voltage) {
-    rightMotor.setControl(voltageRequest.withOutput(voltage));
-  }
-
   /**
    * Sets all of the shooting motors to neutral.
    */
@@ -128,19 +123,21 @@ public class Shooter extends SubsystemBase {
   }
 
   /**
-   * @return The current velocity of the left shooter motor. <b> Units: </b>
-   *         Rotations per second
+   * @return The current velocity of the left shooter motor.
    */
   public Measure<Velocity<Angle>> getLeftShooterVelocity() {
     return Units.RotationsPerSecond.of(leftMotor.getVelocity().getValueAsDouble());
   }
 
   /**
-   * @return The current velocity of the right shooter motor. <b> Units: </b>
-   *         Rotations per second
+   * @return The current velocity of the right shooter motor.
    */
   public Measure<Velocity<Angle>> getRightShooterVelocity() {
     return Units.RotationsPerSecond.of(rightMotor.getVelocity().getValueAsDouble());
+  }
+
+  public Measure<Velocity<Angle>> getPivotVelocity() {
+    return Units.RotationsPerSecond.of(pivotMotor.getVelocity().getValueAsDouble());
   }
 
   /**
@@ -169,6 +166,25 @@ public class Shooter extends SubsystemBase {
         || ignoreFlywheelSpeed);
   }
 
+  /**
+   * @return The current position of the shooter in rotations
+   */
+  public Measure<Angle> getShooterPosition() {
+    return Units.Rotations.of(pivotMotor.getPosition().getValueAsDouble());
+  }
+
+  /**
+   * @return If the shooter position is within tolerance of desired position
+   */
+  public boolean isShooterAtPosition(Measure<Angle> position) {
+    return (Math.abs(getShooterPosition().minus(position).in(Units.Rotations)) < constShooter.AT_POSITION_TOLERANCE
+        .in(Units.Rotations));
+
+    // TODO: test if the code below works and makes our lives easier
+    // return
+    // (getShooterPosition().minus(position).lte(constShooter.AT_POSITION_TOLERANCE));
+  }
+
   public void setLeftDesiredVelocity(Measure<Velocity<Angle>> desiredVelocity) {
     desiredLeftVelocity = desiredVelocity;
   }
@@ -183,7 +199,25 @@ public class Shooter extends SubsystemBase {
     setRightDesiredVelocity(desiredRightVelocity);
   }
 
-  public void setVoltage(double leftVoltage, double rightVoltage) {
+  public void setShooterPercentOutput(Measure<Dimensionless> speed) {
+    leftMotor.set(speed.in(Units.Percent));
+    rightMotor.set(speed.in(Units.Percent));
+  }
+
+  public void setLeftShooterIntakeVoltage(Measure<Voltage> voltage) {
+    leftMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
+
+  }
+
+  public void setRightShooterIntakeVoltage(Measure<Voltage> voltage) {
+    rightMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
+  }
+
+  public void setPivotVoltage(Measure<Voltage> voltage) {
+    pivotMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
+  }
+
+  public void setVoltage(Measure<Voltage> leftVoltage, Measure<Voltage> rightVoltage) {
     setLeftShooterIntakeVoltage(leftVoltage);
     setRightShooterIntakeVoltage(rightVoltage);
   }
@@ -194,6 +228,13 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterPosition(Measure<Angle> position) {
     pivotMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
+  }
+
+  /**
+   * Sets the current angle of the pivot motor to read as the given value
+   */
+  public void setPivotSensorAngle(Measure<Angle> angle) {
+    pivotMotor.setPosition(angle.in(Units.Rotations));
   }
 
   @Override
