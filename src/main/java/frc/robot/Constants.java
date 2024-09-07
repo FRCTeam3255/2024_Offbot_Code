@@ -207,9 +207,10 @@ public final class Constants {
   public static class constShooter {
     public static final Rotation2d SHOOTER_TO_ROBOT = new Rotation2d(Units.Degrees.of(180));
 
-    public static final boolean LEFT_INVERT = true;
-    public static final boolean RIGHT_INVERT = false;
-    public static final boolean PIVOT_INVERT = false;
+    public static final InvertedValue LEFT_INVERT = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue RIGHT_INVERT = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue PIVOT_INVERT = InvertedValue.CounterClockwise_Positive;
+
     public static final double PIVOT_GEAR_RATIO = 70.2;
 
     // - Angles -
@@ -269,15 +270,40 @@ public final class Constants {
   public static class constClimber {
     public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
     public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
+    public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     // TODO: Get real gear ratio values
     public static final double GEAR_RATIO = 1;
 
+    // -- Zeroing --
+    /**
+     * The voltage supplied to the motor in order to zero
+     */
+    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-1);
+
+    /**
+     * 
+     * /**
+     * The elapsed time required to consider the motor as zeroed
+     */
+    public static final Measure<Time> ZEROED_TIME = Units.Seconds.of(1);
+
+    /**
+     * The velocity that the motor goes at once it has zeroed (and can no longer
+     * continue in that direction)
+     */
+    public static final Measure<Velocity<Distance>> ZEROED_VELOCITY = Units.MetersPerSecond.of(0.2);
+
+    /**
+     * The value that the motor reports when it is at it's zeroed position. This
+     * may not necessarily be 0 due to mechanical slop
+     */
+    public static final Measure<Distance> ZEROED_POS = Units.Meters.of(0);
   }
 
   public static class constElevator {
     public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
     public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
-    public static final boolean MOTOR_INVERT = false;
+    public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     // TODO: Get real gear ratio values
     public static final double GEAR_RATIO = 1;
 
@@ -292,10 +318,7 @@ public final class Constants {
 
     // -- Zeroing --
     /**
-     * <p>
      * The voltage supplied to the motor in order to zero
-     * </p>
-     * <b>Units:</b> Volts
      */
     public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-1);
 

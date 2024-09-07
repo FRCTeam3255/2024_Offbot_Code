@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Dimensionless;
@@ -33,8 +34,6 @@ public class Shooter extends SubsystemBase {
 
   VelocityVoltage velocityRequest;
   VoltageOut voltageRequest;
-  boolean leftInvert, rightInvert, pivotInvert;
-
   private boolean ignoreFlywheelSpeed = false;
   private Measure<Velocity<Angle>> desiredLeftVelocity = Units.RotationsPerSecond.of(0);
   private Measure<Velocity<Angle>> desiredRightVelocity = Units.RotationsPerSecond.of(0);
@@ -48,10 +47,6 @@ public class Shooter extends SubsystemBase {
     rightConfig = new TalonFXConfiguration();
     pivotConfig = new TalonFXConfiguration();
 
-    leftInvert = constShooter.LEFT_INVERT;
-    rightInvert = constShooter.RIGHT_INVERT;
-    pivotInvert = constShooter.PIVOT_INVERT;
-
     voltageRequest = new VoltageOut(0);
     velocityRequest = new VelocityVoltage(0).withSlot(0);
     motionMagicRequest = new MotionMagicVelocityVoltage(0);
@@ -61,6 +56,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void configure() {
+    leftConfig.MotorOutput.Inverted = constShooter.LEFT_INVERT;
     leftConfig.Slot0.kV = prefShooter.leftShooterV.getValue();
     leftConfig.Slot0.kS = prefShooter.leftShooterS.getValue();
     leftConfig.Slot0.kA = prefShooter.leftShooterA.getValue();
@@ -71,6 +67,7 @@ public class Shooter extends SubsystemBase {
     leftConfig.MotionMagic.MotionMagicAcceleration = 400;
     leftConfig.MotionMagic.MotionMagicJerk = 4000;
 
+    rightConfig.MotorOutput.Inverted = constShooter.RIGHT_INVERT;
     rightConfig.Slot0.kV = prefShooter.rightShooterV.getValue();
     rightConfig.Slot0.kS = prefShooter.rightShooterS.getValue();
     rightConfig.Slot0.kA = prefShooter.rightShooterA.getValue();
@@ -82,6 +79,7 @@ public class Shooter extends SubsystemBase {
     rightConfig.MotionMagic.MotionMagicJerk = 4000;
 
     pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
+    pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
     pivotConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
     pivotConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
@@ -95,17 +93,12 @@ public class Shooter extends SubsystemBase {
     leftMotor.getConfigurator().apply(leftConfig);
     rightMotor.getConfigurator().apply(rightConfig);
     pivotMotor.getConfigurator().apply(pivotConfig);
-
-    leftMotor.setInverted(leftInvert);
-    rightMotor.setInverted(rightInvert);
-    pivotMotor.setInverted(pivotInvert);
   }
 
   public void setPivotSoftwareLimits(boolean reverse, boolean forward) {
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = reverse;
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = forward;
     pivotMotor.getConfigurator().apply(pivotConfig);
-    pivotMotor.setInverted(pivotInvert);
   }
 
   /**
