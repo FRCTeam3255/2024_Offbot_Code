@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.frcteam3255.components.swerve.SN_SwerveConstants;
+import com.frcteam3255.preferences.SN_DoublePreference;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -24,14 +25,12 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public final class Constants {
-  /**
-   * Volts
-   */
-  public static final double MAX_VOLTAGE = 12;
+  public static final Measure<Voltage> MAX_VOLTAGE = Units.Volts.of(12);
 
   public static class constControllers {
     public static final double DRIVER_LEFT_STICK_DEADBAND = 0.05;
@@ -210,6 +209,7 @@ public final class Constants {
 
     public static final boolean LEFT_INVERT = true;
     public static final boolean RIGHT_INVERT = false;
+    public static final boolean PIVOT_INVERT = false;
 
     // - Angles -
     public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Rotations.of(0);
@@ -225,7 +225,7 @@ public final class Constants {
     public static final Measure<Velocity<Angle>> LEFT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(60);
     public static final Measure<Velocity<Angle>> RIGHT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(45);
 
-    // -- PRESETS --
+    // -- Presets --
     /**
      * Preset: Shooting while touching the subwoofer velocity
      */
@@ -240,6 +240,29 @@ public final class Constants {
     public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
 
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
+
+    // -- Zeroing --
+    /**
+     * The voltage supplied to the motor in order to zero
+     */
+    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-1);
+
+    /**
+     * The velocity that the motor goes at once it has zeroed (and can no longer
+     * continue in that direction)
+     */
+    public static final Measure<Velocity<Angle>> ZEROED_VELOCITY = Units.DegreesPerSecond.of(0.01);
+
+    /**
+     * The elapsed time required to consider the pivot motor as zeroed
+     */
+    public static final Measure<Time> ZEROED_TIME = Units.Seconds.of(0.25);
+
+    /**
+     * The value that the pivot reports when it is at it's zeroed position. This
+     * may not necessarily be 0 due to mechanical slop
+     */
+    public static final Measure<Angle> ZEROED_ANGLE = Units.Degrees.of(0);
   }
 
   public static class constClimber {
