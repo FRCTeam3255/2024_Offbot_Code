@@ -32,7 +32,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void configure() {
-    climberConfig.Feedback.SensorToMechanismRatio = constClimber.GEAR_RATIO;
+    climberConfig.Feedback.SensorToMechanismRatio = constClimber.MOTOR_ROTATION_TO_METERS;
     climberConfig.MotorOutput.Inverted = constClimber.MOTOR_INVERT;
     climberConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     climberConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constClimber.FORWARD_LIMIT.in(Units.Rotations);
@@ -60,7 +60,7 @@ public class Climber extends SubsystemBase {
    * Sets the current position of the climber motor to read as the given value
    */
   public void setClimberSensorPosition(Measure<Distance> position) {
-    climberMotor.setPosition(SN_Math.metersToRotations(position.in(Units.Meters), 1, 1));
+    climberMotor.setPosition(position.in(Units.Meters));
   }
 
   public Measure<Velocity<Distance>> getVelocity() {

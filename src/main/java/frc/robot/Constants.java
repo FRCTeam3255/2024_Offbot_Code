@@ -274,7 +274,8 @@ public final class Constants {
     public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     // TODO: Get real gear ratio values
-    public static final double GEAR_RATIO = 1;
+    public static final double MECHANICAL_GEAR_RATIO = 1;
+    public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO * 1;
 
     // -- Zeroing --
     /**
@@ -309,7 +310,8 @@ public final class Constants {
     public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     // TODO: Get real gear ratio values
-    public static final double GEAR_RATIO = 1;
+    public static final double MECHANICAL_GEAR_RATIO = 1;
+    public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO * 1;
 
     public static final Measure<Angle> AMP_POSITION = Units.Rotations.of(0);
 

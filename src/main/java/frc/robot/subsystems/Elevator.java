@@ -43,7 +43,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void configure() {
-    elevatorConfig.Feedback.SensorToMechanismRatio = constElevator.GEAR_RATIO;
+    elevatorConfig.Feedback.SensorToMechanismRatio = constElevator.MOTOR_ROTATION_TO_METERS;
     elevatorConfig.MotorOutput.Inverted = constElevator.MOTOR_INVERT;
     elevatorConfig.Slot0.kP = prefElevator.elevatorShooterP.getValue();
     elevatorConfig.Slot0.kI = prefElevator.elevatorShooterI.getValue();
@@ -84,7 +84,7 @@ public class Elevator extends SubsystemBase {
    * Sets the current position of the elevator motor to read as the given value
    */
   public void setElevatorSensorPosition(Measure<Distance> position) {
-    elevatorMotor.setPosition(SN_Math.metersToRotations(position.in(Units.Meters), 1, 1));
+    elevatorMotor.setPosition(position.in(Units.Meters));
   }
 
   /**
@@ -95,7 +95,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public Measure<Velocity<Distance>> getVelocity() {
-    return Units.MetersPerSecond.of(SN_Math.rotationsToMeters(elevatorMotor.getVelocity().getValueAsDouble(), 1, 1));
+    return Units.MetersPerSecond.of(elevatorMotor.getVelocity().getValueAsDouble());
   }
 
   /**
