@@ -77,7 +77,11 @@ public class RobotContainer {
     controller.btn_LeftTrigger
         .whileTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subElevator, subIntake, subTransfer,
-                subShooter)));
+                subShooter)))
+        .onFalse(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subElevator, subIntake, subTransfer,
+                subShooter))
+            .unless(gamePieceTrigger));
 
     controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
         .onTrue(Commands.deferredProxy(
@@ -90,7 +94,10 @@ public class RobotContainer {
 
     controller.btn_West.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
-            subShooter)));
+            subShooter)))
+        .onFalse(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subElevator, subIntake, subTransfer,
+                subShooter)));
   }
 
   public Command getAutonomousCommand() {

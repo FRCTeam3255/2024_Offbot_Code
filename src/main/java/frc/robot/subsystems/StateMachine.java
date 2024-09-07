@@ -44,6 +44,15 @@ public class StateMachine extends SubsystemBase {
   public Command tryState(RobotState desiredState, StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
       Transfer subTransfer, Shooter subShooter) {
     switch (desiredState) {
+      case NONE:
+        switch (currentState) {
+          case INTAKING:
+          case EJECTING:
+          case SHOOTING:
+            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
+        }
+        break;
+
       case INTAKING:
         switch (currentState) {
           case NONE:
@@ -106,7 +115,7 @@ public class StateMachine extends SubsystemBase {
       case PREP_SPEAKER:
         return new PrepSpeaker(subStateMachine, subShooter);
       default:
-        return new StoreFeeder(subStateMachine, subIntake, subShooter, subTransfer);
+        return new StoreFeeder(subStateMachine, subIntake, subTransfer);
     }
   }
 
