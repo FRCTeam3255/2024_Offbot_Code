@@ -265,6 +265,8 @@ public final class Constants {
      * may not necessarily be 0 due to mechanical slop
      */
     public static final Measure<Angle> ZEROED_ANGLE = Units.Degrees.of(0);
+
+    public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
   }
 
   public static class constClimber {
@@ -298,6 +300,8 @@ public final class Constants {
      * may not necessarily be 0 due to mechanical slop
      */
     public static final Measure<Distance> ZEROED_POS = Units.Meters.of(0);
+
+    public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
   }
 
   public static class constElevator {
@@ -340,6 +344,8 @@ public final class Constants {
      * may not necessarily be 0 due to mechanical slop
      */
     public static final Measure<Distance> ZEROED_POS = Units.Meters.of(0);
+
+    public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
   }
 
   public static class constIntake {

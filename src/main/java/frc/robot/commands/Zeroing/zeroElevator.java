@@ -12,12 +12,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constElevator;
 import frc.robot.subsystems.Elevator;
 
-public class zeroElevator extends Command {
+public class ZeroElevator extends Command {
   Elevator subElevator;
 
   Measure<Time> zeroingTimestamp;
 
-  public zeroElevator(Elevator subElevator) {
+  public ZeroElevator(Elevator subElevator) {
     this.subElevator = subElevator;
 
     addRequirements(subElevator);

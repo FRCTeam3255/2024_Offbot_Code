@@ -12,12 +12,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constClimber;
 import frc.robot.subsystems.Climber;
 
-public class zeroClimber extends Command {
+public class ZeroClimber extends Command {
   Climber subClimber;
 
   Measure<Time> zeroingTimestamp;
 
-  public zeroClimber(Climber subClimber) {
+  public ZeroClimber(Climber subClimber) {
     this.subClimber = subClimber;
 
     addRequirements(subClimber);

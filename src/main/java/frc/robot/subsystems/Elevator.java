@@ -84,7 +84,7 @@ public class Elevator extends SubsystemBase {
    * Sets the current position of the elevator motor to read as the given value
    */
   public void setElevatorSensorPosition(Measure<Distance> position) {
-    elevatorMotor.setPosition(SN_Math.metersToRotations(angle.in(Units.Meters), 1, 1));
+    elevatorMotor.setPosition(SN_Math.metersToRotations(position.in(Units.Meters), 1, 1));
   }
 
   /**

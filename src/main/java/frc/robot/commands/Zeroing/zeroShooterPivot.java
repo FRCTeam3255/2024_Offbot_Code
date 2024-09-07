@@ -12,12 +12,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constShooter;
 import frc.robot.subsystems.Shooter;
 
-public class zeroShooterPivot extends Command {
+public class ZeroShooterPivot extends Command {
   Shooter subShooter;
 
   Measure<Time> zeroingTimestamp;
 
-  public zeroShooterPivot(Shooter subShooter) {
+  public ZeroShooterPivot(Shooter subShooter) {
     this.subShooter = subShooter;
     addRequirements(subShooter);
   }
