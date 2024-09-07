@@ -55,10 +55,8 @@ public class Shooting extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // If we don't have a game piece anymore, set the state and target state back to
-    // NONE
+    // If we don't have a game piece anymore, set the target state back to NONE
     if (!subTransfer.getGamePieceCollected()) {
-      subStateMachine.setRobotState(RobotState.NONE);
       subStateMachine.setTargetState(TargetState.NONE);
     }
   }
