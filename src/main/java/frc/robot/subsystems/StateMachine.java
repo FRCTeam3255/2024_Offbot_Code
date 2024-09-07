@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.commands.UnPrepAmp;
 import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
@@ -62,7 +63,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
                 .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
-                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter));
+                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
         }
         break;
 
@@ -79,7 +81,8 @@ public class StateMachine extends SubsystemBase {
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
                 .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
-                .andThen(new Ejecting(subStateMachine, subIntake, subTransfer));
+                .andThen(new Ejecting(subStateMachine, subIntake, subTransfer))
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
         }
         break;
 
@@ -94,7 +97,8 @@ public class StateMachine extends SubsystemBase {
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
                 .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
-                .andThen(new PrepShuffle(subStateMachine, subShooter));
+                .andThen(new PrepShuffle(subStateMachine, subShooter))
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
         }
         break;
 
@@ -109,7 +113,8 @@ public class StateMachine extends SubsystemBase {
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
                 .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
-                .andThen(new PrepSpeaker(subStateMachine, subShooter));
+                .andThen(new PrepSpeaker(subStateMachine, subShooter))
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
         }
         break;
 
