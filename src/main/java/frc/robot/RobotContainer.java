@@ -63,53 +63,53 @@ public class RobotContainer {
 
     subDrivetrain.resetModulesToAbsolute();
 
-    configureDriverBindings();
-    configureOperatorBindings();
-    configureTestBindings();
+    configureDriverBindings(conDriver);
+    configureOperatorBindings(conOperator);
+    configureTestBindings(conTestOperator);
   }
 
-  public void configureDriverBindings() {
-    conDriver.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
-    conDriver.btn_Back.onTrue(
+  public void configureDriverBindings(SN_XboxController controller) {
+    controller.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
+    controller.btn_Back.onTrue(
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
 
     // Defaults to Field-Relative, is Robot-Relative while held
-    conDriver.btn_LeftBumper
+    controller.btn_LeftBumper
         .whileTrue(Commands.runOnce(() -> subDrivetrain.setRobotRelative()))
         .onFalse(Commands.runOnce(() -> subDrivetrain.setFieldRelative()));
   }
 
-  public void configureOperatorBindings() {
-    conOperator.btn_LeftTrigger
+  public void configureOperatorBindings(SN_XboxController controller) {
+    controller.btn_LeftTrigger
         .whileTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subElevator, subIntake, subTransfer,
                 subShooter)));
 
-    conOperator.btn_RightTrigger.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.SHOOTING,
+    controller.btn_RightTrigger.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.SHOOTING,
         subStateMachine, subElevator, subIntake, subTransfer, subShooter)));
 
-    conOperator.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
         .onTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake,
                 subTransfer, subShooter)));
 
-    conOperator.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
+    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
-    conOperator.btn_A.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
+    controller.btn_A.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
         subElevator, subIntake, subTransfer, subShooter)));
 
-    conOperator.btn_West.whileTrue(Commands.deferredProxy(
+    controller.btn_West.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
             subShooter)));
   }
 
-  public void configureTestBindings() {
-    conTestOperator.btn_LeftTrigger.whileTrue(new Intaking(subStateMachine, subIntake, subTransfer));
-    conTestOperator.btn_Y.onTrue(new PrepSpeaker(subStateMachine, subShooter));
-    conTestOperator.btn_X.onTrue(new PrepShuffle(subStateMachine, subShooter));
-    conTestOperator.btn_West.whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer));
+  public void configureTestBindings(SN_XboxController controller) {
+    controller.btn_LeftTrigger.whileTrue(new Intaking(subStateMachine, subIntake, subTransfer));
+    controller.btn_Y.onTrue(new PrepSpeaker(subStateMachine, subShooter));
+    controller.btn_X.onTrue(new PrepShuffle(subStateMachine, subShooter));
+    controller.btn_West.whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer));
   }
 
   public Command getAutonomousCommand() {
