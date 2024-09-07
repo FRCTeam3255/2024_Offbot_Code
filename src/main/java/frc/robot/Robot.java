@@ -32,8 +32,6 @@ public class Robot extends TimedRobot {
     // Log the DS data and joysticks
     DriverStation.startDataLog(DataLogManager.getLog(), true);
     DriverStation.silenceJoystickConnectionWarning(Constants.constControllers.SILENCE_JOYSTICK_WARNINGS);
-
-    m_robotContainer.configureDriverBindings();
   }
 
   @Override
@@ -77,8 +75,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
-    m_robotContainer.configureOperatorBindings();
   }
 
   @Override
@@ -92,8 +88,6 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
-
-    m_robotContainer.configureTestBindings();
   }
 
   @Override

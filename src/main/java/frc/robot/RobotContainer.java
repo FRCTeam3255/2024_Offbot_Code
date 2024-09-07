@@ -32,6 +32,7 @@ public class RobotContainer {
 
   private final SN_XboxController conDriver = new SN_XboxController(mapControllers.DRIVER_USB);
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
+  private final SN_XboxController conTestOperator = new SN_XboxController(mapControllers.TEST_OPERATOR_USB);
 
   private final StateMachine subStateMachine = new StateMachine();
   private final Drivetrain subDrivetrain = new Drivetrain();
@@ -61,6 +62,10 @@ public class RobotContainer {
             subShooter)));
 
     subDrivetrain.resetModulesToAbsolute();
+
+    configureDriverBindings();
+    configureOperatorBindings();
+    configureTestBindings();
   }
 
   public void configureDriverBindings() {
@@ -95,10 +100,10 @@ public class RobotContainer {
   }
 
   public void configureTestBindings() {
-    conOperator.btn_LeftTrigger.whileTrue(new Intaking(subStateMachine, subIntake, subTransfer));
-    conOperator.btn_Y.onTrue(new PrepSpeaker(subStateMachine, subShooter));
-    conOperator.btn_X.onTrue(new PrepShuffle(subStateMachine, subShooter));
-    conOperator.btn_West.whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer));
+    conTestOperator.btn_LeftTrigger.whileTrue(new Intaking(subStateMachine, subIntake, subTransfer));
+    conTestOperator.btn_Y.onTrue(new PrepSpeaker(subStateMachine, subShooter));
+    conTestOperator.btn_X.onTrue(new PrepShuffle(subStateMachine, subShooter));
+    conTestOperator.btn_West.whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer));
   }
 
   public Command getAutonomousCommand() {
