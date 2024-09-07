@@ -157,7 +157,7 @@ public class StateMachine extends SubsystemBase {
       case PREP_SPEAKER:
         return new PrepSpeaker(subStateMachine, subShooter);
       default:
-        return new StoreFeeder(subStateMachine, subIntake, subTransfer);
+        return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
     }
   }
 
