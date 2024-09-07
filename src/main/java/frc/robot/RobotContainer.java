@@ -152,12 +152,13 @@ public class RobotContainer {
    * @return Parallel commands to zero the Climber, Elevator, and Shooter Pivot
    */
   public static Command zeroSubsystems() {
-    return new ParallelCommandGroup(
-        new ZeroClimber(subClimber).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
-            .withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
-        new ZeroElevator(subElevator).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
-            .withTimeout(constElevator.ZEROING_TIMEOUT.in(Units.Seconds)),
-        new ZeroShooterPivot(subShooter).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
-            .withTimeout(constShooter.ZEROING_TIMEOUT.in(Units.Seconds)));
-  }
+    Command returnedCommand = new ParallelCommandGroup(
+        new ZeroClimber(subClimber).withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
+        new ZeroElevator(subElevator).withTimeout(constElevator.ZEROING_TIMEOUT.in(Units.Seconds)),
+        new ZeroShooterPivot(subShooter).withTimeout(constShooter.ZEROING_TIMEOUT.in(Units.Seconds)))
+        .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);
+    returnedCommand.addRequirements(subStateMachine);
+    return returnedCommand;
+  };
+
 }
