@@ -68,7 +68,7 @@ public class RobotContainer {
     configureTestBindings(conTestOperator);
   }
 
-  public void configureDriverBindings(SN_XboxController controller) {
+  private void configureDriverBindings(SN_XboxController controller) {
     controller.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
     controller.btn_Back.onTrue(
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
@@ -79,7 +79,7 @@ public class RobotContainer {
         .onFalse(Commands.runOnce(() -> subDrivetrain.setFieldRelative()));
   }
 
-  public void configureOperatorBindings(SN_XboxController controller) {
+  private void configureOperatorBindings(SN_XboxController controller) {
     controller.btn_LeftTrigger
         .whileTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subElevator, subIntake, subTransfer,
@@ -105,7 +105,7 @@ public class RobotContainer {
             subShooter)));
   }
 
-  public void configureTestBindings(SN_XboxController controller) {
+  private void configureTestBindings(SN_XboxController controller) {
     controller.btn_LeftTrigger.whileTrue(new Intaking(subStateMachine, subIntake, subTransfer));
     controller.btn_Y.onTrue(new PrepSpeaker(subStateMachine, subShooter));
     controller.btn_X.onTrue(new PrepShuffle(subStateMachine, subShooter));
