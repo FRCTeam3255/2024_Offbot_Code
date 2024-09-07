@@ -8,21 +8,18 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
 
 public class StoreFeeder extends Command {
   StateMachine subStateMachine;
   Intake subIntake;
-  Shooter subShooter;
   Transfer subTransfer;
 
   /** Creates a new StoreTransfer. */
-  public StoreFeeder(StateMachine subStateMachine, Intake subIntake, Shooter subShooter, Transfer subTransfer) {
+  public StoreFeeder(StateMachine subStateMachine, Intake subIntake, Transfer subTransfer) {
     this.subStateMachine = subStateMachine;
     this.subIntake = subIntake;
-    this.subShooter = subShooter;
     this.subTransfer = subTransfer;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subStateMachine);
