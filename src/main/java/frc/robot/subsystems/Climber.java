@@ -64,7 +64,7 @@ public class Climber extends SubsystemBase {
   }
 
   public Measure<Velocity<Distance>> getVelocity() {
-    return Units.MetersPerSecond.of(SN_Math.rotationsToMeters(climberMotor.getVelocity().getValueAsDouble(), 1, 1));
+    return Units.MetersPerSecond.of(climberMotor.getVelocity().getValueAsDouble());
   }
 
   @Override
