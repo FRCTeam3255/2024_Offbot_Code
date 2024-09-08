@@ -23,7 +23,7 @@ import frc.robot.RobotPreferences.prefElevator;
 
 public class Elevator extends SubsystemBase {
   TalonFX elevatorMotor, drainpipeMotor;
-  TalonFXConfiguration elevatorConfig;
+  TalonFXConfiguration elevatorConfig, drainpipeConfig;
 
   PositionVoltage positionRequest;
   VoltageOut voltageRequest;
@@ -34,6 +34,7 @@ public class Elevator extends SubsystemBase {
     drainpipeMotor = new TalonFX(mapElevator.DRAINPIPE_MOTOR_CAN, "rio");
 
     elevatorConfig = new TalonFXConfiguration();
+    drainpipeConfig = new TalonFXConfiguration();
     positionRequest = new PositionVoltage(0).withSlot(0);
     voltageRequest = new VoltageOut(0);
 
@@ -41,6 +42,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void configure() {
+    // -- Elevator Motor --
     elevatorConfig.Feedback.SensorToMechanismRatio = constElevator.MOTOR_ROTATION_TO_METERS;
     elevatorConfig.MotorOutput.Inverted = constElevator.MOTOR_INVERT;
     elevatorConfig.Slot0.kP = prefElevator.elevatorShooterP.getValue();
@@ -54,6 +56,9 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constElevator.FORWARD_LIMIT.in(Units.Rotations);
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);
+
+    // -- Drainpipe Motor --
+    drainpipeMotor.getConfigurator().apply(drainpipeConfig);
   }
 
   public void setSoftwareLimits(boolean reverse, boolean forward) {

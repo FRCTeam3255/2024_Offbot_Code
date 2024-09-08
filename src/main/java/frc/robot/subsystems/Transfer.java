@@ -32,6 +32,7 @@ public class Transfer extends SubsystemBase {
   }
 
   public void configure() {
+    // -- Feeder Motor --
     feederConfig.MotorOutput.Inverted = constTransfer.MOTOR_INVERT;
     feederConfig.MotorOutput.NeutralMode = constTransfer.FEEDER_NEUTRAL_MODE;
     feederMotor.getConfigurator().apply(feederConfig);

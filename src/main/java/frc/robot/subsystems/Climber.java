@@ -32,6 +32,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void configure() {
+    // -- Climber Motor --
     climberConfig.Feedback.SensorToMechanismRatio = constClimber.MOTOR_ROTATION_TO_METERS;
     climberConfig.MotorOutput.Inverted = constClimber.MOTOR_INVERT;
     climberConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;

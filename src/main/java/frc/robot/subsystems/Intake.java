@@ -10,15 +10,25 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.mapIntake;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Intake extends SubsystemBase {
   TalonFX rollerMotor;
+  TalonFXConfiguration rollerConfiguration;
 
   /** Creates a new Intake. */
   public Intake() {
     rollerMotor = new TalonFX(mapIntake.ROLLER_CAN, "rio");
+
+    rollerConfiguration = new TalonFXConfiguration();
+
+    configure();
+  }
+
+  public void configure() {
+    rollerMotor.getConfigurator().apply(rollerConfiguration);
   }
 
   public void setIntakeRollerSpeed(Measure<Dimensionless> speed) {
