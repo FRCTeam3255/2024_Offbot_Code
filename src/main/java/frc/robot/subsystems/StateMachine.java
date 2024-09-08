@@ -19,7 +19,6 @@ import frc.robot.commands.States.Shooting;
 import frc.robot.commands.States.StoreFeeder;
 
 public class StateMachine extends SubsystemBase {
-
   public static RobotState currentState;
   public static TargetState currentTargetState;
 
@@ -45,6 +44,18 @@ public class StateMachine extends SubsystemBase {
     return currentTargetState;
   }
 
+  /**
+   * Determines which command to run for a desired state depending on if our
+   * current state.
+   * 
+   * @see <a
+   *      href=https://www.tldraw.com/ro/DX06u039erL_iV6q0ARSn?d=v-1103.-1504.5212.2506.page>
+   *      Our State Machine Diagram
+   *      </a>
+   * @param desiredState The state you would like to go to, which may not be
+   *                     possible from your current state
+   * @return The Command to run for that desired state
+   */
   public Command tryState(RobotState desiredState, StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
       Transfer subTransfer, Shooter subShooter) {
     switch (desiredState) {

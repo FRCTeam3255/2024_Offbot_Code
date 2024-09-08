@@ -17,6 +17,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Intake extends SubsystemBase {
   TalonFX rollerMotor;
+
   TalonFXConfiguration rollerConfig = new TalonFXConfiguration();
 
   /** Creates a new Intake. */

@@ -55,6 +55,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void configure() {
+    // -- Left Motor --
     leftConfig.MotorOutput.Inverted = constShooter.LEFT_INVERT;
     leftConfig.Slot0.kV = prefShooter.leftShooterV.getValue();
     leftConfig.Slot0.kS = prefShooter.leftShooterS.getValue();
@@ -65,7 +66,9 @@ public class Shooter extends SubsystemBase {
 
     leftConfig.MotionMagic.MotionMagicAcceleration = 400;
     leftConfig.MotionMagic.MotionMagicJerk = 4000;
+    leftMotor.getConfigurator().apply(leftConfig);
 
+    // -- Right Motor --
     rightConfig.MotorOutput.Inverted = constShooter.RIGHT_INVERT;
     rightConfig.Slot0.kV = prefShooter.rightShooterV.getValue();
     rightConfig.Slot0.kS = prefShooter.rightShooterS.getValue();
@@ -76,7 +79,9 @@ public class Shooter extends SubsystemBase {
 
     rightConfig.MotionMagic.MotionMagicAcceleration = 400;
     rightConfig.MotionMagic.MotionMagicJerk = 4000;
+    rightMotor.getConfigurator().apply(rightConfig);
 
+    // -- Pivot Motor --
     pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
@@ -88,9 +93,6 @@ public class Shooter extends SubsystemBase {
 
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
-
-    leftMotor.getConfigurator().apply(leftConfig);
-    rightMotor.getConfigurator().apply(rightConfig);
     pivotMotor.getConfigurator().apply(pivotConfig);
   }
 
