@@ -51,8 +51,8 @@ public class RobotContainer {
   private final static Drivetrain subDrivetrain = new Drivetrain();
   private final static Elevator subElevator = new Elevator();
   private final static Intake subIntake = new Intake();
-  private final static Transfer subTransfer = new Transfer();
   private final static Shooter subShooter = new Shooter();
+  private final static Transfer subTransfer = new Transfer();
   private final static Limelight subLimelight = new Limelight();
 
   private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceCollected());
