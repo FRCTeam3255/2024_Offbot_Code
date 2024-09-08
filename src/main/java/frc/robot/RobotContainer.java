@@ -24,6 +24,7 @@ import frc.robot.commands.Zeroing.ZeroElevator;
 import frc.robot.commands.Zeroing.ZeroShooterPivot;
 import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
+import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepAmp;
 import frc.robot.commands.States.PrepShuffle;
 import frc.robot.commands.States.PrepSpeaker;
@@ -134,10 +135,12 @@ public class RobotContainer {
 
   private void configureTestBindings(SN_XboxController controller) {
     controller.btn_LeftTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.INTAKING)))
-        .whileTrue(new Intaking(subStateMachine, subIntake, subTransfer));
+        .whileTrue(new Intaking(subStateMachine, subIntake, subTransfer))
+        .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
 
     controller.btn_RightTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.SHOOTING)))
-        .whileTrue(new Shooting(subStateMachine, subElevator, subShooter, subTransfer));
+        .whileTrue(new Shooting(subStateMachine, subElevator, subShooter, subTransfer))
+        .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
 
     controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SPEAKER)))
         .onTrue(new PrepSpeaker(subStateMachine, subShooter));
@@ -149,7 +152,8 @@ public class RobotContainer {
         .onTrue(new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer));
 
     controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
-        .whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer));
+        .whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer))
+        .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
   }
 
   public Command getAutonomousCommand() {

@@ -25,9 +25,16 @@ public class Transfer extends SubsystemBase {
   /** Creates a new Transfer. */
   public Transfer() {
     feederMotor = new TalonFX(mapTransfer.TRANSFER_MOTOR_CAN, "rio");
-    feederMotor.getConfigurator().apply(feederConfig);
 
     noteSensor = new DigitalInput(mapTransfer.NOTE_SENSOR_DIO);
+
+    configure();
+  }
+
+  public void configure() {
+    feederConfig.MotorOutput.Inverted = constTransfer.MOTOR_INVERT;
+    feederConfig.MotorOutput.NeutralMode = constTransfer.FEEDER_NEUTRAL_MODE;
+    feederMotor.getConfigurator().apply(feederConfig);
   }
 
   public void setFeederSpeed(Measure<Dimensionless> speed) {

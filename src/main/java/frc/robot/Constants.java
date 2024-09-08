@@ -360,9 +360,11 @@ public final class Constants {
 
   public static class constTransfer {
     public static final boolean NOTE_SENSOR_INVERT = true;
+    public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+    public static final NeutralModeValue FEEDER_NEUTRAL_MODE = NeutralModeValue.Brake;
 
-    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
-    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
+    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(0.4);
+    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-0.4);
 
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
 
