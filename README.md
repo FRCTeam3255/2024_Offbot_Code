@@ -22,6 +22,12 @@ competitions (depending on region) to qualify for the FIRST Championship in Hous
 
 Interested in learning more about CRESCENDO? Visit [FIRST's website](https://www.firstinspires.org/robotics/frc/game-and-season) for more details!
 
+## Code Details
+This offseason, we chose to control our robot using a state machine! Prior to staring our code, we mapped out and dicussed every state that our robot could be in during a match and how those states should interact with eachother. This allowed us to create a framework of our commands, sort of like pseudocode, before we even opened VSCode!
+
+Check out our diagram below or visit the interactive link [here.](https://www.tldraw.com/ro/DX06u039erL_iV6q0ARSn?d=v-1103.-1504.5212.2506.page)
+![State Machine Diagram](src/main/assets/StateMachine.png)
+
 ## Controls
 Coming Soon!
 
