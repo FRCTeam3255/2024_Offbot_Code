@@ -356,6 +356,7 @@ public final class Constants {
   public static class constIntake {
     public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
     public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
+    public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
   }
 
   public static class constTransfer {
