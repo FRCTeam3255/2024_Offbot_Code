@@ -8,17 +8,27 @@ import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.constIntake;
 import frc.robot.RobotMap.mapIntake;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Intake extends SubsystemBase {
   TalonFX rollerMotor;
+  TalonFXConfiguration rollerConfig = new TalonFXConfiguration();
 
   /** Creates a new Intake. */
   public Intake() {
     rollerMotor = new TalonFX(mapIntake.ROLLER_CAN, "rio");
+
+    configure();
+  }
+
+  public void configure() {
+    rollerConfig.MotorOutput.Inverted = constIntake.MOTOR_INVERT;
+    rollerMotor.getConfigurator().apply(rollerConfig);
   }
 
   public void setIntakeRollerSpeed(Measure<Dimensionless> speed) {
