@@ -224,6 +224,8 @@ public final class Constants {
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(2);
 
+    public static final double MANUAL_PIVOT_PERCENTAGE = 0.5;
+
     // - Velocities -
     public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(5);
 

@@ -207,6 +207,10 @@ public class Shooter extends SubsystemBase {
     rightMotor.set(speed.in(Units.Percent));
   }
 
+  public void setPivotPercentOutput(Measure<Dimensionless> speed) {
+    pivotMotor.set(speed.in(Units.Percent));
+  }
+
   public void setLeftShooterIntakeVoltage(Measure<Voltage> voltage) {
     leftMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
 
