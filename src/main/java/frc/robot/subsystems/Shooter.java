@@ -260,10 +260,5 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
 
-    SmartDashboard.putBoolean("DEBUG AT BACKWARD LIMIT",
-        isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT));
-    SmartDashboard.putBoolean("DEBUG AT FORWARD LIMIT",
-        isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT));
-
   }
 }

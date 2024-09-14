@@ -40,11 +40,6 @@ public class Intaking extends Command {
     subIntake.setIntakeRollerSpeed(constIntake.INTAKING_SPEED);
     subTransfer.setFeederSpeed(constTransfer.INTAKING_SPEED);
 
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
     if (subShooter.getShooterPosition().lte(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT)) {
       subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
     } else if (subShooter.getShooterPosition().gte(constShooter.PIVOT_FORWARD_LIMIT)) {
@@ -52,6 +47,12 @@ public class Intaking extends Command {
     } else {
       subShooter.setPivotPosition(subShooter.getShooterPosition());
     }
+
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
   }
 
   // Called once the command ends or is interrupted.

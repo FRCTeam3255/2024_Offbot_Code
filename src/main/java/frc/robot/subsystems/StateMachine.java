@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.commands.UnPrepAmp;
@@ -156,9 +158,7 @@ public class StateMachine extends SubsystemBase {
         }
         break;
     }
-    // TODO: replace NoneState with a default command when previous states were
-    // invalid (flashing LEDs?)
-    return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
+    return Commands.print("ITS SO OVER D: Invalid State Provided :3");
   }
 
   public Command tryTargetState(StateMachine subStateMachine, Intake subIntake,
