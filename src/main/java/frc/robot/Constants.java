@@ -214,6 +214,7 @@ public final class Constants {
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
 
     // - Angles -
+    // TODO: Competitive robot should use more accurate forward and backward limits
     public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(90);
     public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Degrees.of(10);
 
