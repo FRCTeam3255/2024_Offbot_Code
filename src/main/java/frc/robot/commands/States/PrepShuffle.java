@@ -35,7 +35,7 @@ public class PrepShuffle extends Command {
 
     // TODO: NULL POINTER EXCEPTION MY BELOVED!
     // This will be an interpolating tree map in Constants one day
-    subShooter.setShooterPosition(Units.Rotations.zero());
+    subShooter.setPivotPosition(Units.Rotations.zero());
     subShooter.setDesiredVelocities(constShooter.LEFT_SHUFFLE_VELOCITY, constShooter.RIGHT_SHUFFLE_VELOCITY);
     subShooter.getUpToSpeed();
   }

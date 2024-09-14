@@ -85,6 +85,9 @@ public class Shooter extends SubsystemBase {
     pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
+    pivotConfig.Slot0.kS = prefShooter.pivotShooterS.getValue();
+    pivotConfig.Slot0.kG = prefShooter.pivotShooterG.getValue();
+    pivotConfig.Slot0.kA = prefShooter.pivotShooterA.getValue();
     pivotConfig.Slot0.kP = prefShooter.pivotShooterP.getValue();
     pivotConfig.Slot0.kI = prefShooter.pivotShooterI.getValue();
     pivotConfig.Slot0.kD = prefShooter.pivotShooterD.getValue();
@@ -233,7 +236,7 @@ public class Shooter extends SubsystemBase {
     this.ignoreFlywheelSpeed = ignoreFlywheelSpeed;
   }
 
-  public void setShooterPosition(Measure<Angle> position) {
+  public void setPivotPosition(Measure<Angle> position) {
     pivotMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
   }
 

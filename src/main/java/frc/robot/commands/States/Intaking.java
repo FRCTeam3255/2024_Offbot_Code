@@ -40,13 +40,12 @@ public class Intaking extends Command {
     subIntake.setIntakeRollerSpeed(constIntake.INTAKING_SPEED);
     subTransfer.setFeederSpeed(constTransfer.INTAKING_SPEED);
 
-    subShooter.setShooterPosition(Units.Degrees.of(50));
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    subShooter.setPivotPosition(Units.Degrees.of(50));
     // if (subShooter.isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT)) {
     // subShooter.setShooterPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
     // } else if (subShooter.isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT))
