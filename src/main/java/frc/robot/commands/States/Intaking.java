@@ -45,9 +45,9 @@ public class Intaking extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (subShooter.isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT)) {
+    if (subShooter.getShooterPosition().lte(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT)) {
       subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
-    } else if (subShooter.isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT)) {
+    } else if (subShooter.getShooterPosition().gte(constShooter.PIVOT_FORWARD_LIMIT)) {
       subShooter.setPivotPosition(constShooter.PIVOT_FORWARD_INTAKE_LIMIT);
     } else {
       subShooter.setPivotPosition(subShooter.getShooterPosition());
