@@ -221,6 +221,7 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(10));
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
+    public static final Measure<Angle> PIVOT_SUB_ANGLE = Units.Rotations.of(0);
     public static final Measure<Angle> PIVOT_AMP_ANGLE = Units.Rotations.of(0);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
@@ -238,12 +239,11 @@ public final class Constants {
      * Preset: Shooting while touching the subwoofer velocity
      */
     public static final Measure<Velocity<Angle>> LEFT_SUB_VELOCITY = Units.RotationsPerSecond.of(35 * 0.4);
-
-    /**
-     * Preset: Shooting while touching the subwoofer velocity
-     */
     public static final Measure<Velocity<Angle>> RIGHT_SUB_VELOCITY = Units.RotationsPerSecond.of(35 * 0.4);
 
+    /**
+     * Preset: Shooting while shuffling velocity
+     */
     public static final Measure<Velocity<Angle>> LEFT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32 * 0.4);
     public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32 * 0.4);
 
