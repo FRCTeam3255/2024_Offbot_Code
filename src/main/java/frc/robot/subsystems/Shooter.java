@@ -85,9 +85,9 @@ public class Shooter extends SubsystemBase {
     pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
-    pivotConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
-    pivotConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
-    pivotConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
+    pivotConfig.Slot0.kP = prefShooter.pivotShooterP.getValue();
+    pivotConfig.Slot0.kI = prefShooter.pivotShooterI.getValue();
+    pivotConfig.Slot0.kD = prefShooter.pivotShooterD.getValue();
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
