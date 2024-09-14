@@ -154,6 +154,7 @@ public class StateMachine extends SubsystemBase {
           case SHOOTING:
             return new Shooting(subStateMachine, subElevator, subShooter, subTransfer);
         }
+        break;
     }
     // TODO: replace NoneState with a default command when previous states were
     // invalid (flashing LEDs?)

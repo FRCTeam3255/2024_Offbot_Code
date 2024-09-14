@@ -221,7 +221,7 @@ public final class Constants {
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Rotations.of(0);
 
     // - Velocities -
-    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(0.7);
+    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(5);
 
     public static final Measure<Velocity<Angle>> LEFT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(60);
     public static final Measure<Velocity<Angle>> RIGHT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(45);
@@ -354,7 +354,7 @@ public final class Constants {
   }
 
   public static class constIntake {
-    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(.5);
+    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
     public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
   }

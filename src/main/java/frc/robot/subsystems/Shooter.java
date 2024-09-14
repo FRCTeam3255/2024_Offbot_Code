@@ -250,5 +250,6 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Right/Desired Velocity RPS", desiredRightVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
 
+    SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
   }
 }
