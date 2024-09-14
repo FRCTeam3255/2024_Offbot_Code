@@ -135,7 +135,7 @@ public class RobotContainer {
 
   private void configureTestBindings(SN_XboxController controller) {
     controller.btn_LeftTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.INTAKING)))
-        .whileTrue(new Intaking(subStateMachine, subIntake, subTransfer))
+        .whileTrue(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
         .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
 
     controller.btn_RightTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.SHOOTING)))

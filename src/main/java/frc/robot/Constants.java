@@ -211,14 +211,18 @@ public final class Constants {
     public static final InvertedValue PIVOT_INVERT = InvertedValue.CounterClockwise_Positive;
 
     public static final double PIVOT_GEAR_RATIO = 70.2;
+    public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
 
     // - Angles -
-    public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Rotations.of(0);
-    public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Rotations.of(0);
+    public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(140);
+    public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Degrees.of(0);
+
+    public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.plus(Units.Degrees.of(10));
+    public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.minus(Units.Degrees.of(10));
 
     public static final Measure<Angle> PIVOT_AMP_ANGLE = Units.Rotations.of(0);
 
-    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Rotations.of(0);
+    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(2);
 
     // - Velocities -
     public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(5);
@@ -364,8 +368,8 @@ public final class Constants {
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue FEEDER_NEUTRAL_MODE = NeutralModeValue.Brake;
 
-    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(0.4);
-    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-0.4);
+    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(0.3);
+    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-0.3);
 
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
 

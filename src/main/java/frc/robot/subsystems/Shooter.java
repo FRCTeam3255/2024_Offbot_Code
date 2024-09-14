@@ -84,15 +84,16 @@ public class Shooter extends SubsystemBase {
     // -- Pivot Motor --
     pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
+    pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
     pivotConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
     pivotConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
     pivotConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
+    pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Degrees);
 
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
+    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Degrees);
     pivotMotor.getConfigurator().apply(pivotConfig);
   }
 
@@ -251,5 +252,11 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
 
     SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
+
+    SmartDashboard.putBoolean("DEBUG AT BACKWARD LIMIT",
+        isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT));
+    SmartDashboard.putBoolean("DEBUG AT FORWARD LIMIT",
+        isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT));
+
   }
 }

@@ -4,23 +4,28 @@
 
 package frc.robot.commands.States;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constIntake;
+import frc.robot.Constants.constShooter;
 import frc.robot.Constants.constTransfer;
 import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class Intaking extends Command {
   StateMachine subStateMachine;
   Intake subIntake;
   Transfer subTransfer;
+  Shooter subShooter;
 
   /** Creates a new Intake. */
-  public Intaking(StateMachine subStateMachine, Intake subIntake, Transfer subTransfer) {
+  public Intaking(StateMachine subStateMachine, Intake subIntake, Shooter subShooter, Transfer subTransfer) {
     this.subStateMachine = subStateMachine;
     this.subIntake = subIntake;
+    this.subShooter = subShooter;
     this.subTransfer = subTransfer;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -33,6 +38,17 @@ public class Intaking extends Command {
     subStateMachine.setRobotState(RobotState.INTAKING);
     subIntake.setIntakeRollerSpeed(constIntake.INTAKING_SPEED);
     subTransfer.setFeederSpeed(constTransfer.INTAKING_SPEED);
+
+    SmartDashboard.putBoolean("AT BACKWARD LIMIT",
+        subShooter.isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT));
+    SmartDashboard.putBoolean("AT FORWARD LIMIT",
+        subShooter.isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT));
+
+    if (subShooter.isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT)) {
+      subShooter.setShooterPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
+    } else if (subShooter.isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT)) {
+      subShooter.setShooterPosition(constShooter.PIVOT_FORWARD_INTAKE_LIMIT);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
