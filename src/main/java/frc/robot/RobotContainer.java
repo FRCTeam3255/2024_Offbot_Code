@@ -135,9 +135,7 @@ public class RobotContainer {
             () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subElevator, subIntake, subTransfer,
                 subShooter)));
 
-    // -- Other --
-
-    controller.btn_LeftBumper.whileTrue(new ManualPivot(subShooter, controller.axis_RightY.getAsDouble()));
+    controller.btn_LeftBumper.whileTrue(new ManualPivot(subShooter, controller.axis_RightY));
   }
 
   private void configureTestBindings(SN_XboxController controller) {

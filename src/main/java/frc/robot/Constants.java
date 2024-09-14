@@ -214,17 +214,17 @@ public final class Constants {
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
 
     // - Angles -
-    public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(140);
-    public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Degrees.of(0);
+    public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(90);
+    public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Degrees.of(10);
 
-    public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.plus(Units.Degrees.of(10));
-    public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.minus(Units.Degrees.of(10));
+    public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(20));
+    public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(20));
 
     public static final Measure<Angle> PIVOT_AMP_ANGLE = Units.Rotations.of(0);
 
-    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(2);
+    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
 
-    public static final double MANUAL_PIVOT_PERCENTAGE = 0.5;
+    public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
     // - Velocities -
     public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(5);

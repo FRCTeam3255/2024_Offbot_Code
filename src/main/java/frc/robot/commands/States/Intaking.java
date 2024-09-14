@@ -4,6 +4,7 @@
 
 package frc.robot.commands.States;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constIntake;
@@ -39,21 +40,19 @@ public class Intaking extends Command {
     subIntake.setIntakeRollerSpeed(constIntake.INTAKING_SPEED);
     subTransfer.setFeederSpeed(constTransfer.INTAKING_SPEED);
 
-    SmartDashboard.putBoolean("AT BACKWARD LIMIT",
-        subShooter.isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT));
-    SmartDashboard.putBoolean("AT FORWARD LIMIT",
-        subShooter.isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT));
+    subShooter.setShooterPosition(Units.Degrees.of(50));
 
-    if (subShooter.isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT)) {
-      subShooter.setShooterPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
-    } else if (subShooter.isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT)) {
-      subShooter.setShooterPosition(constShooter.PIVOT_FORWARD_INTAKE_LIMIT);
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // if (subShooter.isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT)) {
+    // subShooter.setShooterPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
+    // } else if (subShooter.isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT))
+    // {
+    // subShooter.setShooterPosition(constShooter.PIVOT_FORWARD_INTAKE_LIMIT);
+    // }
   }
 
   // Called once the command ends or is interrupted.

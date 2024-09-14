@@ -91,7 +91,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference rightShooterI = new SN_DoublePreference("rightShooterI", 0);
     public static final SN_DoublePreference rightShooterD = new SN_DoublePreference("rightShooterD", 0.01);
 
-    public static final SN_DoublePreference pivotShooterP = new SN_DoublePreference("pivotShooterP", 0);
+    public static final SN_DoublePreference pivotShooterP = new SN_DoublePreference("pivotShooterP", 10);
     public static final SN_DoublePreference pivotShooterI = new SN_DoublePreference("pivotShooterI", 0);
     public static final SN_DoublePreference pivotShooterD = new SN_DoublePreference("pivotShooterD", 0);
   }

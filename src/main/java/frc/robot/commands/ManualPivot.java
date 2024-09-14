@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constShooter;
@@ -11,10 +13,10 @@ import frc.robot.subsystems.Shooter;
 
 public class ManualPivot extends Command {
   Shooter subShooter;
-  double yAxis;
+  DoubleSupplier yAxis;
 
   /** Creates a new ManualPivot. */
-  public ManualPivot(Shooter subShooter, double yAxis) {
+  public ManualPivot(Shooter subShooter, DoubleSupplier yAxis) {
     this.subShooter = subShooter;
     this.yAxis = yAxis;
 
@@ -30,14 +32,13 @@ public class ManualPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subShooter.setPivotPercentOutput(Units.Percent.of(yAxis * constShooter.MANUAL_PIVOT_PERCENTAGE));
-    subShooter.setShooterPosition(Units.Rotations.of(subShooter.getShooterPosition().in(Units.Rotations)));
+    subShooter.setPivotPercentOutput(Units.Percent.of(yAxis.getAsDouble() * constShooter.MANUAL_PIVOT_PERCENTAGE));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    subShooter.setShooterPosition(Units.Rotations.of(subShooter.getShooterPosition().in(Units.Rotations)));
+    subShooter.setShooterPosition(subShooter.getShooterPosition());
   }
 
   // Returns true when the command should end.

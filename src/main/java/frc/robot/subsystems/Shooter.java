@@ -90,10 +90,10 @@ public class Shooter extends SubsystemBase {
     pivotConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Degrees);
+    pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
 
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Degrees);
+    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_BACKWARD_LIMIT.in(Units.Rotations);
     pivotMotor.getConfigurator().apply(pivotConfig);
   }
 
