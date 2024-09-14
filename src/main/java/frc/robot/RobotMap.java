@@ -6,6 +6,7 @@ public class RobotMap {
   public static class mapControllers {
     public static final int DRIVER_USB = 0;
     public static final int OPERATOR_USB = 1;
+    public static final int TEST_OPERATOR_USB = 5;
   }
 
   public static class mapDrivetrain {
@@ -59,6 +60,7 @@ public class RobotMap {
   // MOTORS: 50 -> 59
   public static class mapTransfer {
     public static final int TRANSFER_MOTOR_CAN = 50;
+    public static final int NOTE_SENSOR_DIO = 0;
   }
 
 }
