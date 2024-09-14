@@ -14,7 +14,7 @@ public class RobotPreferences {
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while manually driving
-    public static final SN_DoublePreference turnSpeed = new SN_DoublePreference("turnSpeed", 360);
+    public static final SN_DoublePreference turnSpeed = new SN_DoublePreference("turnSpeed", 1);
 
     /**
      * <p>
@@ -91,7 +91,10 @@ public class RobotPreferences {
     public static final SN_DoublePreference rightShooterI = new SN_DoublePreference("rightShooterI", 0);
     public static final SN_DoublePreference rightShooterD = new SN_DoublePreference("rightShooterD", 0.01);
 
-    public static final SN_DoublePreference pivotShooterP = new SN_DoublePreference("pivotShooterP", 0);
+    public static final SN_DoublePreference pivotShooterS = new SN_DoublePreference("pivotShooterS", 0.2);
+    public static final SN_DoublePreference pivotShooterG = new SN_DoublePreference("pivotShooterG", 0.6);
+    public static final SN_DoublePreference pivotShooterA = new SN_DoublePreference("pivotShooterA", 0.1);
+    public static final SN_DoublePreference pivotShooterP = new SN_DoublePreference("pivotShooterP", 40);
     public static final SN_DoublePreference pivotShooterI = new SN_DoublePreference("pivotShooterI", 0);
     public static final SN_DoublePreference pivotShooterD = new SN_DoublePreference("pivotShooterD", 0);
   }

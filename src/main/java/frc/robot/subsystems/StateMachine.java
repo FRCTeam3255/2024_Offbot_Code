@@ -72,7 +72,7 @@ public class StateMachine extends SubsystemBase {
         switch (currentState) {
           case NONE:
           case SHOOTING:
-            return new Intaking(subStateMachine, subIntake, subTransfer);
+            return new Intaking(subStateMachine, subIntake, subShooter, subTransfer);
         }
         break;
 
@@ -84,7 +84,7 @@ public class StateMachine extends SubsystemBase {
             return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
-                .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
+                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
         }
@@ -100,7 +100,7 @@ public class StateMachine extends SubsystemBase {
             return new Ejecting(subStateMachine, subIntake, subTransfer);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
-                .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
+                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
                 .andThen(new Ejecting(subStateMachine, subIntake, subTransfer))
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
@@ -115,7 +115,7 @@ public class StateMachine extends SubsystemBase {
             return new PrepShuffle(subStateMachine, subShooter);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
-                .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
+                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
                 .andThen(new PrepShuffle(subStateMachine, subShooter))
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
@@ -130,7 +130,7 @@ public class StateMachine extends SubsystemBase {
             return new PrepSpeaker(subStateMachine, subShooter);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
-                .andThen(new Intaking(subStateMachine, subIntake, subTransfer))
+                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
                 .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
                 .andThen(new PrepSpeaker(subStateMachine, subShooter))
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
@@ -154,6 +154,7 @@ public class StateMachine extends SubsystemBase {
           case SHOOTING:
             return new Shooting(subStateMachine, subElevator, subShooter, subTransfer);
         }
+        break;
     }
     // TODO: replace NoneState with a default command when previous states were
     // invalid (flashing LEDs?)

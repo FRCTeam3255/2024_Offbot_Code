@@ -84,15 +84,19 @@ public class Shooter extends SubsystemBase {
     // -- Pivot Motor --
     pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
-    pivotConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
-    pivotConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
-    pivotConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
+    pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
+    pivotConfig.Slot0.kS = prefShooter.pivotShooterS.getValue();
+    pivotConfig.Slot0.kG = prefShooter.pivotShooterG.getValue();
+    pivotConfig.Slot0.kA = prefShooter.pivotShooterA.getValue();
+    pivotConfig.Slot0.kP = prefShooter.pivotShooterP.getValue();
+    pivotConfig.Slot0.kI = prefShooter.pivotShooterI.getValue();
+    pivotConfig.Slot0.kD = prefShooter.pivotShooterD.getValue();
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
 
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
+    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_BACKWARD_LIMIT.in(Units.Rotations);
     pivotMotor.getConfigurator().apply(pivotConfig);
   }
 
@@ -206,6 +210,10 @@ public class Shooter extends SubsystemBase {
     rightMotor.set(speed.in(Units.Percent));
   }
 
+  public void setPivotPercentOutput(Measure<Dimensionless> speed) {
+    pivotMotor.set(speed.in(Units.Percent));
+  }
+
   public void setLeftShooterIntakeVoltage(Measure<Voltage> voltage) {
     leftMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
 
@@ -228,7 +236,7 @@ public class Shooter extends SubsystemBase {
     this.ignoreFlywheelSpeed = ignoreFlywheelSpeed;
   }
 
-  public void setShooterPosition(Measure<Angle> position) {
+  public void setPivotPosition(Measure<Angle> position) {
     pivotMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
   }
 
@@ -249,6 +257,13 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Right/Velocity RPS", getRightShooterVelocity().in(Units.RotationsPerSecond));
     SmartDashboard.putNumber("Shooter/Right/Desired Velocity RPS", desiredRightVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
+
+    SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
+
+    SmartDashboard.putBoolean("DEBUG AT BACKWARD LIMIT",
+        isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT));
+    SmartDashboard.putBoolean("DEBUG AT FORWARD LIMIT",
+        isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT));
 
   }
 }

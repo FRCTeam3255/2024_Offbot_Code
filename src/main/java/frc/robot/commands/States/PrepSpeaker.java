@@ -35,7 +35,7 @@ public class PrepSpeaker extends Command {
 
     // Otherwise, just set the angle of the shooter
     // TODO: actually put the calculated position
-    subShooter.setShooterPosition(Units.Rotations.zero());
+    subShooter.setPivotPosition(Units.Rotations.zero());
     subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY, constShooter.RIGHT_SPEAKER_VELOCITY);
     subShooter.getUpToSpeed();
   }
