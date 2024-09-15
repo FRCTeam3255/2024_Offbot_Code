@@ -35,8 +35,12 @@ public class PrepSpeaker extends Command {
 
     // Otherwise, just set the angle of the shooter
     // TODO: actually put the calculated position
-    subShooter.setPivotPosition(constShooter.PIVOT_SUB_ANGLE);
-    subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY, constShooter.RIGHT_SPEAKER_VELOCITY);
+    // subShooter.setPivotPosition(constShooter.PIVOT_SUB_ANGLE);
+    subShooter.setPivotPosition(constShooter.PIVOT_AMP_ANGLE);
+    // subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY,
+    // constShooter.RIGHT_SPEAKER_VELOCITY);
+    subShooter.setDesiredVelocities(constShooter.LEFT_AMP_VELOCITY, constShooter.RIGHT_AMP_VELOCITY);
+
     subShooter.getUpToSpeed();
   }
 
