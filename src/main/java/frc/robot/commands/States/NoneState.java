@@ -7,7 +7,9 @@ package frc.robot.commands.States;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constElevator;
+import frc.robot.Constants.constShooter;
 import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.TargetState;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -37,12 +39,15 @@ public class NoneState extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // Only go to the real PREP_NONE state if the robot is in these states:
+    subStateMachine.setTargetState(TargetState.PREP_NONE);
     subStateMachine.setRobotState(RobotState.NONE);
     subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
     subTransfer.setFeederSpeed(Units.Percent.zero());
+    subShooter.setShootingNeutralOutput();
     subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
-    subShooter.getUpToSpeed();
+    subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

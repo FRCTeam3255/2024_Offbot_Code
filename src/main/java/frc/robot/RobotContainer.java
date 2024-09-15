@@ -85,7 +85,7 @@ public class RobotContainer {
 
   private void configureDriverBindings(SN_XboxController controller) {
     controller.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
-    controller.btn_Back.onTrue(
+    controller.btn_North.onTrue(
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
   }
 
@@ -101,8 +101,9 @@ public class RobotContainer {
                 subShooter))
             .unless(gamePieceTrigger));
 
-    controller.btn_RightTrigger.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.SHOOTING,
-        subStateMachine, subElevator, subIntake, subTransfer, subShooter)))
+    controller.btn_RightTrigger.whileTrue(
+        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.SHOOTING,
+            subStateMachine, subElevator, subIntake, subTransfer, subShooter)))
         .onFalse(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subElevator, subIntake, subTransfer,
                 subShooter))
@@ -117,11 +118,19 @@ public class RobotContainer {
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_A.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
-        subElevator, subIntake, subTransfer, subShooter)));
+    // TODO: ADD BACK AMP WHEN WE ARE READY
+    // controller.btn_A.onTrue(Commands.deferredProxy(() ->
+    // subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
+    // subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_B.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,
-        subStateMachine, subElevator, subIntake, subTransfer, subShooter)));
+    // "Unalive Shooter"
+    controller.btn_B.onTrue(
+        Commands.either(
+            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,
+                subStateMachine, subElevator, subIntake, subTransfer, subShooter)),
+            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE,
+                subStateMachine, subElevator, subIntake, subTransfer, subShooter)),
+            gamePieceTrigger));
 
     controller.btn_West.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,

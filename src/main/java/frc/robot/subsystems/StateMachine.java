@@ -27,7 +27,7 @@ public class StateMachine extends SubsystemBase {
   /** Creates a new StateMachine. */
   public StateMachine() {
     currentState = RobotState.NONE;
-    currentTargetState = TargetState.NONE;
+    currentTargetState = TargetState.PREP_NONE;
   }
 
   public void setRobotState(RobotState robotState) {
@@ -66,6 +66,7 @@ public class StateMachine extends SubsystemBase {
           case INTAKING:
           case EJECTING:
           case SHOOTING:
+          case NONE:
             return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
         }
         break;
@@ -186,7 +187,7 @@ public class StateMachine extends SubsystemBase {
   }
 
   public static enum TargetState {
-    NONE,
+    PREP_NONE,
     PREP_SHUFFLE,
     PREP_SPEAKER,
   }

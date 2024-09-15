@@ -84,15 +84,18 @@ public class Drive extends Command {
 
     // Override any previously calculated rotational speeds if the robot demands it
     // >:(
+    // TODO: ADD ROTATIONAL AIMING BACK WHEN WE HAVE VISION
     switch (subStateMachine.getRobotState()) {
       case PREP_SHUFFLE:
-        rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
+        // rVelocity =
+        // subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
         break;
       case PREP_AMP:
-        rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(270));
+        // rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(270));
         break;
       case PREP_SPEAKER:
-        rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
+        // rVelocity =
+        // subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
         break;
       case CLIMBING:
         rVelocity = subDrivetrain.getVelocityToChain();

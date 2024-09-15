@@ -14,7 +14,7 @@ public class RobotPreferences {
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while manually driving
-    public static final SN_DoublePreference turnSpeed = new SN_DoublePreference("turnSpeed", 1);
+    public static final SN_DoublePreference turnSpeed = new SN_DoublePreference("turnSpeed", 3);
 
     /**
      * <p>

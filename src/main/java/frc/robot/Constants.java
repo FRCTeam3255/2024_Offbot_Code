@@ -221,7 +221,7 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(10));
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
-    public static final Measure<Angle> PIVOT_SUB_ANGLE = Units.Rotations.of(0);
+    public static final Measure<Angle> PIVOT_SUB_ANGLE = Units.Degrees.of(43);
     public static final Measure<Angle> PIVOT_AMP_ANGLE = Units.Rotations.of(0);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
@@ -231,21 +231,21 @@ public final class Constants {
     // - Velocities -
     public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(5);
 
-    public static final Measure<Velocity<Angle>> LEFT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(60 * 0.4);
-    public static final Measure<Velocity<Angle>> RIGHT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(45 * 0.4);
+    public static final Measure<Velocity<Angle>> LEFT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(60 * 0.6);
+    public static final Measure<Velocity<Angle>> RIGHT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(45 * 0.6);
 
     // -- Presets --
     /**
      * Preset: Shooting while touching the subwoofer velocity
      */
-    public static final Measure<Velocity<Angle>> LEFT_SUB_VELOCITY = Units.RotationsPerSecond.of(35 * 0.4);
-    public static final Measure<Velocity<Angle>> RIGHT_SUB_VELOCITY = Units.RotationsPerSecond.of(35 * 0.4);
+    public static final Measure<Velocity<Angle>> LEFT_SUB_VELOCITY = Units.RotationsPerSecond.of(35 * 0.6);
+    public static final Measure<Velocity<Angle>> RIGHT_SUB_VELOCITY = Units.RotationsPerSecond.of(35 * 0.6);
 
     /**
      * Preset: Shooting while shuffling velocity
      */
-    public static final Measure<Velocity<Angle>> LEFT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32 * 0.4);
-    public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32 * 0.4);
+    public static final Measure<Velocity<Angle>> LEFT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32 * 0.6);
+    public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32 * 0.6);
 
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
 

@@ -57,7 +57,9 @@ public class Shooting extends Command {
   public void end(boolean interrupted) {
     // If we don't have a game piece anymore, set the target state back to NONE
     if (!subTransfer.getGamePieceCollected()) {
-      subStateMachine.setTargetState(TargetState.NONE);
+      subStateMachine.setTargetState(TargetState.PREP_NONE);
+      subShooter.setShootingNeutralOutput();
+      subShooter.setPivotNeutralOutput();
     }
   }
 
