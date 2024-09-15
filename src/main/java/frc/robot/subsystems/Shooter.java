@@ -121,11 +121,15 @@ public class Shooter extends SubsystemBase {
   }
 
   /**
-   * Sets all of the shooting motors to neutral.
+   * Sets all of the flywheel motors to neutral.
    */
   public void setShootingNeutralOutput() {
     leftMotor.setControl(new NeutralOut());
     rightMotor.setControl(new NeutralOut());
+  }
+
+  public void setPivotNeutralOutput() {
+    pivotMotor.setControl(new NeutralOut());
   }
 
   /**
@@ -259,11 +263,6 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
 
     SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
-
-    SmartDashboard.putBoolean("DEBUG AT BACKWARD LIMIT",
-        isShooterAtPosition(constShooter.PIVOT_BACKWARD_LIMIT));
-    SmartDashboard.putBoolean("DEBUG AT FORWARD LIMIT",
-        isShooterAtPosition(constShooter.PIVOT_FORWARD_LIMIT));
 
   }
 }

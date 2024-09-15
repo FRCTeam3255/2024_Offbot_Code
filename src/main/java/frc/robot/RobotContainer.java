@@ -27,6 +27,7 @@ import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepAmp;
+import frc.robot.commands.States.PrepAmpShooter;
 import frc.robot.commands.States.PrepShuffle;
 import frc.robot.commands.States.PrepSpeaker;
 import frc.robot.commands.States.Shooting;
@@ -85,13 +86,8 @@ public class RobotContainer {
 
   private void configureDriverBindings(SN_XboxController controller) {
     controller.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
-    controller.btn_Back.onTrue(
+    controller.btn_North.onTrue(
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
-
-    // Defaults to Field-Relative, is Robot-Relative while held
-    controller.btn_LeftBumper
-        .whileTrue(Commands.runOnce(() -> subDrivetrain.setRobotRelative()))
-        .onFalse(Commands.runOnce(() -> subDrivetrain.setFieldRelative()));
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
@@ -106,8 +102,9 @@ public class RobotContainer {
                 subShooter))
             .unless(gamePieceTrigger));
 
-    controller.btn_RightTrigger.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.SHOOTING,
-        subStateMachine, subElevator, subIntake, subTransfer, subShooter)))
+    controller.btn_RightTrigger.whileTrue(
+        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.SHOOTING,
+            subStateMachine, subElevator, subIntake, subTransfer, subShooter)))
         .onFalse(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subElevator, subIntake, subTransfer,
                 subShooter))
@@ -125,8 +122,15 @@ public class RobotContainer {
     controller.btn_A.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
         subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_B.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,
-        subStateMachine, subElevator, subIntake, subTransfer, subShooter)));
+    // "Unalive Shooter"
+    controller.btn_B.onTrue(
+        Commands.either(
+            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,
+                subStateMachine, subElevator, subIntake, subTransfer, subShooter)),
+            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE,
+                subStateMachine, subElevator, subIntake, subTransfer, subShooter)),
+            gamePieceTrigger)
+            .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))));
 
     controller.btn_West.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
@@ -154,7 +158,7 @@ public class RobotContainer {
         .onTrue(new PrepShuffle(subStateMachine, subShooter));
 
     controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_AMP)))
-        .onTrue(new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer));
+        .onTrue(new PrepAmpShooter(subStateMachine, subShooter));
 
     controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
         .whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer))
