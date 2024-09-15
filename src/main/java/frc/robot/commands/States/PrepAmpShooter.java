@@ -11,12 +11,12 @@ import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 
-public class PrepSpeaker extends Command {
+public class PrepAmpShooter extends Command {
   StateMachine subStateMachine;
   Shooter subShooter;
 
   /** Creates a new PrepSpeaker. */
-  public PrepSpeaker(StateMachine subStateMachine, Shooter subShooter) {
+  public PrepAmpShooter(StateMachine subStateMachine, Shooter subShooter) {
     this.subStateMachine = subStateMachine;
     this.subShooter = subShooter;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -29,18 +29,14 @@ public class PrepSpeaker extends Command {
     // Only go to the real PREP_SPEAKER state if the robot is in these states:
     switch (subStateMachine.getRobotState()) {
       case STORE_FEEDER:
-      case PREP_SHUFFLE:
-        subStateMachine.setRobotState(RobotState.PREP_SPEAKER);
+      case PREP_AMP:
+        subStateMachine.setRobotState(RobotState.PREP_AMP);
     }
 
     // Otherwise, just set the angle of the shooter
-    // TODO: actually put the calculated position
-    subShooter.setPivotPosition(constShooter.PIVOT_SUB_ANGLE);
-    // subShooter.setPivotPosition(constShooter.PIVOT_AMP_ANGLE);
-    subShooter.setDesiredVelocities(constShooter.LEFT_SPEAKER_VELOCITY,
-        constShooter.RIGHT_SPEAKER_VELOCITY);
-    // subShooter.setDesiredVelocities(constShooter.LEFT_AMP_VELOCITY,
-    // constShooter.RIGHT_AMP_VELOCITY);
+    subShooter.setPivotPosition(constShooter.PIVOT_AMP_ANGLE);
+    subShooter.setDesiredVelocities(constShooter.LEFT_AMP_VELOCITY,
+        constShooter.RIGHT_AMP_VELOCITY);
 
     subShooter.getUpToSpeed();
   }

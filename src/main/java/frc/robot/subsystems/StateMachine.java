@@ -15,6 +15,7 @@ import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepAmp;
+import frc.robot.commands.States.PrepAmpShooter;
 import frc.robot.commands.States.PrepShuffle;
 import frc.robot.commands.States.PrepSpeaker;
 import frc.robot.commands.States.Shooting;
@@ -86,10 +87,12 @@ public class StateMachine extends SubsystemBase {
           case PREP_SPEAKER:
             return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
           case PREP_AMP:
-            return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
-                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
-                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
+          // return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+          // .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
+          // .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer,
+          // subShooter))
+          // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
         }
         break;
 
@@ -102,11 +105,13 @@ public class StateMachine extends SubsystemBase {
           case PREP_SPEAKER:
             return new Ejecting(subStateMachine, subIntake, subTransfer);
           case PREP_AMP:
-            return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
-                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
-                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
-                .andThen(new Ejecting(subStateMachine, subIntake, subTransfer))
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            return new Ejecting(subStateMachine, subIntake, subTransfer);
+          // return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+          // .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
+          // .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer,
+          // subShooter))
+          // .andThen(new Ejecting(subStateMachine, subIntake, subTransfer))
+          // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
         }
         break;
 
@@ -117,11 +122,13 @@ public class StateMachine extends SubsystemBase {
           case PREP_SPEAKER:
             return new PrepShuffle(subStateMachine, subShooter);
           case PREP_AMP:
-            return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
-                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
-                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
-                .andThen(new PrepShuffle(subStateMachine, subShooter))
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            return new PrepShuffle(subStateMachine, subShooter);
+          // return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+          // .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
+          // .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer,
+          // subShooter))
+          // .andThen(new PrepShuffle(subStateMachine, subShooter))
+          // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
         }
         break;
 
@@ -132,11 +139,13 @@ public class StateMachine extends SubsystemBase {
           case PREP_SHUFFLE:
             return new PrepSpeaker(subStateMachine, subShooter);
           case PREP_AMP:
-            return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
-                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
-                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter))
-                .andThen(new PrepSpeaker(subStateMachine, subShooter))
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            return new PrepSpeaker(subStateMachine, subShooter);
+          // return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+          // .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
+          // .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer,
+          // subShooter))
+          // .andThen(new PrepSpeaker(subStateMachine, subShooter))
+          // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
         }
         break;
 
@@ -145,7 +154,7 @@ public class StateMachine extends SubsystemBase {
           case STORE_FEEDER:
           case PREP_SPEAKER:
           case PREP_SHUFFLE:
-            return new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer);
+            return new PrepAmpShooter(subStateMachine, subShooter);
         }
         break;
 

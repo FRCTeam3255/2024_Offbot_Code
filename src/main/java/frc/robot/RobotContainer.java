@@ -27,6 +27,7 @@ import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepAmp;
+import frc.robot.commands.States.PrepAmpShooter;
 import frc.robot.commands.States.PrepShuffle;
 import frc.robot.commands.States.PrepSpeaker;
 import frc.robot.commands.States.Shooting;
@@ -118,10 +119,8 @@ public class RobotContainer {
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
-    // TODO: ADD BACK AMP WHEN WE ARE READY
-    // controller.btn_A.onTrue(Commands.deferredProxy(() ->
-    // subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
-    // subElevator, subIntake, subTransfer, subShooter)));
+    controller.btn_A.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
+        subElevator, subIntake, subTransfer, subShooter)));
 
     // "Unalive Shooter"
     controller.btn_B.onTrue(
@@ -130,7 +129,8 @@ public class RobotContainer {
                 subStateMachine, subElevator, subIntake, subTransfer, subShooter)),
             Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE,
                 subStateMachine, subElevator, subIntake, subTransfer, subShooter)),
-            gamePieceTrigger));
+            gamePieceTrigger)
+            .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))));
 
     controller.btn_West.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
@@ -158,7 +158,7 @@ public class RobotContainer {
         .onTrue(new PrepShuffle(subStateMachine, subShooter));
 
     controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_AMP)))
-        .onTrue(new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer));
+        .onTrue(new PrepAmpShooter(subStateMachine, subShooter));
 
     controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
         .whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer))
