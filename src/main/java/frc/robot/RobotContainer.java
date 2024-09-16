@@ -22,6 +22,7 @@ import frc.robot.Constants.constShooter;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
+import frc.robot.commands.Autos.PreloadOnly;
 import frc.robot.commands.Autos.WingOnly;
 import frc.robot.commands.Zeroing.ZeroClimber;
 import frc.robot.commands.Zeroing.ZeroElevator;
@@ -165,7 +166,9 @@ public class RobotContainer {
   }
 
   private void configureAutoSelector() {
-    autoChooser.setDefaultOption("Wing Only Down", new WingOnly(subDrivetrain, true));
+    autoChooser.setDefaultOption("Preload Only",
+        new PreloadOnly(subStateMachine, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));
+    autoChooser.addOption("Wing Only Down", new WingOnly(subDrivetrain, true));
     autoChooser.addOption("Wing Only Up", new WingOnly(subDrivetrain, false));
   }
 
