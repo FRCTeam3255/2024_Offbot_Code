@@ -227,9 +227,9 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
     public static final Measure<Angle> PIVOT_SUB_ANGLE = Units.Degrees.of(43);
-    public static final Measure<Angle> PIVOT_SHUFFLE_ANGLE = Units.Degrees.of(43);
-    public static final Measure<Angle> PIVOT_SPIKE_ANGLE = Units.Degrees.of(43);
-    public static final Measure<Angle> PIVOT_WING_ANGLE = Units.Degrees.of(43);
+    public static final Measure<Angle> PIVOT_SHUFFLE_ANGLE = Units.Degrees.of(46.5);
+    public static final Measure<Angle> PIVOT_SPIKE_ANGLE = Units.Degrees.of(40);
+    public static final Measure<Angle> PIVOT_WING_ANGLE = Units.Degrees.of(20.6995);
     public static final Measure<Angle> PIVOT_AMP_ANGLE = Units.Degrees.of(110);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
