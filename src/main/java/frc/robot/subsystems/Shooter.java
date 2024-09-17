@@ -21,6 +21,7 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constShooter;
+import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.RobotMap.mapShooter;
 import frc.robot.RobotPreferences.prefShooter;
 
@@ -207,6 +208,18 @@ public class Shooter extends SubsystemBase {
       Measure<Velocity<Angle>> desiredRightVelocity) {
     setLeftDesiredVelocity(desiredLeftVelocity);
     setRightDesiredVelocity(desiredRightVelocity);
+  }
+
+  /**
+   * Sets the desired speeds for the flywheels, as well as the desired pivot
+   * position for the shooter, and attempts to get up to speed.
+   * 
+   * @param shooterPositionGroup
+   */
+  public void setDesiredPosition(ShooterPositionGroup shooterPositionGroup) {
+    setDesiredVelocities(shooterPositionGroup.leftVelocity, shooterPositionGroup.rightVelocity);
+    setPivotPosition(shooterPositionGroup.shooterAngle);
+    getUpToSpeed();
   }
 
   public void setShooterPercentOutput(Measure<Dimensionless> speed) {

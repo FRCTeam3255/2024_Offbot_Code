@@ -33,6 +33,7 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine.TargetState;
 
@@ -230,6 +231,9 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
     public static final Measure<Angle> PIVOT_SUB_ANGLE = Units.Degrees.of(43);
+    public static final Measure<Angle> PIVOT_SHUFFLE_ANGLE = Units.Degrees.of(43);
+    public static final Measure<Angle> PIVOT_SPIKE_ANGLE = Units.Degrees.of(43);
+    public static final Measure<Angle> PIVOT_WING_ANGLE = Units.Degrees.of(43);
     public static final Measure<Angle> PIVOT_AMP_ANGLE = Units.Degrees.of(110);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
@@ -258,6 +262,12 @@ public final class Constants {
     public static final Measure<Velocity<Angle>> LEFT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
     public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
 
+    public static final Measure<Velocity<Angle>> LEFT_SPIKE_VELOCITY = Units.RotationsPerSecond.of(32);
+    public static final Measure<Velocity<Angle>> RIGHT_SPIKE_VELOCITY = Units.RotationsPerSecond.of(32);
+
+    public static final Measure<Velocity<Angle>> LEFT_WING_VELOCITY = Units.RotationsPerSecond.of(32);
+    public static final Measure<Velocity<Angle>> RIGHT_WING_VELOCITY = Units.RotationsPerSecond.of(32);
+
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
 
     // -- Zeroing --
@@ -284,6 +294,33 @@ public final class Constants {
     public static final Measure<Angle> ZEROED_ANGLE = Units.Degrees.of(0);
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+
+    public static class ShooterPositionGroup {
+      public Measure<Angle> shooterAngle;
+      public Measure<Velocity<Angle>> leftVelocity, rightVelocity;
+
+      public ShooterPositionGroup(Measure<Angle> shooterAngle, Measure<Velocity<Angle>> leftVelocity,
+          Measure<Velocity<Angle>> rightVelocity) {
+        this.shooterAngle = shooterAngle;
+        this.leftVelocity = leftVelocity;
+        this.rightVelocity = rightVelocity;
+      }
+    }
+
+    public static final ShooterPositionGroup PREP_NONE = new ShooterPositionGroup(
+        constShooter.PIVOT_BACKWARD_INTAKE_LIMIT,
+        Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
+    public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(constShooter.PIVOT_AMP_ANGLE,
+        constShooter.LEFT_AMP_VELOCITY, constShooter.RIGHT_AMP_VELOCITY);
+    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(constShooter.PIVOT_SHUFFLE_ANGLE,
+        constShooter.LEFT_SHUFFLE_VELOCITY, constShooter.RIGHT_SHUFFLE_VELOCITY);
+    public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(constShooter.PIVOT_SUB_ANGLE,
+        constShooter.LEFT_SUB_VELOCITY, constShooter.RIGHT_SUB_VELOCITY);
+    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(constShooter.PIVOT_SPIKE_ANGLE,
+        constShooter.LEFT_SPIKE_VELOCITY, constShooter.RIGHT_SPIKE_VELOCITY);
+    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(constShooter.PIVOT_WING_ANGLE,
+        constShooter.LEFT_WING_VELOCITY, constShooter.RIGHT_WING_VELOCITY);
+
   }
 
   public static class constStateMachine {
@@ -305,26 +342,16 @@ public final class Constants {
      * Returns the associated shooter pivot angle and flywheel speeds for the given
      * preset TargetState
      */
-    public static Map<TargetState, Measure[]> TARGET_TO_PRESETSa; // Measure array size isnt specified
-    public static Map<TargetState, Pair<Measure<Angle>, Pair<Measure<Velocity<Angle>>, Measure<Velocity<Angle>>>>> TARGET_TO_PRESETSb; // Pairs
-                                                                                                                                       // bleh
-    public static Map<TargetState, Matrix<N3, N1>> TARGET_TO_PRESETSc; // Measures need to be converted to ints or
-                                                                       // doubles
+    public static Map<TargetState, ShooterPositionGroup> TARGET_TO_PRESET_GROUP;
 
-    // TODO: Decide if we want to store these pairs in the constShooter subclass
-    // (The map will stay here, I think i will throw them in there)
-    // static {
-    // TARGET_TO_PRESETS.put(TargetState.PREP_NONE,
-    // new Pair<>(
-    // constShooter.PIVOT_BACKWARD_INTAKE_LIMIT,
-    // new Pair<>(Units.RotationsPerSecond.zero(),
-    // Units.RotationsPerSecond.zero())));
-
-    // TARGET_TO_PRESETS.put(TargetState.PREP_AMP_SHOOTER,
-    // new Pair<>(constShooter.PIVOT_AMP_ANGLE,
-    // new Pair<>(constShooter.LEFT_AMP_VELOCITY,
-    // constShooter.RIGHT_AMP_VELOCITY)));
-    // }
+    static {
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_NONE, constShooter.PREP_NONE);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_AMP_SHOOTER, constShooter.PREP_AMP_SHOOTER);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SHUFFLE, constShooter.PREP_SHUFFLE);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPEAKER, constShooter.PREP_SUB);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPIKE, constShooter.PREP_SPIKE);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_WING, constShooter.PREP_WING);
+    }
   }
 
   public static class constClimber {
