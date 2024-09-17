@@ -39,7 +39,6 @@ public class NoneState extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Only go to the real PREP_NONE state if the robot is in these states:
     subStateMachine.setTargetState(TargetState.PREP_NONE);
     subStateMachine.setRobotState(RobotState.NONE);
     subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);

@@ -187,9 +187,12 @@ public class StateMachine extends SubsystemBase {
     NONE,
     INTAKING,
     STORE_FEEDER,
+    PREP_AMP,
+    PREP_AMP_SHOOTER,
     PREP_SHUFFLE,
     PREP_SPEAKER,
-    PREP_AMP,
+    PREP_SPIKE,
+    PREP_WING,
     CLIMBING,
     SHOOTING,
     EJECTING
@@ -197,8 +200,11 @@ public class StateMachine extends SubsystemBase {
 
   public static enum TargetState {
     PREP_NONE,
+    PREP_AMP_SHOOTER,
     PREP_SHUFFLE,
     PREP_SPEAKER,
+    PREP_SPIKE,
+    PREP_WING
   }
 
   @Override
