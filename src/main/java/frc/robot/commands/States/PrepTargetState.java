@@ -8,8 +8,11 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Constants.constStateMachine;
+import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
+import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine.TargetState;
 
 public class PrepTargetState extends InstantCommand {
@@ -33,11 +36,16 @@ public class PrepTargetState extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // TODO: Determine the desired Robot state to go to based on the target state
-    // Determine if we should actually go to that state- Im pretty sure this will
-    // always be true but i need to read PrepSpeaker again haha
-    // TODO: Add Dictionary for TargetState -> Pivot angle, velocities
+    RobotState desiredRobotState = constStateMachine.TARGET_TO_ROBOT_STATE.get(desiredTargetState);
 
+    if (subStateMachine.getRobotState().equals(RobotState.STORE_FEEDER)
+        || subStateMachine.getRobotState().equals(desiredRobotState)) {
+      subStateMachine.setRobotState(desiredRobotState);
+    }
+
+    ShooterPositionGroup desiredShooterPosition = constStateMachine.TARGET_TO_PRESET_GROUP.get(desiredTargetState);
+
+    subShooter.setDesiredPosition(desiredShooterPosition);
   }
 
   // Called once the command ends or is interrupted.
