@@ -277,10 +277,10 @@ public final class Constants {
         Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
     public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(43),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35));
-    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(40),
-        Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
-    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(20.6995),
-        Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
+    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(26),
+        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(8.8),
+        Units.RotationsPerSecond.of(40), Units.RotationsPerSecond.of(50));
 
   }
 

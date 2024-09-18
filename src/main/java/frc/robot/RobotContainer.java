@@ -112,12 +112,13 @@ public class RobotContainer {
             () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake,
                 subTransfer, subShooter)));
 
-    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
-        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine,
+    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPIKE)))
+        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SPIKE, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_A.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
-        subElevator, subIntake, subTransfer, subShooter)));
+    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_WING)))
+        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_WING, subStateMachine,
+            subElevator, subIntake, subTransfer, subShooter)));
 
     // "Unalive Shooter"
     controller.btn_B.onTrue(
