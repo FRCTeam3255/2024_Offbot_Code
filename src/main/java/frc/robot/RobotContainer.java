@@ -16,6 +16,7 @@ import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constField;
 import frc.robot.Constants.constShooter;
+import frc.robot.Constants.constStateMachine;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
@@ -43,6 +44,7 @@ public class RobotContainer {
 
   private final SN_XboxController conDriver = new SN_XboxController(mapControllers.DRIVER_USB);
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
+  private final SN_XboxController conTuningController = new SN_XboxController(mapControllers.TUNING_USB);
   private final SN_XboxController conTestOperator = new SN_XboxController(mapControllers.TEST_OPERATOR_USB);
 
   private final static StateMachine subStateMachine = new StateMachine();
@@ -78,6 +80,7 @@ public class RobotContainer {
 
     configureDriverBindings(conDriver);
     configureOperatorBindings(conOperator);
+    configureTuningBindings(conTuningController);
     configureTestBindings(conTestOperator);
   }
 
@@ -137,6 +140,56 @@ public class RobotContainer {
                 subShooter)));
 
     controller.btn_LeftBumper.whileTrue(new ManualPivot(subShooter, controller.axis_RightY));
+  }
+
+  private void configureTuningBindings(SN_XboxController controller) {
+    // TODO: Make this implementation not horribly painful to read
+
+    // figure out what our current target state is
+    // go to that target state and get the preset for it
+    // raise the value by our iterator
+    controller.btn_North.onTrue(
+        Commands.runOnce(() -> constStateMachine.TARGET_TO_PRESET_GROUP
+            .get(subStateMachine.getTargetState()).shooterAngle = constStateMachine.TARGET_TO_PRESET_GROUP
+                .get(subStateMachine.getTargetState()).shooterAngle.plus(constShooter.TUNING_ANGLE_ITERATOR))
+            .andThen(
+                Commands.deferredProxy(() -> subStateMachine.tryState(constStateMachine.TARGET_TO_ROBOT_STATE
+                    .get(subStateMachine.getTargetState()), subStateMachine,
+                    subElevator, subIntake, subTransfer, subShooter))));
+
+    controller.btn_South.onTrue(
+        Commands.runOnce(() -> constStateMachine.TARGET_TO_PRESET_GROUP
+            .get(subStateMachine.getTargetState()).shooterAngle = constStateMachine.TARGET_TO_PRESET_GROUP
+                .get(subStateMachine.getTargetState()).shooterAngle.minus(constShooter.TUNING_ANGLE_ITERATOR))
+            .andThen(
+                Commands.deferredProxy(() -> subStateMachine.tryState(constStateMachine.TARGET_TO_ROBOT_STATE
+                    .get(subStateMachine.getTargetState()), subStateMachine,
+                    subElevator, subIntake, subTransfer, subShooter))));
+
+    controller.btn_East.onTrue(
+        Commands.runOnce(() -> constStateMachine.TARGET_TO_PRESET_GROUP
+            .get(subStateMachine.getTargetState()).leftVelocity = constStateMachine.TARGET_TO_PRESET_GROUP
+                .get(subStateMachine.getTargetState()).leftVelocity.minus(constShooter.TUNING_VELOCITY_ITERATOR))
+            .alongWith(Commands.runOnce(() -> constStateMachine.TARGET_TO_PRESET_GROUP
+                .get(subStateMachine.getTargetState()).rightVelocity = constStateMachine.TARGET_TO_PRESET_GROUP
+                    .get(subStateMachine.getTargetState()).rightVelocity.minus(constShooter.TUNING_VELOCITY_ITERATOR)))
+            .andThen(
+                Commands.deferredProxy(() -> subStateMachine.tryState(constStateMachine.TARGET_TO_ROBOT_STATE
+                    .get(subStateMachine.getTargetState()), subStateMachine,
+                    subElevator, subIntake, subTransfer, subShooter))));
+
+    controller.btn_West.onTrue(
+        Commands.runOnce(() -> constStateMachine.TARGET_TO_PRESET_GROUP
+            .get(subStateMachine.getTargetState()).leftVelocity = constStateMachine.TARGET_TO_PRESET_GROUP
+                .get(subStateMachine.getTargetState()).leftVelocity.plus(constShooter.TUNING_VELOCITY_ITERATOR))
+            .alongWith(Commands.runOnce(() -> constStateMachine.TARGET_TO_PRESET_GROUP
+                .get(subStateMachine.getTargetState()).rightVelocity = constStateMachine.TARGET_TO_PRESET_GROUP
+                    .get(subStateMachine.getTargetState()).rightVelocity.plus(constShooter.TUNING_VELOCITY_ITERATOR)))
+            .andThen(
+                Commands.deferredProxy(() -> subStateMachine.tryState(constStateMachine.TARGET_TO_ROBOT_STATE
+                    .get(subStateMachine.getTargetState()), subStateMachine,
+                    subElevator, subIntake, subTransfer, subShooter))));
+
   }
 
   private void configureTestBindings(SN_XboxController controller) {
