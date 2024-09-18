@@ -38,8 +38,7 @@ public class PrepTargetState extends InstantCommand {
   public void initialize() {
     RobotState desiredRobotState = constStateMachine.TARGET_TO_ROBOT_STATE.get(desiredTargetState);
 
-    if (subStateMachine.getRobotState().equals(RobotState.STORE_FEEDER)
-        || subStateMachine.getRobotState().equals(desiredRobotState)) {
+    if (subStateMachine.getRobotState().equals(RobotState.STORE_FEEDER)) {
       subStateMachine.setRobotState(desiredRobotState);
     }
 
