@@ -226,45 +226,13 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(10));
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
-    public static final Measure<Angle> PIVOT_SUB_ANGLE = Units.Degrees.of(43);
-    public static final Measure<Angle> PIVOT_SHUFFLE_ANGLE = Units.Degrees.of(46.5);
-    public static final Measure<Angle> PIVOT_SPIKE_ANGLE = Units.Degrees.of(40);
-    public static final Measure<Angle> PIVOT_WING_ANGLE = Units.Degrees.of(20.6995);
-    public static final Measure<Angle> PIVOT_AMP_ANGLE = Units.Degrees.of(110);
-
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
 
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
-    // - Velocities -
-    public static final Measure<Velocity<Angle>> LEFT_AMP_VELOCITY = Units.RotationsPerSecond.of(10);
-    public static final Measure<Velocity<Angle>> RIGHT_AMP_VELOCITY = Units.RotationsPerSecond.of(10);
-
     public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(5);
-
-    public static final Measure<Velocity<Angle>> LEFT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(60);
-    public static final Measure<Velocity<Angle>> RIGHT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(45);
-
-    // -- Presets --
-    /**
-     * Preset: Shooting while touching the subwoofer velocity
-     */
-    public static final Measure<Velocity<Angle>> LEFT_SUB_VELOCITY = Units.RotationsPerSecond.of(35);
-    public static final Measure<Velocity<Angle>> RIGHT_SUB_VELOCITY = Units.RotationsPerSecond.of(35);
-
-    /**
-     * Preset: Shooting while shuffling velocity
-     */
-    public static final Measure<Velocity<Angle>> LEFT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
-    public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
-
-    public static final Measure<Velocity<Angle>> LEFT_SPIKE_VELOCITY = Units.RotationsPerSecond.of(32);
-    public static final Measure<Velocity<Angle>> RIGHT_SPIKE_VELOCITY = Units.RotationsPerSecond.of(32);
-
-    public static final Measure<Velocity<Angle>> LEFT_WING_VELOCITY = Units.RotationsPerSecond.of(32);
-    public static final Measure<Velocity<Angle>> RIGHT_WING_VELOCITY = Units.RotationsPerSecond.of(32);
-
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
+    public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 
     // -- Zeroing --
     /**
@@ -303,19 +271,16 @@ public final class Constants {
       }
     }
 
-    public static final ShooterPositionGroup PREP_NONE = new ShooterPositionGroup(
-        constShooter.PIVOT_BACKWARD_INTAKE_LIMIT,
-        Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
-    public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(constShooter.PIVOT_AMP_ANGLE,
-        constShooter.LEFT_AMP_VELOCITY, constShooter.RIGHT_AMP_VELOCITY);
-    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(constShooter.PIVOT_SHUFFLE_ANGLE,
-        constShooter.LEFT_SHUFFLE_VELOCITY, constShooter.RIGHT_SHUFFLE_VELOCITY);
-    public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(constShooter.PIVOT_SUB_ANGLE,
-        constShooter.LEFT_SUB_VELOCITY, constShooter.RIGHT_SUB_VELOCITY);
-    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(constShooter.PIVOT_SPIKE_ANGLE,
-        constShooter.LEFT_SPIKE_VELOCITY, constShooter.RIGHT_SPIKE_VELOCITY);
-    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(constShooter.PIVOT_WING_ANGLE,
-        constShooter.LEFT_WING_VELOCITY, constShooter.RIGHT_WING_VELOCITY);
+    public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(110),
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10));
+    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(46.5),
+        Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
+    public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(43),
+        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35));
+    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(40),
+        Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
+    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(20.6995),
+        Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
 
   }
 
@@ -326,7 +291,6 @@ public final class Constants {
     public static final Map<TargetState, RobotState> TARGET_TO_ROBOT_STATE = new HashMap<TargetState, RobotState>();
 
     static {
-      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_NONE, RobotState.NONE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP_SHOOTER, RobotState.PREP_AMP_SHOOTER);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SHUFFLE, RobotState.PREP_SHUFFLE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPEAKER, RobotState.PREP_SPEAKER);
@@ -341,7 +305,6 @@ public final class Constants {
     public static Map<TargetState, ShooterPositionGroup> TARGET_TO_PRESET_GROUP;
 
     static {
-      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_NONE, constShooter.PREP_NONE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_AMP_SHOOTER, constShooter.PREP_AMP_SHOOTER);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SHUFFLE, constShooter.PREP_SHUFFLE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPEAKER, constShooter.PREP_SUB);

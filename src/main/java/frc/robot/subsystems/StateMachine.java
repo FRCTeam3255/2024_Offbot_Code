@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.constStateMachine;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -193,6 +194,25 @@ public class StateMachine extends SubsystemBase {
       default:
         return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
     }
+  }
+
+  /**
+   * Determines if our current robot state is also a target state.
+   */
+  public boolean isCurrentStateTargetState() {
+    for (TargetState targetState : TargetState.values()) {
+      // There is no Robot State for Prep_NONE
+      if (targetState.equals(TargetState.PREP_NONE)) {
+        continue;
+      }
+
+      RobotState possibleRobotState = constStateMachine.TARGET_TO_ROBOT_STATE.get(targetState);
+      if (currentState.equals(possibleRobotState)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public static enum RobotState {
