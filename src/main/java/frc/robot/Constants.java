@@ -305,7 +305,7 @@ public final class Constants {
      * Returns the associated shooter pivot angle and flywheel speeds for the given
      * preset TargetState
      */
-    public static Map<TargetState, ShooterPositionGroup> TARGET_TO_PRESET_GROUP;
+    public static Map<TargetState, ShooterPositionGroup> TARGET_TO_PRESET_GROUP = new HashMap<TargetState, ShooterPositionGroup>();
 
     static {
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_AMP_SHOOTER, constShooter.PREP_AMP_SHOOTER);

@@ -60,6 +60,13 @@ public class StateMachine extends SubsystemBase {
    */
   public Command tryState(RobotState desiredState, StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
       Transfer subTransfer, Shooter subShooter) {
+
+    // TODO: Write this functionality in a later pr
+    if (isGivenStateTargetState(desiredState)) {
+      // functionality is always the same for a target state
+      // if its amp then do something else
+    }
+
     switch (desiredState) {
       case NONE:
         switch (currentState) {
@@ -140,6 +147,7 @@ public class StateMachine extends SubsystemBase {
       case PREP_SPEAKER:
         switch (currentState) {
           case NONE:
+          case PREP_SPEAKER:
           case STORE_FEEDER:
           case PREP_SHUFFLE:
           case PREP_AMP_SHOOTER:
@@ -180,6 +188,66 @@ public class StateMachine extends SubsystemBase {
             return new Shooting(subStateMachine, subElevator, subShooter, subTransfer);
         }
         break;
+
+      case PREP_AMP_SHOOTER:
+        switch (currentState) {
+          case NONE:
+          case STORE_FEEDER:
+          case PREP_AMP_SHOOTER:
+          case PREP_SHUFFLE:
+          case PREP_SPEAKER:
+          case PREP_SPIKE:
+          case PREP_WING:
+            return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_AMP_SHOOTER);
+          case PREP_AMP:
+            return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
+                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer,
+                    subShooter))
+                .andThen(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_AMP_SHOOTER))
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+        }
+        break;
+
+      case PREP_SPIKE:
+        switch (currentState) {
+          case NONE:
+          case STORE_FEEDER:
+          case PREP_SHUFFLE:
+          case PREP_SPIKE:
+          case PREP_SPEAKER:
+          case PREP_AMP_SHOOTER:
+          case PREP_WING:
+            return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SPIKE);
+          case PREP_AMP:
+            return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
+                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer,
+                    subShooter))
+                .andThen(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SPIKE))
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+        }
+        break;
+
+      case PREP_WING:
+        switch (currentState) {
+          case NONE:
+          case STORE_FEEDER:
+          case PREP_SHUFFLE:
+          case PREP_SPEAKER:
+          case PREP_WING:
+          case PREP_SPIKE:
+          case PREP_AMP_SHOOTER:
+            return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_WING);
+          case PREP_AMP:
+            return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
+                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer,
+                    subShooter))
+                .andThen(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_WING))
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+        }
+        break;
     }
     return Commands.print("ITS SO OVER D: Invalid State Provided :3");
   }
@@ -200,6 +268,10 @@ public class StateMachine extends SubsystemBase {
    * Determines if our current robot state is also a target state.
    */
   public boolean isCurrentStateTargetState() {
+    return isGivenStateTargetState(currentState);
+  }
+
+  public boolean isGivenStateTargetState(RobotState givenState) {
     for (TargetState targetState : TargetState.values()) {
       // There is no Robot State for Prep_NONE
       if (targetState.equals(TargetState.PREP_NONE)) {
@@ -207,7 +279,7 @@ public class StateMachine extends SubsystemBase {
       }
 
       RobotState possibleRobotState = constStateMachine.TARGET_TO_ROBOT_STATE.get(targetState);
-      if (currentState.equals(possibleRobotState)) {
+      if (givenState.equals(possibleRobotState)) {
         return true;
       }
     }
