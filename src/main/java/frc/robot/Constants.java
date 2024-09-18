@@ -234,9 +234,6 @@ public final class Constants {
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
     public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 
-    public static final Measure<Angle> TUNING_ANGLE_ITERATOR = Units.Degrees.of(1);
-    public static final Measure<Velocity<Angle>> TUNING_VELOCITY_ITERATOR = Units.RotationsPerSecond.of(32);
-
     // -- Zeroing --
     /**
      * The voltage supplied to the motor in order to zero
