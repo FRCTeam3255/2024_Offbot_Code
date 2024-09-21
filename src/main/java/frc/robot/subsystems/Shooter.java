@@ -59,12 +59,12 @@ public class Shooter extends SubsystemBase {
   public void configure() {
     // -- Left Motor --
     leftConfig.MotorOutput.Inverted = constShooter.LEFT_INVERT;
-    leftConfig.Slot0.kV = prefShooter.leftShooterV.getValue();
-    leftConfig.Slot0.kS = prefShooter.leftShooterS.getValue();
-    leftConfig.Slot0.kA = prefShooter.leftShooterA.getValue();
-    leftConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
-    leftConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
-    leftConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
+    leftConfig.Slot0.kV = prefShooter.leftShooterV;
+    leftConfig.Slot0.kS = prefShooter.leftShooterS;
+    leftConfig.Slot0.kA = prefShooter.leftShooterA;
+    leftConfig.Slot0.kP = prefShooter.leftShooterP;
+    leftConfig.Slot0.kI = prefShooter.leftShooterI;
+    leftConfig.Slot0.kD = prefShooter.leftShooterD;
 
     leftConfig.MotionMagic.MotionMagicAcceleration = 400;
     leftConfig.MotionMagic.MotionMagicJerk = 4000;
@@ -72,12 +72,12 @@ public class Shooter extends SubsystemBase {
 
     // -- Right Motor --
     rightConfig.MotorOutput.Inverted = constShooter.RIGHT_INVERT;
-    rightConfig.Slot0.kV = prefShooter.rightShooterV.getValue();
-    rightConfig.Slot0.kS = prefShooter.rightShooterS.getValue();
-    rightConfig.Slot0.kA = prefShooter.rightShooterA.getValue();
-    rightConfig.Slot0.kP = prefShooter.rightShooterP.getValue();
-    rightConfig.Slot0.kI = prefShooter.rightShooterI.getValue();
-    rightConfig.Slot0.kD = prefShooter.rightShooterD.getValue();
+    rightConfig.Slot0.kV = prefShooter.rightShooterV;
+    rightConfig.Slot0.kS = prefShooter.rightShooterS;
+    rightConfig.Slot0.kA = prefShooter.rightShooterA;
+    rightConfig.Slot0.kP = prefShooter.rightShooterP;
+    rightConfig.Slot0.kI = prefShooter.rightShooterI;
+    rightConfig.Slot0.kD = prefShooter.rightShooterD;
 
     rightConfig.MotionMagic.MotionMagicAcceleration = 400;
     rightConfig.MotionMagic.MotionMagicJerk = 4000;
@@ -87,13 +87,13 @@ public class Shooter extends SubsystemBase {
     pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
-    pivotConfig.Slot0.kS = prefShooter.pivotShooterS.getValue();
-    pivotConfig.Slot0.kV = prefShooter.pivotShooterV.getValue();
-    pivotConfig.Slot0.kG = prefShooter.pivotShooterG.getValue();
-    pivotConfig.Slot0.kA = prefShooter.pivotShooterA.getValue();
-    pivotConfig.Slot0.kP = prefShooter.pivotShooterP.getValue();
-    pivotConfig.Slot0.kI = prefShooter.pivotShooterI.getValue();
-    pivotConfig.Slot0.kD = prefShooter.pivotShooterD.getValue();
+    pivotConfig.Slot0.kS = prefShooter.pivotShooterS;
+    pivotConfig.Slot0.kV = prefShooter.pivotShooterV;
+    pivotConfig.Slot0.kG = prefShooter.pivotShooterG;
+    pivotConfig.Slot0.kA = prefShooter.pivotShooterA;
+    pivotConfig.Slot0.kP = prefShooter.pivotShooterP;
+    pivotConfig.Slot0.kI = prefShooter.pivotShooterI;
+    pivotConfig.Slot0.kD = prefShooter.pivotShooterD;
     pivotConfig.Slot0.GravityType = constShooter.PIVOT_GRAVITY_TYPE;
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;

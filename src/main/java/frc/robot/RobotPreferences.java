@@ -77,27 +77,27 @@ public class RobotPreferences {
 
   public static final class prefShooter {
     // - PID -
-    public static final SN_DoublePreference leftShooterS = new SN_DoublePreference("leftShooterS", 0.4);
-    public static final SN_DoublePreference leftShooterV = new SN_DoublePreference("leftShooterV", 0.12);
-    public static final SN_DoublePreference leftShooterA = new SN_DoublePreference("leftShooterA", 0.1);
-    public static final SN_DoublePreference leftShooterP = new SN_DoublePreference("leftShooterP", 0.6);
-    public static final SN_DoublePreference leftShooterI = new SN_DoublePreference("leftShooterI", 0);
-    public static final SN_DoublePreference leftShooterD = new SN_DoublePreference("leftShooterD", 0.01);
+    public static final double leftShooterS = 0.28;
+    public static final double leftShooterV = 0.13;
+    public static final double leftShooterA = 0.0;
+    public static final double leftShooterP = 0.75;
+    public static final double leftShooterI = 0;
+    public static final double leftShooterD = 0.0;
 
-    public static final SN_DoublePreference rightShooterS = new SN_DoublePreference("rightShooterS", 0.4);
-    public static final SN_DoublePreference rightShooterV = new SN_DoublePreference("rightShooterV", 0.1175);
-    public static final SN_DoublePreference rightShooterA = new SN_DoublePreference("rightShooterA", 0.1);
-    public static final SN_DoublePreference rightShooterP = new SN_DoublePreference("rightShooterP", 0.6);
-    public static final SN_DoublePreference rightShooterI = new SN_DoublePreference("rightShooterI", 0);
-    public static final SN_DoublePreference rightShooterD = new SN_DoublePreference("rightShooterD", 0.01);
+    public static final double rightShooterS = 0.4;
+    public static final double rightShooterV = 0.11;
+    public static final double rightShooterA = 0;
+    public static final double rightShooterP = 0.6;
+    public static final double rightShooterI = 0;
+    public static final double rightShooterD = 0;
 
-    public static final SN_DoublePreference pivotShooterS = new SN_DoublePreference("pivotShooterS", 0.2);
-    public static final SN_DoublePreference pivotShooterV = new SN_DoublePreference("pivotShooterV", 0.12);
-    public static final SN_DoublePreference pivotShooterG = new SN_DoublePreference("pivotShooterG", 0.3);
-    public static final SN_DoublePreference pivotShooterA = new SN_DoublePreference("pivotShooterA", 0.1);
-    public static final SN_DoublePreference pivotShooterP = new SN_DoublePreference("pivotShooterP", 60);
-    public static final SN_DoublePreference pivotShooterI = new SN_DoublePreference("pivotShooterI", 0);
-    public static final SN_DoublePreference pivotShooterD = new SN_DoublePreference("pivotShooterD", 0);
+    public static final double pivotShooterS = 0.2;
+    public static final double pivotShooterV = 0.12;
+    public static final double pivotShooterG = 0.3;
+    public static final double pivotShooterA = 0.1;
+    public static final double pivotShooterP = 60;
+    public static final double pivotShooterI = 0;
+    public static final double pivotShooterD = 0;
   }
 
   public static final class prefElevator {
