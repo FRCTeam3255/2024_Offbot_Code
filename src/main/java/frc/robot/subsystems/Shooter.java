@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Dimensionless;
@@ -87,11 +88,13 @@ public class Shooter extends SubsystemBase {
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
     pivotConfig.Slot0.kS = prefShooter.pivotShooterS.getValue();
+    pivotConfig.Slot0.kV = prefShooter.pivotShooterV.getValue();
     pivotConfig.Slot0.kG = prefShooter.pivotShooterG.getValue();
     pivotConfig.Slot0.kA = prefShooter.pivotShooterA.getValue();
     pivotConfig.Slot0.kP = prefShooter.pivotShooterP.getValue();
     pivotConfig.Slot0.kI = prefShooter.pivotShooterI.getValue();
     pivotConfig.Slot0.kD = prefShooter.pivotShooterD.getValue();
+    pivotConfig.Slot0.GravityType = constShooter.PIVOT_GRAVITY_TYPE;
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -217,6 +218,7 @@ public final class Constants {
 
     public static final double PIVOT_GEAR_RATIO = 70.2;
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
+    public static final GravityTypeValue PIVOT_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
     // - Angles -
     // TODO: Competitive robot should use more accurate forward and backward limits
@@ -277,7 +279,7 @@ public final class Constants {
         Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
     public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(43),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35));
-    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(26),
+    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(90),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
     public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(8.8),
         Units.RotationsPerSecond.of(40), Units.RotationsPerSecond.of(50));
