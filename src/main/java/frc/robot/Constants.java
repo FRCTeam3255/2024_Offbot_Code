@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -27,6 +30,9 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Constants.constShooter.ShooterPositionGroup;
+import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.TargetState;
 
 public final class Constants {
   public static final Measure<Voltage> MAX_VOLTAGE = Units.Volts.of(12);
@@ -212,6 +218,7 @@ public final class Constants {
 
     public static final double PIVOT_GEAR_RATIO = 70.2;
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
+    public static final GravityTypeValue PIVOT_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
     // - Angles -
     // TODO: Competitive robot should use more accurate forward and backward limits
@@ -221,36 +228,13 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(10));
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
-    public static final Measure<Angle> PIVOT_SUB_ANGLE = Units.Degrees.of(43);
-    public static final Measure<Angle> PIVOT_AMP_ANGLE = Units.Degrees.of(110);
-
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
 
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
-    // - Velocities -
-    public static final Measure<Velocity<Angle>> LEFT_AMP_VELOCITY = Units.RotationsPerSecond.of(10);
-    public static final Measure<Velocity<Angle>> RIGHT_AMP_VELOCITY = Units.RotationsPerSecond.of(10);
-
     public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(5);
-
-    public static final Measure<Velocity<Angle>> LEFT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(60);
-    public static final Measure<Velocity<Angle>> RIGHT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(45);
-
-    // -- Presets --
-    /**
-     * Preset: Shooting while touching the subwoofer velocity
-     */
-    public static final Measure<Velocity<Angle>> LEFT_SUB_VELOCITY = Units.RotationsPerSecond.of(35);
-    public static final Measure<Velocity<Angle>> RIGHT_SUB_VELOCITY = Units.RotationsPerSecond.of(35);
-
-    /**
-     * Preset: Shooting while shuffling velocity
-     */
-    public static final Measure<Velocity<Angle>> LEFT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
-    public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
-
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
+    public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 
     // -- Zeroing --
     /**
@@ -276,6 +260,59 @@ public final class Constants {
     public static final Measure<Angle> ZEROED_ANGLE = Units.Degrees.of(0);
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+
+    public static class ShooterPositionGroup {
+      public Measure<Angle> shooterAngle;
+      public Measure<Velocity<Angle>> leftVelocity, rightVelocity;
+
+      public ShooterPositionGroup(Measure<Angle> shooterAngle, Measure<Velocity<Angle>> leftVelocity,
+          Measure<Velocity<Angle>> rightVelocity) {
+        this.shooterAngle = shooterAngle;
+        this.leftVelocity = leftVelocity;
+        this.rightVelocity = rightVelocity;
+      }
+    }
+
+    public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(110),
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10));
+    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(46.5),
+        Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
+    public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(43),
+        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35));
+    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(26),
+        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(8.8),
+        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+
+  }
+
+  public static class constStateMachine {
+    /**
+     * Returns the associated RobotState with the given TargetState
+     */
+    public static final Map<TargetState, RobotState> TARGET_TO_ROBOT_STATE = new HashMap<TargetState, RobotState>();
+
+    static {
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP_SHOOTER, RobotState.PREP_AMP_SHOOTER);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SHUFFLE, RobotState.PREP_SHUFFLE);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPEAKER, RobotState.PREP_SPEAKER);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPIKE, RobotState.PREP_SPIKE);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_WING, RobotState.PREP_WING);
+    }
+
+    /**
+     * Returns the associated shooter pivot angle and flywheel speeds for the given
+     * preset TargetState
+     */
+    public static Map<TargetState, ShooterPositionGroup> TARGET_TO_PRESET_GROUP = new HashMap<TargetState, ShooterPositionGroup>();
+
+    static {
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_AMP_SHOOTER, constShooter.PREP_AMP_SHOOTER);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SHUFFLE, constShooter.PREP_SHUFFLE);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPEAKER, constShooter.PREP_SUB);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPIKE, constShooter.PREP_SPIKE);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_WING, constShooter.PREP_WING);
+    }
   }
 
   public static class constClimber {

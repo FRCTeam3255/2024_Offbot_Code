@@ -26,10 +26,7 @@ import frc.robot.commands.Zeroing.ZeroShooterPivot;
 import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
-import frc.robot.commands.States.PrepAmp;
-import frc.robot.commands.States.PrepAmpShooter;
-import frc.robot.commands.States.PrepShuffle;
-import frc.robot.commands.States.PrepSpeaker;
+import frc.robot.commands.States.PrepTargetState;
 import frc.robot.commands.States.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -115,12 +112,13 @@ public class RobotContainer {
             () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake,
                 subTransfer, subShooter)));
 
-    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
-        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine,
+    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPIKE)))
+        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SPIKE, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_A.onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine,
-        subElevator, subIntake, subTransfer, subShooter)));
+    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_WING)))
+        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_WING, subStateMachine,
+            subElevator, subIntake, subTransfer, subShooter)));
 
     // "Unalive Shooter"
     controller.btn_B.onTrue(
@@ -152,13 +150,13 @@ public class RobotContainer {
         .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
 
     controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SPEAKER)))
-        .onTrue(new PrepSpeaker(subStateMachine, subShooter));
+        .onTrue(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SPEAKER));
 
     controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SHUFFLE)))
-        .onTrue(new PrepShuffle(subStateMachine, subShooter));
+        .onTrue(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SHUFFLE));
 
     controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_AMP)))
-        .onTrue(new PrepAmpShooter(subStateMachine, subShooter));
+        .onTrue(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_AMP_SHOOTER));
 
     controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
         .whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer))
