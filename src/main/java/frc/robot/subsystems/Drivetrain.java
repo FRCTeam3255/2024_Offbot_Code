@@ -107,9 +107,9 @@ public class Drivetrain extends SN_SuperSwerve {
     SN_SwerveModule.steerConfiguration = steerConfiguration;
 
     yawSnappingController = new PIDController(
-        prefDrivetrain.yawSnapP.getValue(),
-        prefDrivetrain.yawSnapI.getValue(),
-        prefDrivetrain.yawSnapD.getValue());
+        prefDrivetrain.yawSnapP,
+        prefDrivetrain.yawSnapI,
+        prefDrivetrain.yawSnapD);
     yawSnappingController.enableContinuousInput(0, 360);
 
     super.configure();
@@ -127,8 +127,8 @@ public class Drivetrain extends SN_SuperSwerve {
     double yawSetpoint = yawSnappingController.calculate(getRotation().getDegrees(), desiredYaw.getDegrees());
 
     // limit the PID output to our maximum rotational speed
-    yawSetpoint = MathUtil.clamp(yawSetpoint, -prefDrivetrain.turnSpeed.getValue(),
-        prefDrivetrain.turnSpeed.getValue());
+    yawSetpoint = MathUtil.clamp(yawSetpoint, -prefDrivetrain.maxTurnSpeed,
+        prefDrivetrain.maxTurnSpeed);
 
     return Units.DegreesPerSecond.of(yawSetpoint);
   }
@@ -138,7 +138,7 @@ public class Drivetrain extends SN_SuperSwerve {
   }
 
   /**
-   * Calculates the angle necessary for the drivetrain to face a given coordinate.
+   * Calculates the angle necessary for the shooter to face a given coordinate.
    * 
    * @param targetPose The coordinate to face
    * @return The necessary angle, in the Field Coordinate System
@@ -150,12 +150,14 @@ public class Drivetrain extends SN_SuperSwerve {
     // Move the robot pose to be relative to the target
     Pose2d relativeToTarget = robotPose.relativeTo(targetPose);
 
-    // Get the angle of 0,0 to the turret pose
+    // Get the angle of 0,0 to the shooter pose
     Rotation2d desiredLockingAngle = new Rotation2d(relativeToTarget.getX(), relativeToTarget.getY());
 
     // Our shooter is physically mounted 180 degrees from the heading of our
     // drivetrain :o
     desiredLockingAngle = desiredLockingAngle.plus(constShooter.SHOOTER_TO_ROBOT);
+
+    SmartDashboard.putNumber("DT ANGLE TO SPEAKER", desiredLockingAngle.getDegrees());
 
     return desiredLockingAngle;
   }

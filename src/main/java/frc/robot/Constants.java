@@ -206,7 +206,6 @@ public final class Constants {
 
       private static final Pose3d SUBWOOFER = new Pose3d(
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(180)));
-
       private static final Pose3d SHUFFLE = new Pose3d(
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.2991523742675781, 7.103456497192383, Rotation2d.fromDegrees(0)));
     }

@@ -14,7 +14,9 @@ public class RobotPreferences {
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while manually driving
-    public static final SN_DoublePreference turnSpeed = new SN_DoublePreference("turnSpeed", 3);
+    public static final SN_DoublePreference manualTurnSpeed = new SN_DoublePreference("manualTurnSpeed", 3);
+
+    public static final double maxTurnSpeed = 360;
 
     /**
      * <p>
@@ -70,9 +72,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference autoSteerD = new SN_DoublePreference("autoSteerD", 0.0);
 
     // Teleop Snapping to Rotation (Yaw)
-    public static final SN_DoublePreference yawSnapP = new SN_DoublePreference("yawSnapP", 3);
-    public static final SN_DoublePreference yawSnapI = new SN_DoublePreference("yawSnapI", 0);
-    public static final SN_DoublePreference yawSnapD = new SN_DoublePreference("yawSnapD", 0);
+    public static final double yawSnapP = 0.5;
+    public static final double yawSnapI = 0;
+    public static final double yawSnapD = 0;
   }
 
   public static final class prefShooter {
