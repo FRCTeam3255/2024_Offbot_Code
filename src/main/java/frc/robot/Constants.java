@@ -221,8 +221,7 @@ public final class Constants {
     public static final GravityTypeValue PIVOT_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
     // - Angles -
-    // TODO: Competitive robot should use more accurate forward and backward limits
-    public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(130);
+    public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(155);
     public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Degrees.of(0);
 
     public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(10));
@@ -273,15 +272,15 @@ public final class Constants {
       }
     }
 
-    public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(110),
+    public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10));
-    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(46.5),
+    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(47.5),
         Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
-    public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(43),
+    public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(42),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35));
-    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(26),
+    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
-    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(8.8),
+    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(9.8),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
 
   }

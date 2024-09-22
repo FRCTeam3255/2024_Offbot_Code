@@ -91,11 +91,11 @@ public class RobotPreferences {
     public static final double rightShooterI = 0;
     public static final double rightShooterD = 0;
 
-    public static final double pivotShooterS = 0.2;
-    public static final double pivotShooterV = 0.12;
-    public static final double pivotShooterG = 0.3;
-    public static final double pivotShooterA = 0.1;
-    public static final double pivotShooterP = 60;
+    public static final double pivotShooterS = 0.4;
+    public static final double pivotShooterV = 0.0;
+    public static final double pivotShooterG = 0.53;
+    public static final double pivotShooterA = 0.0;
+    public static final double pivotShooterP = 150;
     public static final double pivotShooterI = 0;
     public static final double pivotShooterD = 0;
   }
