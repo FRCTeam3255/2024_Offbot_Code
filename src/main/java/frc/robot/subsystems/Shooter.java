@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -13,6 +15,9 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
@@ -265,6 +270,34 @@ public class Shooter extends SubsystemBase {
    */
   public void setPivotSensorAngle(Measure<Angle> angle) {
     pivotMotor.setPosition(angle.in(Units.Rotations));
+  }
+
+  /**
+   * Calculates the desired angle needed to lock onto the speaker.
+   * 
+   * @param robotPose  The current pose of the robot
+   * @param fieldPoses The poses of the field elements, matching your alliance
+   *                   color
+   * 
+   * @return The desired angle required to lock onto the speaker
+   */
+  public Measure<Angle> getDesiredAngleToLock(Pose2d robotPose, Pose3d[] fieldPoses) {
+
+    Pose3d targetPose = fieldPoses[0];
+
+    // Get the pitch pose (field relative)
+    Pose3d pitchPose = new Pose3d(robotPose).transformBy(constShooter.ROBOT_TO_PIVOT);
+
+    // Get distances from the pitch pose to the target pose and then calculate the
+    // required angle
+    // Theres probably a WPILib method for this
+    double distX = Math.abs(targetPose.getX() - pitchPose.getX());
+    double distY = Math.abs(targetPose.getY() - pitchPose.getY());
+    double distanceFromSpeaker = Math.hypot(distX, distY);
+    SmartDashboard.putNumber("DISTANCE_FROM_SPEAKER", distanceFromSpeaker);
+    Measure<Angle> desiredLockingAngle = Units.Degrees.of(constShooter.DISTANCE_MAP.get(distanceFromSpeaker));
+
+    return desiredLockingAngle;
   }
 
   @Override

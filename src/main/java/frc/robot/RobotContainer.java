@@ -69,8 +69,9 @@ public class RobotContainer {
     // subLimelight));
 
     gamePieceTrigger
-        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine,
-            subElevator, subIntake, subTransfer, subShooter))
+        .onTrue(Commands
+            .deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subDrivetrain,
+                subElevator, subIntake, subTransfer, subShooter))
             .andThen(Commands.deferredProxy(
                 () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer))));
 
@@ -92,50 +93,58 @@ public class RobotContainer {
 
     controller.btn_LeftTrigger
         .whileTrue(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subElevator, subIntake, subTransfer,
+            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subDrivetrain, subElevator, subIntake,
+                subTransfer,
                 subShooter)))
         .onFalse(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subElevator, subIntake, subTransfer,
+            () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subDrivetrain, subElevator, subIntake,
+                subTransfer,
                 subShooter))
             .unless(gamePieceTrigger));
 
     controller.btn_RightTrigger.whileTrue(
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.SHOOTING,
-            subStateMachine, subElevator, subIntake, subTransfer, subShooter)))
+            subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)))
         .onFalse(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subElevator, subIntake, subTransfer,
+            () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subDrivetrain, subElevator, subIntake,
+                subTransfer,
                 subShooter))
             .unless(gamePieceTrigger));
 
     controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
         .onTrue(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake,
+            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subDrivetrain, subElevator,
+                subIntake,
                 subTransfer, subShooter)));
 
     controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPIKE)))
-        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SPIKE, subStateMachine,
-            subElevator, subIntake, subTransfer, subShooter)));
+        .onTrue(
+            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SPIKE, subStateMachine, subDrivetrain,
+                subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP_SHOOTER)))
-        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP_SHOOTER, subStateMachine,
-            subElevator, subIntake, subTransfer, subShooter)));
+    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
+        .onTrue(Commands
+            .deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain,
+                subElevator, subIntake, subTransfer, subShooter)));
 
     // "Unalive Shooter"
 
     controller.btn_B.onTrue(
         Commands.either(
             Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,
-                subStateMachine, subElevator, subIntake, subTransfer, subShooter)),
+                subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)),
             Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE,
-                subStateMachine, subElevator, subIntake, subTransfer, subShooter)),
+                subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)),
             gamePieceTrigger)
             .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))));
 
     controller.btn_West.whileTrue(Commands.deferredProxy(
-        () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subElevator, subIntake, subTransfer,
+        () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subDrivetrain, subElevator, subIntake,
+            subTransfer,
             subShooter)))
         .onFalse(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subElevator, subIntake, subTransfer,
+            () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subDrivetrain, subElevator, subIntake,
+                subTransfer,
                 subShooter)));
 
     controller.btn_LeftBumper.whileTrue(new ManualPivot(subShooter, controller.axis_RightY));

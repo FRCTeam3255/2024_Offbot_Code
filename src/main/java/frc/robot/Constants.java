@@ -20,6 +20,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Time;
@@ -174,7 +177,7 @@ public final class Constants {
       private static final Pose3d RIGHT_STAGE = new Pose3d(
           new Pose2d(4.524875164031982, 3.488827705383301, Rotation2d.fromDegrees(240)));
 
-      private static final Pose3d SUBWOOFER = new Pose3d(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(180)));
+      private static final Pose3d SUBWOOFER = new Pose3d(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(0)));
 
       private static final Pose3d SHUFFLE = new Pose3d(
           new Pose2d(1.2991523742675781, 7.103456497192383, Rotation2d.fromDegrees(0)));
@@ -202,7 +205,7 @@ public final class Constants {
           new Pose2d(12.021082878112793, 4.7371745109558105, Rotation2d.fromDegrees(60)));
 
       private static final Pose3d SUBWOOFER = new Pose3d(
-          new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(0)));
+          new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(180)));
 
       private static final Pose3d SHUFFLE = new Pose3d(
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.2991523742675781, 7.103456497192383, Rotation2d.fromDegrees(0)));
@@ -211,6 +214,17 @@ public final class Constants {
 
   public static class constShooter {
     public static final Rotation2d SHOOTER_TO_ROBOT = new Rotation2d(Units.Degrees.of(180));
+    /**
+     * The position, in meters, of the center of rotation for the pivot motor
+     * relative to the center of the robot (Robot Coordinates).
+     * 
+     * @see <a href=
+     *      "https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html">Robot
+     *      Coordinate System</a>
+     */
+    public static final Transform3d ROBOT_TO_PIVOT = new Transform3d(
+        new Translation3d(0.1778, 0, 0),
+        new Rotation3d(0, 0, 180));
 
     public static final InvertedValue LEFT_INVERT = InvertedValue.Clockwise_Positive;
     public static final InvertedValue RIGHT_INVERT = InvertedValue.CounterClockwise_Positive;
@@ -282,8 +296,44 @@ public final class Constants {
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35));
     public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+    public static final ShooterPositionGroup PREP_VISION = new ShooterPositionGroup(Units.Degrees.of(0),
+        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
     public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(10.5),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+
+    /**
+     * <p>
+     * Determines the necessary angle for the shooter depending on the distance from
+     * the SPEAKER.
+     * </p>
+     * <b>KEY:</b> The distance (in meters) of the center of the shooter to the
+     * SPEAKER
+     * <br>
+     * <br>
+     * <b>VALUE:</b> The angle (in degrees) for the pivot to go up by
+     * 
+     */
+    public static final InterpolatingDoubleTreeMap DISTANCE_MAP = new InterpolatingDoubleTreeMap();
+
+    static {
+      DISTANCE_MAP.put(1.2827, 42.0);
+      DISTANCE_MAP.put(1.5875, 40.0);
+      DISTANCE_MAP.put(1.8923, 34.0);
+      DISTANCE_MAP.put(2.1971, 28.5);
+      DISTANCE_MAP.put(2.5019, 27.5);
+      DISTANCE_MAP.put(2.8067, 25.0);
+      DISTANCE_MAP.put(3.1115, 23.0);
+      DISTANCE_MAP.put(3.4163, 19.0);
+      DISTANCE_MAP.put(3.7211, 18.5);
+      DISTANCE_MAP.put(4.0259, 18.0);
+      DISTANCE_MAP.put(4.3307, 17.0);
+      DISTANCE_MAP.put(4.6355, 16.5);
+      DISTANCE_MAP.put(4.9403, 15.0);
+      DISTANCE_MAP.put(5.2451, 14.5);
+      DISTANCE_MAP.put(5.5499, 14.0);
+      DISTANCE_MAP.put(5.8547, 13.0);
+      DISTANCE_MAP.put(6.1595, 12.5);
+    }
 
   }
 
@@ -311,6 +361,7 @@ public final class Constants {
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_AMP_SHOOTER, constShooter.PREP_AMP_SHOOTER);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SHUFFLE, constShooter.PREP_SHUFFLE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPEAKER, constShooter.PREP_SUB);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_VISION, constShooter.PREP_VISION);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPIKE, constShooter.PREP_SPIKE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_WING, constShooter.PREP_WING);
     }
