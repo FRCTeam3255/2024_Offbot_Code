@@ -116,11 +116,12 @@ public class RobotContainer {
         .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SPIKE, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_WING)))
-        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_WING, subStateMachine,
+    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP_SHOOTER)))
+        .onTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP_SHOOTER, subStateMachine,
             subElevator, subIntake, subTransfer, subShooter)));
 
     // "Unalive Shooter"
+
     controller.btn_B.onTrue(
         Commands.either(
             Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,

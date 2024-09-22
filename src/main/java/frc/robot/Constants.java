@@ -227,6 +227,8 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(10));
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
+    public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
+
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
 
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
@@ -239,13 +241,13 @@ public final class Constants {
     /**
      * The voltage supplied to the motor in order to zero
      */
-    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-1);
+    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-2);
 
     /**
      * The velocity that the motor goes at once it has zeroed (and can no longer
      * continue in that direction)
      */
-    public static final Measure<Velocity<Angle>> ZEROED_VELOCITY = Units.DegreesPerSecond.of(0.01);
+    public static final Measure<Velocity<Angle>> ZEROED_VELOCITY = Units.RotationsPerSecond.of(-0.01);
 
     /**
      * The elapsed time required to consider the pivot motor as zeroed
@@ -280,7 +282,7 @@ public final class Constants {
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35));
     public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
-    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(9.8),
+    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(10.5),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
 
   }
