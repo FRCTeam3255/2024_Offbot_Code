@@ -329,10 +329,10 @@ public final class Constants {
       DISTANCE_MAP.put(4.3307, 17.0);
       DISTANCE_MAP.put(4.6355, 16.5);
       DISTANCE_MAP.put(4.9403, 15.0);
-      DISTANCE_MAP.put(5.2451, 14.5);
-      DISTANCE_MAP.put(5.5499, 14.0);
+      DISTANCE_MAP.put(5.2451, 14.0);
+      DISTANCE_MAP.put(5.5499, 13.5);
       DISTANCE_MAP.put(5.8547, 13.0);
-      DISTANCE_MAP.put(6.1595, 12.5);
+      DISTANCE_MAP.put(6.1595, 11.5);
     }
 
   }
