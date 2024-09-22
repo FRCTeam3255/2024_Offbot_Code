@@ -80,14 +80,14 @@ public class RobotPreferences {
     public static final double leftShooterS = 0.28;
     public static final double leftShooterV = 0.13;
     public static final double leftShooterA = 0.0;
-    public static final double leftShooterP = 0.75;
+    public static final double leftShooterP = 0.5; // 0.75 ?
     public static final double leftShooterI = 0;
     public static final double leftShooterD = 0.0;
 
     public static final double rightShooterS = 0.4;
     public static final double rightShooterV = 0.11;
     public static final double rightShooterA = 0;
-    public static final double rightShooterP = 0.6;
+    public static final double rightShooterP = 0.4; // 0.6 ?
     public static final double rightShooterI = 0;
     public static final double rightShooterD = 0;
 
