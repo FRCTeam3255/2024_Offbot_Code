@@ -46,7 +46,11 @@ public class NoneState extends Command {
     subTransfer.setFeederSpeed(Units.Percent.zero());
     subShooter.setShootingNeutralOutput();
     subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
-    subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
+    if (subShooter.getShooterPosition().lte(constShooter.NEUTRAL_OUT_THRESHOLD)) {
+      subShooter.setPivotNeutralOutput();
+    } else {
+      subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -55,7 +55,7 @@ public class ZeroShooterPivot extends Command {
     // If the current velocity is low enough to be considered as zeroed
     // TODO: Test if we need a Math.Abs here; we had it last year but I don't think
     // its needed
-    if (subShooter.getPivotVelocity().lte(constShooter.ZEROED_VELOCITY)) {
+    if (subShooter.getPivotVelocity().gte(constShooter.ZEROED_VELOCITY)) {
       // And this is the first loop it has happened, begin the timer
       if (zeroingTimestamp.equals(Units.Seconds.zero())) {
         zeroingTimestamp = Units.Seconds.of(Timer.getFPGATimestamp());

@@ -17,6 +17,7 @@ import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepAmp;
 import frc.robot.commands.States.PrepTargetState;
+import frc.robot.commands.States.PrepVision;
 import frc.robot.commands.States.Shooting;
 import frc.robot.commands.States.StoreFeeder;
 
@@ -58,7 +59,8 @@ public class StateMachine extends SubsystemBase {
    *                     possible from your current state
    * @return The Command to run for that desired state
    */
-  public Command tryState(RobotState desiredState, StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
+  public Command tryState(RobotState desiredState, StateMachine subStateMachine, Drivetrain subDrivetrain,
+      Elevator subElevator, Intake subIntake,
       Transfer subTransfer, Shooter subShooter) {
 
     // TODO: Write this functionality in a later pr
@@ -92,6 +94,8 @@ public class StateMachine extends SubsystemBase {
           case INTAKING:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
+          case PREP_VISION:
+
           case PREP_AMP_SHOOTER:
           case PREP_SPIKE:
           case PREP_WING:
@@ -112,6 +116,8 @@ public class StateMachine extends SubsystemBase {
           case STORE_FEEDER:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
+          case PREP_VISION:
+
           case PREP_AMP_SHOOTER:
           case PREP_SPIKE:
           case PREP_WING:
@@ -131,6 +137,8 @@ public class StateMachine extends SubsystemBase {
           case NONE:
           case STORE_FEEDER:
           case PREP_SPEAKER:
+          case PREP_VISION:
+
           case PREP_AMP_SHOOTER:
           case PREP_SPIKE:
           case PREP_WING:
@@ -149,6 +157,8 @@ public class StateMachine extends SubsystemBase {
         switch (currentState) {
           case NONE:
           case PREP_SPEAKER:
+          case PREP_VISION:
+
           case STORE_FEEDER:
           case PREP_SHUFFLE:
           case PREP_AMP_SHOOTER:
@@ -169,6 +179,8 @@ public class StateMachine extends SubsystemBase {
         switch (currentState) {
           case STORE_FEEDER:
           case PREP_SPEAKER:
+          case PREP_VISION:
+
           case PREP_SHUFFLE:
           case PREP_AMP_SHOOTER:
           case PREP_SPIKE:
@@ -180,6 +192,8 @@ public class StateMachine extends SubsystemBase {
       case SHOOTING:
         switch (currentState) {
           case PREP_SPEAKER:
+          case PREP_VISION:
+
           case PREP_SHUFFLE:
           case PREP_AMP:
           case PREP_AMP_SHOOTER:
@@ -197,6 +211,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP_SHOOTER:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
+          case PREP_VISION:
+
           case PREP_SPIKE:
           case PREP_WING:
             return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_AMP_SHOOTER);
@@ -217,6 +233,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_SHUFFLE:
           case PREP_SPIKE:
           case PREP_SPEAKER:
+          case PREP_VISION:
+
           case PREP_AMP_SHOOTER:
           case PREP_WING:
             return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SPIKE);
@@ -237,9 +255,31 @@ public class StateMachine extends SubsystemBase {
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
           case PREP_WING:
+          case PREP_VISION:
           case PREP_SPIKE:
           case PREP_AMP_SHOOTER:
             return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_WING);
+          case PREP_AMP:
+            return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
+                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
+                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer,
+                    subShooter))
+                .andThen(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_WING))
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+        }
+        break;
+
+      case PREP_VISION:
+        switch (currentState) {
+          case NONE:
+          case STORE_FEEDER:
+          case PREP_SHUFFLE:
+          case PREP_SPEAKER:
+          case PREP_WING:
+          case PREP_VISION:
+          case PREP_SPIKE:
+          case PREP_AMP_SHOOTER:
+            return new PrepVision(subStateMachine, subDrivetrain, subShooter);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
                 .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
@@ -296,6 +336,7 @@ public class StateMachine extends SubsystemBase {
     PREP_AMP_SHOOTER,
     PREP_SHUFFLE,
     PREP_SPEAKER,
+    PREP_VISION,
     PREP_SPIKE,
     PREP_WING,
     CLIMBING,
@@ -309,6 +350,7 @@ public class StateMachine extends SubsystemBase {
     PREP_SHUFFLE,
     PREP_SPEAKER,
     PREP_SPIKE,
+    PREP_VISION,
     PREP_WING
   }
 

@@ -14,7 +14,9 @@ public class RobotPreferences {
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while manually driving
-    public static final SN_DoublePreference turnSpeed = new SN_DoublePreference("turnSpeed", 3);
+    public static final SN_DoublePreference manualTurnSpeed = new SN_DoublePreference("manualTurnSpeed", 3);
+
+    public static final double maxTurnSpeed = 360;
 
     /**
      * <p>
@@ -70,9 +72,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference autoSteerD = new SN_DoublePreference("autoSteerD", 0.0);
 
     // Teleop Snapping to Rotation (Yaw)
-    public static final SN_DoublePreference yawSnapP = new SN_DoublePreference("yawSnapP", 3);
-    public static final SN_DoublePreference yawSnapI = new SN_DoublePreference("yawSnapI", 0);
-    public static final SN_DoublePreference yawSnapD = new SN_DoublePreference("yawSnapD", 0);
+    public static final double yawSnapP = 0.5;
+    public static final double yawSnapI = 0;
+    public static final double yawSnapD = 0;
   }
 
   public static final class prefShooter {
@@ -80,22 +82,22 @@ public class RobotPreferences {
     public static final double leftShooterS = 0.28;
     public static final double leftShooterV = 0.13;
     public static final double leftShooterA = 0.0;
-    public static final double leftShooterP = 0.75;
+    public static final double leftShooterP = 0.5; // 0.75 ?
     public static final double leftShooterI = 0;
     public static final double leftShooterD = 0.0;
 
     public static final double rightShooterS = 0.4;
     public static final double rightShooterV = 0.11;
     public static final double rightShooterA = 0;
-    public static final double rightShooterP = 0.6;
+    public static final double rightShooterP = 0.4; // 0.6 ?
     public static final double rightShooterI = 0;
     public static final double rightShooterD = 0;
 
-    public static final double pivotShooterS = 0.2;
-    public static final double pivotShooterV = 0.12;
-    public static final double pivotShooterG = 0.3;
-    public static final double pivotShooterA = 0.1;
-    public static final double pivotShooterP = 60;
+    public static final double pivotShooterS = 0.4;
+    public static final double pivotShooterV = 0.0;
+    public static final double pivotShooterG = 0.53;
+    public static final double pivotShooterA = 0.0;
+    public static final double pivotShooterP = 150;
     public static final double pivotShooterI = 0;
     public static final double pivotShooterD = 0;
   }
