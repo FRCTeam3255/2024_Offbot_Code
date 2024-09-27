@@ -295,14 +295,12 @@ public class StateMachine extends SubsystemBase {
 
   public Command tryTargetState(StateMachine subStateMachine, Intake subIntake,
       Shooter subShooter, Transfer subTransfer) {
-    switch (currentTargetState) {
-      case PREP_SHUFFLE:
-        return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SHUFFLE);
-      case PREP_SPEAKER:
-        return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SPEAKER);
-      default:
-        return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
+    // There is no Robot command for Prep_NONE
+    if (currentTargetState.equals(TargetState.PREP_NONE)) {
+      return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
     }
+
+    return new PrepTargetState(subStateMachine, subShooter, currentTargetState);
   }
 
   /**
@@ -347,6 +345,7 @@ public class StateMachine extends SubsystemBase {
   public static enum TargetState {
     PREP_NONE,
     PREP_AMP_SHOOTER,
+    PREP_AMP,
     PREP_SHUFFLE,
     PREP_SPEAKER,
     PREP_SPIKE,
