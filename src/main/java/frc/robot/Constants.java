@@ -416,13 +416,11 @@ public final class Constants {
 
   public static class constElevator {
     public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0);
-    public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
+    public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0.5);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+    public static final NeutralModeValue ELEVATOR_NEUTRAL_MODE = NeutralModeValue.Brake;
     public static final boolean NOTE_SENSOR_INVERT = true;
-    public static final double MECHANICAL_GEAR_RATIO = 1 / 10;
-    public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Inches.of(1.432);
-    public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO
-        * FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
+    public static final double MOTOR_ROTATION_TO_METERS = 1 / 0.0456842368;
 
     public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0);
 
@@ -437,7 +435,7 @@ public final class Constants {
     /**
      * The voltage supplied to the motor in order to zero
      */
-    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(1);
+    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-1);
 
     /**
      * 

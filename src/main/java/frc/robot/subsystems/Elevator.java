@@ -46,6 +46,7 @@ public class Elevator extends SubsystemBase {
   public void configure() {
     // -- Elevator Motor --
     elevatorConfig.Feedback.SensorToMechanismRatio = constElevator.MOTOR_ROTATION_TO_METERS;
+    elevatorConfig.MotorOutput.NeutralMode = constElevator.ELEVATOR_NEUTRAL_MODE;
     elevatorConfig.MotorOutput.Inverted = constElevator.MOTOR_INVERT;
     elevatorConfig.Slot0.kP = prefElevator.elevatorShooterP.getValue();
     elevatorConfig.Slot0.kI = prefElevator.elevatorShooterI.getValue();
