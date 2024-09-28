@@ -50,7 +50,23 @@ public class PrepAmp extends SequentialCommandGroup {
         Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION)),
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(constElevator.AMP_POSITION)),
 
-        // Pivot shooter and then start spinning the flywheels :p
-        Commands.runOnce(() -> subShooter.setDesiredPosition(desiredShooterPosition)));
+        // Pivot shooter
+        Commands.runOnce(() -> subShooter.setDesiredPosition(desiredShooterPosition)),
+        Commands.waitUntil(() -> subShooter.isShooterAtPosition(desiredShooterPosition.shooterAngle)),
+
+        // Feed the note into the drainpipe until we see a note in that bad boy
+        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_SCORE_AMP_SPEED)),
+        Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
+
+        Commands.waitUntil(() -> subElevator.getGamePieceStored()),
+
+        // then turn everything off :>
+        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(0)),
+        Commands.runOnce(() -> subTransfer.setFeederSpeed(0)),
+        Commands
+            .runOnce(() -> subShooter.setDesiredVelocities(Units.DegreesPerSecond.of(0), Units.DegreesPerSecond.of(0))),
+        Commands.runOnce(() -> subShooter.setShootingNeutralOutput())
+
+    );
   }
 }

@@ -38,8 +38,8 @@ public class Transfer extends SubsystemBase {
     feederMotor.getConfigurator().apply(feederConfig);
   }
 
-  public void setFeederSpeed(Measure<Dimensionless> speed) {
-    feederMotor.set(speed.in(Units.Percent));
+  public void setFeederSpeed(double speed) {
+    feederMotor.set(speed);
   }
 
   public void setFeederNeutralOutput() {

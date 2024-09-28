@@ -55,7 +55,7 @@ public final class Constants {
     public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = -0.079834;
     public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.249268;
     public static final double BACK_LEFT_ABS_ENCODER_OFFSET = -0.240479;
-    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = 0.210449;
+    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = 0.209717;
 
     public static final InvertedValue DRIVE_MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final InvertedValue STEER_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
@@ -64,12 +64,8 @@ public final class Constants {
     public static final NeutralModeValue DRIVE_NEUTRAL_MODE = NeutralModeValue.Brake;
     public static final NeutralModeValue STEER_NEUTRAL_MODE = NeutralModeValue.Coast;
 
-    public static final double WHEEL_DIAMETER = 0.09779;
-    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
-
-    // Taken from the online listing
-    public static final double DRIVE_GEAR_RATIO = 6.75;
-    public static final double STEER_GEAR_RATIO = 150.0 / 7.0;
+    public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(3.966);
+    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.in(Units.Meters) * Math.PI;
 
     /**
      * <p>
@@ -78,7 +74,7 @@ public final class Constants {
      * </p>
      * <b>Units:</b> Meters Per Second
      */
-    public static final double THEORETICAL_MAX_DRIVE_SPEED = SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters;
+    public static final double THEORETICAL_MAX_DRIVE_SPEED = SN_SwerveConstants.MK4I.FALCON.L3.maxSpeedMeters;
 
     /**
      * <p>
@@ -89,15 +85,15 @@ public final class Constants {
     public static final Measure<Velocity<Distance>> DRIVE_SPEED = Units.FeetPerSecond.of(15.1);
     // Physically measured from center to center of the wheels
     // Distance between Left & Right Wheels
-    public static final double TRACK_WIDTH = Units.Meters.convertFrom(23.75, Units.Inches);
+    public static final double TRACK_WIDTH = Units.Meters.convertFrom(19.75, Units.Inches);
     // Distance between Front & Back Wheels
-    public static final double WHEELBASE = Units.Meters.convertFrom(23.75, Units.Inches);
+    public static final double WHEELBASE = Units.Meters.convertFrom(19.75, Units.Inches);
 
     public static final SN_SwerveConstants SWERVE_CONSTANTS = new SN_SwerveConstants(
-        SN_SwerveConstants.MK4I.KRAKEN.L3.steerGearRatio,
+        SN_SwerveConstants.MK4I.FALCON.L3.steerGearRatio,
         WHEEL_CIRCUMFERENCE,
-        SN_SwerveConstants.MK4I.KRAKEN.L3.driveGearRatio,
-        SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters);
+        SN_SwerveConstants.MK4I.FALCON.L3.driveGearRatio,
+        SN_SwerveConstants.MK4I.FALCON.L3.maxSpeedMeters);
 
     public static final Measure<Angle> AT_ROTATION_TOLERANCE = Units.Degrees.of(20);
   }
@@ -422,9 +418,9 @@ public final class Constants {
     public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0);
     public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
-    // TODO: Get real gear ratio values
-    public static final double MECHANICAL_GEAR_RATIO = 1;
-    public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Meters.of(1);
+    public static final boolean NOTE_SENSOR_INVERT = true;
+    public static final double MECHANICAL_GEAR_RATIO = 10;
+    public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Inches.of(1.432);
     public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO
         * FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
 
@@ -432,8 +428,8 @@ public final class Constants {
 
     public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0);
 
-    public static final double DRAINPIPE_PREP_TO_AMP_SPEED = 0;
-    public static final double DRAINPIPE_SCORE_AMP_SPEED = 0;
+    public static final double DRAINPIPE_PREP_TO_AMP_SPEED = 0.2;
+    public static final double DRAINPIPE_SCORE_AMP_SPEED = 0.6;
 
     public static final Measure<Time> PREP_AMP_DELAY = Units.Seconds.of(2);
 
@@ -441,7 +437,7 @@ public final class Constants {
     /**
      * The voltage supplied to the motor in order to zero
      */
-    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-1);
+    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(1);
 
     /**
      * 
@@ -476,12 +472,12 @@ public final class Constants {
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue FEEDER_NEUTRAL_MODE = NeutralModeValue.Brake;
 
-    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(0.3);
-    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-0.3);
+    public static final double INTAKING_SPEED = 0.3;
+    public static final double EJECTING_SPEED = -0.3;
 
-    public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
+    public static final double PREP_TO_AMP_SPEED = 0.2;
 
-    public static final Measure<Dimensionless> SHOOTING_SPEED = Units.Percent.of(0.5);
+    public static final double SHOOTING_SPEED = 0.5;
   }
 
   public static class constLimelight {

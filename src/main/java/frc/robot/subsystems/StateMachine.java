@@ -192,7 +192,6 @@ public class StateMachine extends SubsystemBase {
         switch (currentState) {
           case PREP_SPEAKER:
           case PREP_VISION:
-
           case PREP_SHUFFLE:
           case PREP_AMP:
           case PREP_AMP_SHOOTER:

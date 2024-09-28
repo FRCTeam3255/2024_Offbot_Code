@@ -50,6 +50,7 @@ public class RobotMap {
   public static class mapElevator {
     public static final int ELEVATOR_MOTOR_CAN = 30;
     public static final int DRAINPIPE_MOTOR_CAN = 31;
+    public static final int NOTE_SENSOR_DIO = 1;
   }
 
   // MOTORS: 40 -> 49

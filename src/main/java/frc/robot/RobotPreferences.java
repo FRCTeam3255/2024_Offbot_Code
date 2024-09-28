@@ -2,7 +2,10 @@ package frc.robot;
 
 import com.frcteam3255.preferences.SN_DoublePreference;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 
 public class RobotPreferences {
   public static final class prefDrivetrain {
@@ -14,9 +17,7 @@ public class RobotPreferences {
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while manually driving
-    public static final SN_DoublePreference manualTurnSpeed = new SN_DoublePreference("manualTurnSpeed", 3);
-
-    public static final double maxTurnSpeed = 360;
+    public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(360);
 
     /**
      * <p>

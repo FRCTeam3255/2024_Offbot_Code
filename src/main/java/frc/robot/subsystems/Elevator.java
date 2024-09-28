@@ -9,13 +9,12 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constElevator;
 import frc.robot.RobotMap.mapElevator;
@@ -24,6 +23,7 @@ import frc.robot.RobotPreferences.prefElevator;
 public class Elevator extends SubsystemBase {
   TalonFX elevatorMotor, drainpipeMotor;
   TalonFXConfiguration elevatorConfig, drainpipeConfig;
+  DigitalInput noteSensor;
 
   PositionVoltage positionRequest;
   VoltageOut voltageRequest;
@@ -32,6 +32,7 @@ public class Elevator extends SubsystemBase {
   public Elevator() {
     elevatorMotor = new TalonFX(mapElevator.ELEVATOR_MOTOR_CAN, "rio");
     drainpipeMotor = new TalonFX(mapElevator.DRAINPIPE_MOTOR_CAN, "rio");
+    noteSensor = new DigitalInput(mapElevator.NOTE_SENSOR_DIO);
 
     elevatorConfig = new TalonFXConfiguration();
     drainpipeConfig = new TalonFXConfiguration();
@@ -112,6 +113,10 @@ public class Elevator extends SubsystemBase {
     // TODO: test if the code below works and makes our lives easier
     // return
     // (getElevatorPosition().minus(position)).lte(constElevator.AT_POSITION_TOLERANCE);
+  }
+
+  public boolean getGamePieceStored() {
+    return (constElevator.NOTE_SENSOR_INVERT) ? !noteSensor.get() : noteSensor.get();
   }
 
   @Override

@@ -9,10 +9,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constShooter;
+import frc.robot.Constants.constStateMachine;
+import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.Constants.constTransfer;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
+import frc.robot.subsystems.StateMachine.TargetState;
 import frc.robot.subsystems.Transfer;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -32,12 +35,29 @@ public class UnPrepAmp extends SequentialCommandGroup {
 
     addRequirements(subStateMachine);
 
+    ShooterPositionGroup desiredShooterPosition = constStateMachine.TARGET_TO_PRESET_GROUP.get(TargetState.PREP_AMP);
+
     addCommands(
         // Shooter is currently pivoted up and the elevator is up (bad news bears!)
-        // Stop those rollers
+        // Lets double check that though while also setting the flywheels in reverse
+        Commands
+            .runOnce(() -> subShooter.setDesiredPosition(new ShooterPositionGroup(desiredShooterPosition.shooterAngle,
+                desiredShooterPosition.leftVelocity.negate(), desiredShooterPosition.rightVelocity.negate()))),
+
+        // Feed the note backwards until we see the note
+        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(-constElevator.DRAINPIPE_SCORE_AMP_SPEED)),
+        Commands.runOnce(() -> subTransfer.setFeederSpeed(-constTransfer.PREP_TO_AMP_SPEED)),
+
+        Commands.waitUntil(() -> subTransfer.getGamePieceCollected()),
+        // Continue feeding until we stop seeing it
+        Commands.waitUntil(() -> !subTransfer.getGamePieceCollected()),
+
+        // Stop all rollers
+        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(0)),
+        Commands.runOnce(() -> subTransfer.setFeederSpeed(0)),
+        Commands
+            .runOnce(() -> subShooter.setDesiredVelocities(Units.DegreesPerSecond.of(0), Units.DegreesPerSecond.of(0))),
         Commands.runOnce(() -> subShooter.setShootingNeutralOutput()),
-        Commands.runOnce(
-            () -> subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero())),
 
         // Pivot shooter back
         Commands.runOnce(() -> subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT)),
