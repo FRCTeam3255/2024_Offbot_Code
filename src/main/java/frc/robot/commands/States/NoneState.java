@@ -43,6 +43,7 @@ public class NoneState extends Command {
     subStateMachine.setRobotState(RobotState.NONE);
     subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
+    subElevator.setDrainpipeSpeed(0);
     subTransfer.setFeederSpeed(0);
     subShooter.setShootingNeutralOutput();
     subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());

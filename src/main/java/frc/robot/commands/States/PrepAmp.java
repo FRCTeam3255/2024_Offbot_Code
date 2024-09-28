@@ -50,13 +50,9 @@ public class PrepAmp extends SequentialCommandGroup {
         Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION)),
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(constElevator.AMP_POSITION)),
 
-        Commands.waitSeconds(2),
-
         // Pivot shooter
         Commands.runOnce(() -> subShooter.setDesiredPosition(desiredShooterPosition)),
         Commands.waitUntil(() -> subShooter.isShooterAtPosition(desiredShooterPosition.shooterAngle)),
-
-        Commands.waitSeconds(2),
 
         // Feed the note into the drainpipe until we see a note in that bad boy
         Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_SCORE_AMP_SPEED)),

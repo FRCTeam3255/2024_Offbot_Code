@@ -246,7 +246,7 @@ public final class Constants {
 
     public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
 
-    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
+    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(3);
 
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
@@ -426,7 +426,7 @@ public final class Constants {
 
     public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0.37);
 
-    public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0);
+    public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0.05);
 
     public static final double DRAINPIPE_PREP_TO_AMP_SPEED = 0.2;
     public static final double DRAINPIPE_SCORE_AMP_SPEED = 0.6;
