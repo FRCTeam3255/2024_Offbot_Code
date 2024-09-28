@@ -86,6 +86,8 @@ public final class Constants {
         WHEEL_CIRCUMFERENCE,
         SN_SwerveConstants.MK4I.KRAKEN.L3.driveGearRatio,
         SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters);
+
+    public static final Measure<Angle> AUTO_PRELOAD_TAXI_ROTATION = Units.Degrees.of(119.62);
   }
 
   public static class constField {
@@ -241,6 +243,8 @@ public final class Constants {
     public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
 
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
+
+    public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(1);
 
     // -- Zeroing --
     /**
