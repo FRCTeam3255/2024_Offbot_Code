@@ -9,8 +9,10 @@ import java.util.function.Supplier;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.constShooter;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -46,32 +48,65 @@ public class WingOnly extends SequentialCommandGroup {
         Commands.runOnce(
             () -> subDrivetrain.resetPoseToPose(getInitialPose().get())),
 
-        // new PathPlannerAuto("PsW1sW2sW3s"),
-
         // Intake
         Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subDrivetrain, subElevator, subIntake,
                 subTransfer, subShooter)),
 
         // Drive to first note
-        new PathPlannerAuto(determinePathName() + ".1")
+        new PathPlannerAuto("PsW3sW2sW1s.1"),
 
-        // Transfer + Shoot
+        // Aim at speaker
+        Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain, subElevator,
+                subIntake, subTransfer, subShooter)),
+
+        // Shoot
+        Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.SHOOTING, subStateMachine, subDrivetrain, subElevator, subIntake,
+                subTransfer, subShooter).until(() -> !subTransfer.getGamePieceCollected())),
 
         // Intake
+        Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subDrivetrain, subElevator, subIntake,
+                subTransfer, subShooter)),
 
         // Drive to second note
-        // new PathPlannerAuto(determinePathName() + ".2"),
+        new PathPlannerAuto("PsW3sW2sW1s.2"),
 
-        // Transfer + Shoot
+        // Aim at speaker
+        Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain, subElevator,
+                subIntake, subTransfer, subShooter)),
+
+        // Shoot
+        Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.SHOOTING, subStateMachine, subDrivetrain, subElevator, subIntake,
+                subTransfer, subShooter).until(() -> !subTransfer.getGamePieceCollected())),
 
         // Intake
+        Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subDrivetrain, subElevator, subIntake,
+                subTransfer, subShooter)),
 
         // Drive to third note
-        // new PathPlannerAuto(determinePathName() + ".3")
+        new PathPlannerAuto("PsW3sW2sW1s.3"),
 
-        // Transfer + Shoot
-    );
+        // Aim at speaker
+        Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain, subElevator,
+                subIntake, subTransfer, subShooter)),
+
+        // Shoot
+        Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.SHOOTING, subStateMachine, subDrivetrain, subElevator, subIntake,
+                subTransfer, subShooter).until(() -> !subTransfer.getGamePieceCollected())),
+
+        Commands.waitSeconds(constShooter.AUTO_PREP_NONE_DELAY.in(Units.Seconds)),
+
+        // Reset subsystems to chill
+        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subDrivetrain,
+            subElevator, subIntake, subTransfer, subShooter)));
   }
 
   public String determinePathName() {
