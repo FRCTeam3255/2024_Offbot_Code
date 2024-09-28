@@ -417,9 +417,9 @@ public final class Constants {
   public static class constElevator {
     public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0);
     public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
-    public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final boolean NOTE_SENSOR_INVERT = true;
-    public static final double MECHANICAL_GEAR_RATIO = 10;
+    public static final double MECHANICAL_GEAR_RATIO = 1 / 10;
     public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Inches.of(1.432);
     public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO
         * FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
