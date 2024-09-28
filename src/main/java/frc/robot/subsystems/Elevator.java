@@ -50,10 +50,10 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.Slot0.kD = prefElevator.elevatorShooterD.getValue();
 
     elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constElevator.FORWARD_LIMIT.in(Units.Rotations);
+    elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constElevator.FORWARD_LIMIT.in(Units.Meters);
 
     elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-    elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constElevator.FORWARD_LIMIT.in(Units.Rotations);
+    elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constElevator.BACKWARD_LIMIT.in(Units.Meters);
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);
 
@@ -67,8 +67,8 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.getConfigurator().apply(elevatorConfig);
   }
 
-  public void setDrainpipeSpeed(Measure<Dimensionless> speed) {
-    drainpipeMotor.set(speed.in(Units.Percent));
+  public void setDrainpipeSpeed(double speed) {
+    drainpipeMotor.set(speed);
   }
 
   public void setElevatorSpeed(double speed) {
@@ -79,8 +79,9 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
   }
 
-  public void setElevatorPosition(Measure<Angle> position) {
-    elevatorMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
+  public void setElevatorPosition(Measure<Distance> position) {
+    // TODO: Surely this works!
+    elevatorMotor.setControl(positionRequest.withPosition(position.in(Units.Meters)));
   }
 
   /**
@@ -91,10 +92,10 @@ public class Elevator extends SubsystemBase {
   }
 
   /**
-   * @return The current position of the elevator in rotations
+   * @return The current position of the elevator in meters
    */
-  public Measure<Angle> getElevatorPosition() {
-    return Units.Rotations.of(elevatorMotor.getPosition().getValueAsDouble());
+  public Measure<Distance> getElevatorPosition() {
+    return Units.Meters.of(elevatorMotor.getPosition().getValueAsDouble());
   }
 
   public Measure<Velocity<Distance>> getVelocity() {
@@ -104,9 +105,9 @@ public class Elevator extends SubsystemBase {
   /**
    * @return If the elevator position is within tolerance of desired position
    */
-  public boolean isElevatorAtPosition(Measure<Angle> position) {
-    return (Math.abs(getElevatorPosition().minus(position).in(Units.Rotations)) < constElevator.AT_POSITION_TOLERANCE
-        .in(Units.Rotations));
+  public boolean isElevatorAtPosition(Measure<Distance> position) {
+    return (Math.abs(getElevatorPosition().minus(position).in(Units.Meters)) < constElevator.AT_POSITION_TOLERANCE
+        .in(Units.Meters));
 
     // TODO: test if the code below works and makes our lives easier
     // return

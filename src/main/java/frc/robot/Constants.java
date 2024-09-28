@@ -419,8 +419,8 @@ public final class Constants {
   }
 
   public static class constElevator {
-    public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
-    public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
+    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0);
+    public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     // TODO: Get real gear ratio values
     public static final double MECHANICAL_GEAR_RATIO = 1;
@@ -428,12 +428,12 @@ public final class Constants {
     public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO
         * FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
 
-    public static final Measure<Angle> AMP_POSITION = Units.Rotations.of(0);
+    public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0);
 
-    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Rotations.of(0);
+    public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0);
 
-    public static final Measure<Dimensionless> DRAINPIPE_PREP_TO_AMP_SPEED = Units.Percent.of(0);
-    public static final Measure<Dimensionless> DRAINPIPE_SCORE_AMP_SPEED = Units.Percent.of(0);
+    public static final double DRAINPIPE_PREP_TO_AMP_SPEED = 0;
+    public static final double DRAINPIPE_SCORE_AMP_SPEED = 0;
 
     public static final Measure<Time> PREP_AMP_DELAY = Units.Seconds.of(2);
 
