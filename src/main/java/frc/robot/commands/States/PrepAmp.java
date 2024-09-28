@@ -4,17 +4,22 @@
 
 package frc.robot.commands.States;
 
+import java.lang.annotation.Target;
+
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constShooter;
+import frc.robot.Constants.constStateMachine;
 import frc.robot.Constants.constTransfer;
+import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
 import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.TargetState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -34,6 +39,10 @@ public class PrepAmp extends SequentialCommandGroup {
 
     addRequirements(subStateMachine);
 
+    ShooterPositionGroup desiredShooterPosition = constStateMachine.TARGET_TO_PRESET_GROUP.get(TargetState.PREP_AMP);
+
+    // Implementation of this command assumes that the current robot state is either
+    // STORE_FEEDER or a target state.
     addCommands(
         Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_AMP)),
 
@@ -41,21 +50,7 @@ public class PrepAmp extends SequentialCommandGroup {
         Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION)),
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(constElevator.AMP_POSITION)),
 
-        // Set amp position of shooter and wait until it's at position
-        Commands.runOnce(() -> subShooter.setPivotPosition(constShooter.TRANSFER_TO_AMPER_ANGLE)),
-        Commands.waitUntil(() -> subShooter.isShooterAtPosition(constShooter.TRANSFER_TO_AMPER_ANGLE)),
-
-        // Spin feeder, shooter, and drainpipe motors
-        Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
-        Commands.runOnce(() -> subShooter.setShooterPercentOutput(constShooter.PREP_TO_AMP_SPEED)),
-        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_PREP_TO_AMP_SPEED)),
-
-        // Wait for the note to transfer to drainpipe
-        Commands.waitSeconds(constElevator.PREP_AMP_DELAY.in(Units.Seconds)),
-
-        // Stop motors
-        Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
-        Commands.runOnce(() -> subShooter.setShooterPercentOutput(constShooter.PREP_TO_AMP_SPEED)),
-        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_PREP_TO_AMP_SPEED)));
+        // Pivot shooter and then start spinning the flywheels :p
+        Commands.runOnce(() -> subShooter.setDesiredPosition(desiredShooterPosition)));
   }
 }

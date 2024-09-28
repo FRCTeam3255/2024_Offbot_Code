@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.constElevator;
@@ -32,18 +33,18 @@ public class UnPrepAmp extends SequentialCommandGroup {
     addRequirements(subStateMachine);
 
     addCommands(
-        // Shooter is already pivoted up
-        // Run all rollers in reverse until we see a game piece detected
-        Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
-        Commands.runOnce(() -> subShooter.setShooterPercentOutput(constShooter.PREP_TO_AMP_SPEED)),
-        Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_PREP_TO_AMP_SPEED)),
+        // Shooter is currently pivoted up and the elevator is up (bad news bears!)
+        // Stop those rollers
+        Commands.runOnce(() -> subShooter.setShootingNeutralOutput()),
+        Commands.runOnce(
+            () -> subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero())),
 
-        Commands.waitUntil(() -> subTransfer.getGamePieceCollected()),
+        // Pivot shooter back
+        Commands.runOnce(() -> subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT)),
+        Commands.waitUntil(() -> subShooter.getShooterPosition().lte(constShooter.ELEVATOR_ABLE_TO_MOVE_LIMIT)),
 
-        // continue running all rollers in reverse until we stop seeing that the game
-        // piece is detected
-        Commands.waitUntil(() -> !subTransfer.getGamePieceCollected())
-
+        // Lower the elevator when it's safe
+        Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT))
     // End this command and run the intaking command
     );
   }

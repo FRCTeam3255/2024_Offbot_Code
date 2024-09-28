@@ -36,6 +36,7 @@ public class NoneState extends Command {
     addRequirements(subStateMachine);
   }
 
+  // TODO: ALL MOVEMENT OF THE ELEVATOR DOWN NEEDS TO CHECK SHOOTER POSITION :O
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {

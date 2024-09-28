@@ -73,7 +73,8 @@ public class RobotContainer {
             .deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subDrivetrain,
                 subElevator, subIntake, subTransfer, subShooter))
             .andThen(Commands.deferredProxy(
-                () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer))));
+                () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer,
+                    subElevator))));
 
     subDrivetrain.resetModulesToAbsolute();
 

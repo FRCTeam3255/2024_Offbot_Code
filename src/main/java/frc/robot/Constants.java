@@ -240,6 +240,9 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(10));
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
+    // TODO: Find real value
+    public static final Measure<Angle> ELEVATOR_ABLE_TO_MOVE_LIMIT = Units.Degrees.of(90);
+
     public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
@@ -287,7 +290,11 @@ public final class Constants {
       }
     }
 
+    // Amping w/o amper
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10));
+    // Amping w/ amper
+    public static final ShooterPositionGroup PREP_AMP = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10));
     public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(47.5),
         Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
@@ -348,6 +355,7 @@ public final class Constants {
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPEAKER, RobotState.PREP_SPEAKER);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPIKE, RobotState.PREP_SPIKE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_WING, RobotState.PREP_WING);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP, RobotState.PREP_AMP);
     }
 
     /**
@@ -360,6 +368,7 @@ public final class Constants {
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_AMP_SHOOTER, constShooter.PREP_AMP_SHOOTER);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SHUFFLE, constShooter.PREP_SHUFFLE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPEAKER, constShooter.PREP_SUB);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_AMP, constShooter.PREP_AMP);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_VISION, constShooter.PREP_VISION);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPIKE, constShooter.PREP_SPIKE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_WING, constShooter.PREP_WING);

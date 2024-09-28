@@ -180,7 +180,6 @@ public class StateMachine extends SubsystemBase {
           case STORE_FEEDER:
           case PREP_SPEAKER:
           case PREP_VISION:
-
           case PREP_SHUFFLE:
           case PREP_AMP_SHOOTER:
           case PREP_SPIKE:
@@ -212,7 +211,6 @@ public class StateMachine extends SubsystemBase {
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
           case PREP_VISION:
-
           case PREP_SPIKE:
           case PREP_WING:
             return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_AMP_SHOOTER);
@@ -234,7 +232,6 @@ public class StateMachine extends SubsystemBase {
           case PREP_SPIKE:
           case PREP_SPEAKER:
           case PREP_VISION:
-
           case PREP_AMP_SHOOTER:
           case PREP_WING:
             return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SPIKE);
@@ -294,10 +291,15 @@ public class StateMachine extends SubsystemBase {
   }
 
   public Command tryTargetState(StateMachine subStateMachine, Intake subIntake,
-      Shooter subShooter, Transfer subTransfer) {
+      Shooter subShooter, Transfer subTransfer, Elevator subElevator) {
     // There is no Robot command for Prep_NONE
     if (currentTargetState.equals(TargetState.PREP_NONE)) {
       return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
+    }
+
+    // Prep_AMP is a special child
+    if (currentTargetState.equals(TargetState.PREP_AMP)) {
+      return new PrepAmp(subStateMachine, subElevator, subShooter, subTransfer);
     }
 
     return new PrepTargetState(subStateMachine, subShooter, currentTargetState);
