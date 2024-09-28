@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
 import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Distance;
@@ -49,9 +50,13 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.Feedback.SensorToMechanismRatio = constElevator.MOTOR_ROTATION_TO_METERS;
     elevatorConfig.MotorOutput.NeutralMode = constElevator.ELEVATOR_NEUTRAL_MODE;
     elevatorConfig.MotorOutput.Inverted = constElevator.MOTOR_INVERT;
-    elevatorConfig.Slot0.kP = prefElevator.elevatorShooterP.getValue();
-    elevatorConfig.Slot0.kI = prefElevator.elevatorShooterI.getValue();
-    elevatorConfig.Slot0.kD = prefElevator.elevatorShooterD.getValue();
+    elevatorConfig.Slot0.GravityType = constElevator.ELEVATOR_GRAVITY_TYPE;
+    elevatorConfig.Slot0.StaticFeedforwardSign = constElevator.ELEVATOR_STATIC_FFWD_SIGN;
+    elevatorConfig.Slot0.kG = prefElevator.elevatorG;
+    elevatorConfig.Slot0.kS = prefElevator.elevatorS;
+    elevatorConfig.Slot0.kP = prefElevator.elevatorP;
+    elevatorConfig.Slot0.kI = prefElevator.elevatorI;
+    elevatorConfig.Slot0.kD = prefElevator.elevatorD;
 
     elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     elevatorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constElevator.FORWARD_LIMIT.in(Units.Meters);
@@ -75,8 +80,8 @@ public class Elevator extends SubsystemBase {
     drainpipeMotor.set(speed);
   }
 
-  public void setElevatorSpeed(Measure<Dimensionless> speed) {
-    elevatorMotor.set(speed.in(Units.Percent));
+  public void setElevatorSpeed(double speed) {
+    elevatorMotor.set(speed);
   }
 
   public void setVoltage(Measure<Voltage> voltage) {

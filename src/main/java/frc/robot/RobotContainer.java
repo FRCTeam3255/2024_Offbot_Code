@@ -133,9 +133,9 @@ public class RobotContainer {
             Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SPIKE, subStateMachine, subDrivetrain,
                 subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
+    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP)))
         .onTrue(Commands
-            .deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain,
+            .deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine, subDrivetrain,
                 subElevator, subIntake, subTransfer, subShooter)));
 
     // "Unalive Shooter"
@@ -171,14 +171,11 @@ public class RobotContainer {
         .whileTrue(new Shooting(subStateMachine, subElevator, subShooter, subTransfer))
         .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
 
-    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SPEAKER)))
-        .onTrue(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SPEAKER));
-
     controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SHUFFLE)))
         .onTrue(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SHUFFLE));
 
-    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_AMP)))
-        .onTrue(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_AMP_SHOOTER));
+    controller.btn_A.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION)));
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT)));
 
     controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
         .whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer))

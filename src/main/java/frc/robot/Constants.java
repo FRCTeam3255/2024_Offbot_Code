@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.frcteam3255.components.swerve.SN_SwerveConstants;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -241,8 +242,7 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(10));
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
-    // TODO: Find real value
-    public static final Measure<Angle> ELEVATOR_ABLE_TO_MOVE_LIMIT = Units.Degrees.of(90);
+    public static final Measure<Angle> ELEVATOR_ABLE_TO_MOVE_LIMIT = Units.Degrees.of(81);
 
     public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
 
@@ -295,7 +295,7 @@ public final class Constants {
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10));
     // Amping w/ amper
-    public static final ShooterPositionGroup PREP_AMP = new ShooterPositionGroup(Units.Degrees.of(111),
+    public static final ShooterPositionGroup PREP_AMP = new ShooterPositionGroup(Units.Degrees.of(99),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10));
     public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(47.5),
         Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
@@ -415,14 +415,16 @@ public final class Constants {
   }
 
   public static class constElevator {
-    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0);
-    public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0.5);
+    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0.5);
+    public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue ELEVATOR_NEUTRAL_MODE = NeutralModeValue.Brake;
+    public static final GravityTypeValue ELEVATOR_GRAVITY_TYPE = GravityTypeValue.Elevator_Static;
+    public static final StaticFeedforwardSignValue ELEVATOR_STATIC_FFWD_SIGN = StaticFeedforwardSignValue.UseClosedLoopSign;
     public static final boolean NOTE_SENSOR_INVERT = true;
     public static final double MOTOR_ROTATION_TO_METERS = 1 / 0.0456842368;
 
-    public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0);
+    public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0.37);
 
     public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0);
 

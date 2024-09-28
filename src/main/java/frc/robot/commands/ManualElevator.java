@@ -32,7 +32,7 @@ public class ManualElevator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subElevator.setElevatorSpeed(Units.Percent.of(yAxis.getAsDouble() * constElevator.MANUAL_ELEVATOR_PERCENTAGE));
+    subElevator.setElevatorSpeed(yAxis.getAsDouble() * constElevator.MANUAL_ELEVATOR_PERCENTAGE);
   }
 
   // Called once the command ends or is interrupted.

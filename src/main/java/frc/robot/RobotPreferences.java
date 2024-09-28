@@ -104,9 +104,11 @@ public class RobotPreferences {
   }
 
   public static final class prefElevator {
-    public static final SN_DoublePreference elevatorShooterP = new SN_DoublePreference("elevatorShooterP", 0);
-    public static final SN_DoublePreference elevatorShooterI = new SN_DoublePreference("elevatorShooterI", 0);
-    public static final SN_DoublePreference elevatorShooterD = new SN_DoublePreference("elevatorShooterD", 0);
+    public static final double elevatorG = 0.3;
+    public static final double elevatorS = 0.4;
+    public static final double elevatorP = 25;
+    public static final double elevatorI = 0;
+    public static final double elevatorD = 0;
   }
 
   public static final class prefVision {
