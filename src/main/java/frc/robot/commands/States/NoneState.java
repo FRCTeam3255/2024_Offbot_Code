@@ -46,6 +46,11 @@ public class NoneState extends Command {
     subTransfer.setFeederSpeed(Units.Percent.zero());
     subShooter.setShootingNeutralOutput();
     subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
+    if (subShooter.getShooterPosition().lte(constShooter.NEUTRAL_OUT_THRESHOLD)) {
+      subShooter.setPivotNeutralOutput();
+    } else {
+      subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,16 +61,13 @@ public class NoneState extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (subShooter.getShooterPosition().lte(constShooter.NEUTRAL_OUT_THRESHOLD)) {
-      subShooter.setPivotNeutralOutput();
-    } else {
-      subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
-    }
+    subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return subElevator.isElevatorAtPosition(Units.Meters.of(0)) || subShooter.isShooterAtPosition(Units.Degrees.of(0));
+    return subElevator.isElevatorAtPosition(constElevator.BACKWARD_LIMIT)
+        || subShooter.getShooterPosition().lte(constShooter.ELEVATOR_ABLE_TO_MOVE_LIMIT);
   }
 }
