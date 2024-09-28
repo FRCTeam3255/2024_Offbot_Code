@@ -41,7 +41,7 @@ public class StoreFeeder extends Command {
     // This allows StoreFeeder to effectively also act as our "Unalive Shooter"
     // command from last year
     // We don't care if it actually gets there- just that its going there
-    subShooter.setShooterPosition(constShooter.PIVOT_BACKWARD_LIMIT);
+    subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_LIMIT);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -17,6 +20,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Time;
@@ -27,6 +33,9 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Constants.constShooter.ShooterPositionGroup;
+import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.TargetState;
 
 public final class Constants {
   public static final Measure<Voltage> MAX_VOLTAGE = Units.Volts.of(12);
@@ -170,7 +179,7 @@ public final class Constants {
       private static final Pose3d RIGHT_STAGE = new Pose3d(
           new Pose2d(4.524875164031982, 3.488827705383301, Rotation2d.fromDegrees(240)));
 
-      private static final Pose3d SUBWOOFER = new Pose3d(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(180)));
+      private static final Pose3d SUBWOOFER = new Pose3d(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(0)));
 
       private static final Pose3d SHUFFLE = new Pose3d(
           new Pose2d(1.2991523742675781, 7.103456497192383, Rotation2d.fromDegrees(0)));
@@ -198,8 +207,7 @@ public final class Constants {
           new Pose2d(12.021082878112793, 4.7371745109558105, Rotation2d.fromDegrees(60)));
 
       private static final Pose3d SUBWOOFER = new Pose3d(
-          new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(0)));
-
+          new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(180)));
       private static final Pose3d SHUFFLE = new Pose3d(
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.2991523742675781, 7.103456497192383, Rotation2d.fromDegrees(0)));
     }
@@ -207,42 +215,42 @@ public final class Constants {
 
   public static class constShooter {
     public static final Rotation2d SHOOTER_TO_ROBOT = new Rotation2d(Units.Degrees.of(180));
+    /**
+     * The position, in meters, of the center of rotation for the pivot motor
+     * relative to the center of the robot (Robot Coordinates).
+     * 
+     * @see <a href=
+     *      "https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html">Robot
+     *      Coordinate System</a>
+     */
+    public static final Transform3d ROBOT_TO_PIVOT = new Transform3d(
+        new Translation3d(0.1778, 0, 0),
+        new Rotation3d(0, 0, 180));
 
     public static final InvertedValue LEFT_INVERT = InvertedValue.Clockwise_Positive;
     public static final InvertedValue RIGHT_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final InvertedValue PIVOT_INVERT = InvertedValue.CounterClockwise_Positive;
 
     public static final double PIVOT_GEAR_RATIO = 70.2;
+    public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
+    public static final GravityTypeValue PIVOT_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
     // - Angles -
-    public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Rotations.of(0);
-    public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Rotations.of(0);
+    public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(155);
+    public static final Measure<Angle> PIVOT_BACKWARD_LIMIT = Units.Degrees.of(0);
 
-    public static final Measure<Angle> PIVOT_AMP_ANGLE = Units.Rotations.of(0);
+    public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(10));
+    public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
-    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Rotations.of(0);
+    public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
 
-    // - Velocities -
-    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(0.7);
+    public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(10);
 
-    public static final Measure<Velocity<Angle>> LEFT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(60);
-    public static final Measure<Velocity<Angle>> RIGHT_SPEAKER_VELOCITY = Units.RotationsPerSecond.of(45);
+    public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
-    // -- Presets --
-    /**
-     * Preset: Shooting while touching the subwoofer velocity
-     */
-    public static final Measure<Velocity<Angle>> LEFT_SUB_VELOCITY = Units.RotationsPerSecond.of(35);
-
-    /**
-     * Preset: Shooting while touching the subwoofer velocity
-     */
-    public static final Measure<Velocity<Angle>> RIGHT_SUB_VELOCITY = Units.RotationsPerSecond.of(35);
-
-    public static final Measure<Velocity<Angle>> LEFT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
-    public static final Measure<Velocity<Angle>> RIGHT_SHUFFLE_VELOCITY = Units.RotationsPerSecond.of(32);
-
+    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(5);
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
+    public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 
     public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(1);
 
@@ -250,13 +258,13 @@ public final class Constants {
     /**
      * The voltage supplied to the motor in order to zero
      */
-    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-1);
+    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-2);
 
     /**
      * The velocity that the motor goes at once it has zeroed (and can no longer
      * continue in that direction)
      */
-    public static final Measure<Velocity<Angle>> ZEROED_VELOCITY = Units.DegreesPerSecond.of(0.01);
+    public static final Measure<Velocity<Angle>> ZEROED_VELOCITY = Units.RotationsPerSecond.of(-0.01);
 
     /**
      * The elapsed time required to consider the pivot motor as zeroed
@@ -270,6 +278,96 @@ public final class Constants {
     public static final Measure<Angle> ZEROED_ANGLE = Units.Degrees.of(0);
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+
+    public static class ShooterPositionGroup {
+      public Measure<Angle> shooterAngle;
+      public Measure<Velocity<Angle>> leftVelocity, rightVelocity;
+
+      public ShooterPositionGroup(Measure<Angle> shooterAngle, Measure<Velocity<Angle>> leftVelocity,
+          Measure<Velocity<Angle>> rightVelocity) {
+        this.shooterAngle = shooterAngle;
+        this.leftVelocity = leftVelocity;
+        this.rightVelocity = rightVelocity;
+      }
+    }
+
+    public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10));
+    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(47.5),
+        Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
+    public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(42),
+        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35));
+    public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
+        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+    public static final ShooterPositionGroup PREP_VISION = new ShooterPositionGroup(Units.Degrees.of(0),
+        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+    public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(10.5),
+        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+
+    /**
+     * <p>
+     * Determines the necessary angle for the shooter depending on the distance from
+     * the SPEAKER.
+     * </p>
+     * <b>KEY:</b> The distance (in meters) of the center of the shooter to the
+     * SPEAKER
+     * <br>
+     * <br>
+     * <b>VALUE:</b> The angle (in degrees) for the pivot to go up by
+     * 
+     */
+    public static final InterpolatingDoubleTreeMap DISTANCE_MAP = new InterpolatingDoubleTreeMap();
+
+    static {
+      DISTANCE_MAP.put(1.2827, 42.0);
+      DISTANCE_MAP.put(1.5875, 40.0);
+      DISTANCE_MAP.put(1.8923, 34.0);
+      DISTANCE_MAP.put(2.1971, 28.5);
+      DISTANCE_MAP.put(2.5019, 27.5);
+      DISTANCE_MAP.put(2.8067, 25.0);
+      DISTANCE_MAP.put(3.1115, 23.0);
+      DISTANCE_MAP.put(3.4163, 19.0);
+      DISTANCE_MAP.put(3.7211, 18.5);
+      DISTANCE_MAP.put(4.0259, 18.0);
+      DISTANCE_MAP.put(4.3307, 17.0);
+      DISTANCE_MAP.put(4.6355, 16.5);
+      DISTANCE_MAP.put(4.9403, 15.0);
+      DISTANCE_MAP.put(5.2451, 14.0);
+      DISTANCE_MAP.put(5.5499, 13.5);
+      DISTANCE_MAP.put(5.8547, 13.0);
+      DISTANCE_MAP.put(6.1595, 11.5);
+    }
+
+  }
+
+  public static class constStateMachine {
+    /**
+     * Returns the associated RobotState with the given TargetState
+     */
+    public static final Map<TargetState, RobotState> TARGET_TO_ROBOT_STATE = new HashMap<TargetState, RobotState>();
+
+    static {
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP_SHOOTER, RobotState.PREP_AMP_SHOOTER);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SHUFFLE, RobotState.PREP_SHUFFLE);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPEAKER, RobotState.PREP_SPEAKER);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPIKE, RobotState.PREP_SPIKE);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_WING, RobotState.PREP_WING);
+    }
+
+    /**
+     * Returns the associated shooter pivot angle and flywheel speeds for the given
+     * preset TargetState
+     */
+    public static Map<TargetState, ShooterPositionGroup> TARGET_TO_PRESET_GROUP = new HashMap<TargetState, ShooterPositionGroup>();
+
+    static {
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_AMP_SHOOTER, constShooter.PREP_AMP_SHOOTER);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SHUFFLE, constShooter.PREP_SHUFFLE);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPEAKER, constShooter.PREP_SUB);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_VISION, constShooter.PREP_VISION);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPIKE, constShooter.PREP_SPIKE);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_WING, constShooter.PREP_WING);
+    }
   }
 
   public static class constClimber {
@@ -358,7 +456,7 @@ public final class Constants {
   }
 
   public static class constIntake {
-    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(.5);
+    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
     public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
   }
@@ -368,8 +466,8 @@ public final class Constants {
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue FEEDER_NEUTRAL_MODE = NeutralModeValue.Brake;
 
-    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(0.4);
-    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-0.4);
+    public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(0.3);
+    public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-0.3);
 
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
 

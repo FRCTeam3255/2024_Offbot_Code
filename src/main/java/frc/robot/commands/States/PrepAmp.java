@@ -42,8 +42,8 @@ public class PrepAmp extends SequentialCommandGroup {
         Commands.waitUntil(() -> subElevator.isElevatorAtPosition(constElevator.AMP_POSITION)),
 
         // Set amp position of shooter and wait until it's at position
-        Commands.runOnce(() -> subShooter.setShooterPosition(constShooter.PIVOT_AMP_ANGLE)),
-        Commands.waitUntil(() -> subShooter.isShooterAtPosition(constShooter.PIVOT_AMP_ANGLE)),
+        Commands.runOnce(() -> subShooter.setPivotPosition(constShooter.TRANSFER_TO_AMPER_ANGLE)),
+        Commands.waitUntil(() -> subShooter.isShooterAtPosition(constShooter.TRANSFER_TO_AMPER_ANGLE)),
 
         // Spin feeder, shooter, and drainpipe motors
         Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),

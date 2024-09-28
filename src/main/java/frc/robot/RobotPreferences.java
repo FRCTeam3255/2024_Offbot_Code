@@ -14,7 +14,9 @@ public class RobotPreferences {
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while manually driving
-    public static final SN_DoublePreference turnSpeed = new SN_DoublePreference("turnSpeed", 360);
+    public static final SN_DoublePreference manualTurnSpeed = new SN_DoublePreference("manualTurnSpeed", 3);
+
+    public static final double maxTurnSpeed = 360;
 
     /**
      * <p>
@@ -70,30 +72,34 @@ public class RobotPreferences {
     public static final SN_DoublePreference autoSteerD = new SN_DoublePreference("autoSteerD", 0.0);
 
     // Teleop Snapping to Rotation (Yaw)
-    public static final SN_DoublePreference yawSnapP = new SN_DoublePreference("yawSnapP", 3);
-    public static final SN_DoublePreference yawSnapI = new SN_DoublePreference("yawSnapI", 0);
-    public static final SN_DoublePreference yawSnapD = new SN_DoublePreference("yawSnapD", 0);
+    public static final double yawSnapP = 0.5;
+    public static final double yawSnapI = 0;
+    public static final double yawSnapD = 0;
   }
 
   public static final class prefShooter {
     // - PID -
-    public static final SN_DoublePreference leftShooterS = new SN_DoublePreference("leftShooterS", 0.4);
-    public static final SN_DoublePreference leftShooterV = new SN_DoublePreference("leftShooterV", 0.12);
-    public static final SN_DoublePreference leftShooterA = new SN_DoublePreference("leftShooterA", 0.1);
-    public static final SN_DoublePreference leftShooterP = new SN_DoublePreference("leftShooterP", 0.6);
-    public static final SN_DoublePreference leftShooterI = new SN_DoublePreference("leftShooterI", 0);
-    public static final SN_DoublePreference leftShooterD = new SN_DoublePreference("leftShooterD", 0.01);
+    public static final double leftShooterS = 0.28;
+    public static final double leftShooterV = 0.13;
+    public static final double leftShooterA = 0.0;
+    public static final double leftShooterP = 0.5; // 0.75 ?
+    public static final double leftShooterI = 0;
+    public static final double leftShooterD = 0.0;
 
-    public static final SN_DoublePreference rightShooterS = new SN_DoublePreference("rightShooterS", 0.4);
-    public static final SN_DoublePreference rightShooterV = new SN_DoublePreference("rightShooterV", 0.1175);
-    public static final SN_DoublePreference rightShooterA = new SN_DoublePreference("rightShooterA", 0.1);
-    public static final SN_DoublePreference rightShooterP = new SN_DoublePreference("rightShooterP", 0.6);
-    public static final SN_DoublePreference rightShooterI = new SN_DoublePreference("rightShooterI", 0);
-    public static final SN_DoublePreference rightShooterD = new SN_DoublePreference("rightShooterD", 0.01);
+    public static final double rightShooterS = 0.4;
+    public static final double rightShooterV = 0.11;
+    public static final double rightShooterA = 0;
+    public static final double rightShooterP = 0.4; // 0.6 ?
+    public static final double rightShooterI = 0;
+    public static final double rightShooterD = 0;
 
-    public static final SN_DoublePreference pivotShooterP = new SN_DoublePreference("pivotShooterP", 0);
-    public static final SN_DoublePreference pivotShooterI = new SN_DoublePreference("pivotShooterI", 0);
-    public static final SN_DoublePreference pivotShooterD = new SN_DoublePreference("pivotShooterD", 0);
+    public static final double pivotShooterS = 0.4;
+    public static final double pivotShooterV = 0.0;
+    public static final double pivotShooterG = 0.53;
+    public static final double pivotShooterA = 0.0;
+    public static final double pivotShooterP = 150;
+    public static final double pivotShooterI = 0;
+    public static final double pivotShooterD = 0;
   }
 
   public static final class prefElevator {

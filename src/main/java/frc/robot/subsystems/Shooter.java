@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -11,7 +13,11 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
@@ -21,6 +27,7 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constShooter;
+import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.RobotMap.mapShooter;
 import frc.robot.RobotPreferences.prefShooter;
 
@@ -57,12 +64,12 @@ public class Shooter extends SubsystemBase {
   public void configure() {
     // -- Left Motor --
     leftConfig.MotorOutput.Inverted = constShooter.LEFT_INVERT;
-    leftConfig.Slot0.kV = prefShooter.leftShooterV.getValue();
-    leftConfig.Slot0.kS = prefShooter.leftShooterS.getValue();
-    leftConfig.Slot0.kA = prefShooter.leftShooterA.getValue();
-    leftConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
-    leftConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
-    leftConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
+    leftConfig.Slot0.kV = prefShooter.leftShooterV;
+    leftConfig.Slot0.kS = prefShooter.leftShooterS;
+    leftConfig.Slot0.kA = prefShooter.leftShooterA;
+    leftConfig.Slot0.kP = prefShooter.leftShooterP;
+    leftConfig.Slot0.kI = prefShooter.leftShooterI;
+    leftConfig.Slot0.kD = prefShooter.leftShooterD;
 
     leftConfig.MotionMagic.MotionMagicAcceleration = 400;
     leftConfig.MotionMagic.MotionMagicJerk = 4000;
@@ -70,12 +77,12 @@ public class Shooter extends SubsystemBase {
 
     // -- Right Motor --
     rightConfig.MotorOutput.Inverted = constShooter.RIGHT_INVERT;
-    rightConfig.Slot0.kV = prefShooter.rightShooterV.getValue();
-    rightConfig.Slot0.kS = prefShooter.rightShooterS.getValue();
-    rightConfig.Slot0.kA = prefShooter.rightShooterA.getValue();
-    rightConfig.Slot0.kP = prefShooter.rightShooterP.getValue();
-    rightConfig.Slot0.kI = prefShooter.rightShooterI.getValue();
-    rightConfig.Slot0.kD = prefShooter.rightShooterD.getValue();
+    rightConfig.Slot0.kV = prefShooter.rightShooterV;
+    rightConfig.Slot0.kS = prefShooter.rightShooterS;
+    rightConfig.Slot0.kA = prefShooter.rightShooterA;
+    rightConfig.Slot0.kP = prefShooter.rightShooterP;
+    rightConfig.Slot0.kI = prefShooter.rightShooterI;
+    rightConfig.Slot0.kD = prefShooter.rightShooterD;
 
     rightConfig.MotionMagic.MotionMagicAcceleration = 400;
     rightConfig.MotionMagic.MotionMagicJerk = 4000;
@@ -84,15 +91,21 @@ public class Shooter extends SubsystemBase {
     // -- Pivot Motor --
     pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
-    pivotConfig.Slot0.kP = prefShooter.leftShooterP.getValue();
-    pivotConfig.Slot0.kI = prefShooter.leftShooterI.getValue();
-    pivotConfig.Slot0.kD = prefShooter.leftShooterD.getValue();
+    pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
+    pivotConfig.Slot0.kS = prefShooter.pivotShooterS;
+    pivotConfig.Slot0.kV = prefShooter.pivotShooterV;
+    pivotConfig.Slot0.kG = prefShooter.pivotShooterG;
+    pivotConfig.Slot0.kA = prefShooter.pivotShooterA;
+    pivotConfig.Slot0.kP = prefShooter.pivotShooterP;
+    pivotConfig.Slot0.kI = prefShooter.pivotShooterI;
+    pivotConfig.Slot0.kD = prefShooter.pivotShooterD;
+    pivotConfig.Slot0.GravityType = constShooter.PIVOT_GRAVITY_TYPE;
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
 
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
+    pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_BACKWARD_LIMIT.in(Units.Rotations);
     pivotMotor.getConfigurator().apply(pivotConfig);
   }
 
@@ -117,11 +130,15 @@ public class Shooter extends SubsystemBase {
   }
 
   /**
-   * Sets all of the shooting motors to neutral.
+   * Sets all of the flywheel motors to neutral.
    */
   public void setShootingNeutralOutput() {
     leftMotor.setControl(new NeutralOut());
     rightMotor.setControl(new NeutralOut());
+  }
+
+  public void setPivotNeutralOutput() {
+    pivotMotor.setControl(new NeutralOut());
   }
 
   /**
@@ -201,9 +218,25 @@ public class Shooter extends SubsystemBase {
     setRightDesiredVelocity(desiredRightVelocity);
   }
 
+  /**
+   * Sets the desired speeds for the flywheels, as well as the desired pivot
+   * position for the shooter, and attempts to get up to speed.
+   * 
+   * @param shooterPositionGroup
+   */
+  public void setDesiredPosition(ShooterPositionGroup shooterPositionGroup) {
+    setDesiredVelocities(shooterPositionGroup.leftVelocity, shooterPositionGroup.rightVelocity);
+    setPivotPosition(shooterPositionGroup.shooterAngle);
+    getUpToSpeed();
+  }
+
   public void setShooterPercentOutput(Measure<Dimensionless> speed) {
     leftMotor.set(speed.in(Units.Percent));
     rightMotor.set(speed.in(Units.Percent));
+  }
+
+  public void setPivotPercentOutput(Measure<Dimensionless> speed) {
+    pivotMotor.set(speed.in(Units.Percent));
   }
 
   public void setLeftShooterIntakeVoltage(Measure<Voltage> voltage) {
@@ -228,7 +261,7 @@ public class Shooter extends SubsystemBase {
     this.ignoreFlywheelSpeed = ignoreFlywheelSpeed;
   }
 
-  public void setShooterPosition(Measure<Angle> position) {
+  public void setPivotPosition(Measure<Angle> position) {
     pivotMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
   }
 
@@ -237,6 +270,34 @@ public class Shooter extends SubsystemBase {
    */
   public void setPivotSensorAngle(Measure<Angle> angle) {
     pivotMotor.setPosition(angle.in(Units.Rotations));
+  }
+
+  /**
+   * Calculates the desired angle needed to lock onto the speaker.
+   * 
+   * @param robotPose  The current pose of the robot
+   * @param fieldPoses The poses of the field elements, matching your alliance
+   *                   color
+   * 
+   * @return The desired angle required to lock onto the speaker
+   */
+  public Measure<Angle> getDesiredAngleToLock(Pose2d robotPose, Pose3d[] fieldPoses) {
+
+    Pose3d targetPose = fieldPoses[0];
+
+    // Get the pitch pose (field relative)
+    Pose3d pitchPose = new Pose3d(robotPose).transformBy(constShooter.ROBOT_TO_PIVOT);
+
+    // Get distances from the pitch pose to the target pose and then calculate the
+    // required angle
+    // Theres probably a WPILib method for this
+    double distX = Math.abs(targetPose.getX() - pitchPose.getX());
+    double distY = Math.abs(targetPose.getY() - pitchPose.getY());
+    double distanceFromSpeaker = Math.hypot(distX, distY);
+    SmartDashboard.putNumber("DISTANCE_FROM_SPEAKER", distanceFromSpeaker);
+    Measure<Angle> desiredLockingAngle = Units.Degrees.of(constShooter.DISTANCE_MAP.get(distanceFromSpeaker));
+
+    return desiredLockingAngle;
   }
 
   @Override
@@ -249,6 +310,9 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Right/Velocity RPS", getRightShooterVelocity().in(Units.RotationsPerSecond));
     SmartDashboard.putNumber("Shooter/Right/Desired Velocity RPS", desiredRightVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
+
+    SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
+    SmartDashboard.putNumber("Shooter/Pivot Velocity", pivotMotor.getVelocity().getValueAsDouble());
 
   }
 }
