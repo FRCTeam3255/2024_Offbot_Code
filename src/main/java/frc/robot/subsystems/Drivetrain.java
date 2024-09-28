@@ -137,6 +137,15 @@ public class Drivetrain extends SN_SuperSwerve {
     return getVelocityToSnap(Rotation2d.fromDegrees(desiredYaw.in(Units.Degrees)));
   }
 
+  public boolean isDrivetrainAtAngle(Rotation2d desiredAngle) {
+    return (Math.abs(getRotation().getDegrees() - desiredAngle.getDegrees()) < constDrivetrain.AT_ROTATION_TOLERANCE
+        .in(Units.Degrees));
+  }
+
+  public boolean isDrivetrainFacingSpeaker() {
+    return isDrivetrainAtAngle(getAngleToSpeaker());
+  }
+
   /**
    * Calculates the angle necessary for the shooter to face a given coordinate.
    * 

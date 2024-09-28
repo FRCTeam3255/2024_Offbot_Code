@@ -43,6 +43,9 @@ public final class Constants {
   public static class constControllers {
     public static final double DRIVER_LEFT_STICK_DEADBAND = 0.05;
     public static final boolean SILENCE_JOYSTICK_WARNINGS = true;
+
+    public static final double DRIVER_RUMBLE = 0.5;
+    public static final double OPERATOR_RUMBLE = 0.5;
   }
 
   public static class constDrivetrain {
@@ -95,6 +98,8 @@ public final class Constants {
         WHEEL_CIRCUMFERENCE,
         SN_SwerveConstants.MK4I.KRAKEN.L3.driveGearRatio,
         SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters);
+
+    public static final Measure<Angle> AT_ROTATION_TOLERANCE = Units.Degrees.of(20);
   }
 
   public static class constField {

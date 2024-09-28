@@ -7,6 +7,7 @@ package frc.robot;
 import com.frcteam3255.joystick.SN_XboxController;
 
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -55,6 +56,7 @@ public class RobotContainer {
   private final static Limelight subLimelight = new Limelight();
 
   private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceCollected());
+  private final Trigger readyToShoot = new Trigger(() -> subDrivetrain.isDrivetrainFacingSpeaker());
 
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
@@ -75,6 +77,13 @@ public class RobotContainer {
             .andThen(Commands.deferredProxy(
                 () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer,
                     subElevator))));
+
+    readyToShoot.onTrue(
+        Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, constControllers.DRIVER_RUMBLE)).alongWith(
+            Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, constControllers.OPERATOR_RUMBLE))))
+        .onFalse(
+            Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, 0)).alongWith(
+                Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
 
     subDrivetrain.resetModulesToAbsolute();
 
