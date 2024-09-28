@@ -58,28 +58,25 @@ public class PreloadTaxi extends SequentialCommandGroup {
         // Skip directly to STORE_FEEDER since we already have a game piece
         new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter),
 
-        // Rotate to shooting angle
-        // TODO: add .until the drivetrain gets to desired rotation (steal alice's
-        // method)
-        Commands.runOnce(() -> subDrivetrain.drive(new Translation2d(0, 0),
-            subDrivetrain.getVelocityToSnap(constDrivetrain.AUTO_PRELOAD_TAXI_ROTATION).in(Units.RadiansPerSecond),
-            true)),
-
-        // Aim at Speaker: TODO: update with alice's new preptargetstate code
+        // Aim at Speaker TODO: maybe make presets later?
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subElevator, subIntake,
+            () -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain, subElevator,
+                subIntake,
                 subTransfer, subShooter)),
 
         // Shoot! (Ends when we don't have a game piece anymore)
         Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.SHOOTING, subStateMachine, subElevator, subIntake, subTransfer, subShooter)
+            .tryState(RobotState.SHOOTING, subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer,
+                subShooter)
             .until(() -> !subTransfer.getGamePieceCollected())),
 
         Commands.waitSeconds(constShooter.AUTO_PREP_NONE_DELAY.in(Units.Seconds)),
 
         // Reset subsystems to chill
-        Commands.deferredProxy(() -> new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer)),
+        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subDrivetrain,
+            subElevator, subIntake, subTransfer, subShooter)),
 
+        // Mooovve outside starting line
         new PathPlannerAuto("PsTaxi"));
   }
 
