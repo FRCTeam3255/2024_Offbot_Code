@@ -188,8 +188,8 @@ public class RobotContainer {
         new PreloadOnly(subStateMachine, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));
     autoChooser.addOption("Preload Taxi",
         new PreloadTaxi(subStateMachine, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));
-    autoChooser.addOption("Wing Only Down", new WingOnly(subDrivetrain, true));
-    autoChooser.addOption("Wing Only Up", new WingOnly(subDrivetrain, false));
+    autoChooser.addOption("Wing Only Down", new WingOnly(subStateMachine, subDrivetrain, subElevator, subIntake, true));
+    autoChooser.addOption("Wing Only Up", new WingOnly(subStateMachine, subDrivetrain, subElevator, subIntake, false));
   }
 
   public Command getAutonomousCommand() {
