@@ -431,6 +431,8 @@ public final class Constants {
     public static final double DRAINPIPE_PREP_TO_AMP_SPEED = 0.2;
     public static final double DRAINPIPE_SCORE_AMP_SPEED = 0.6;
 
+    public static final double MANUAL_ELEVATOR_PERCENTAGE = 0.2;
+
     public static final Measure<Time> PREP_AMP_DELAY = Units.Seconds.of(2);
 
     // -- Zeroing --

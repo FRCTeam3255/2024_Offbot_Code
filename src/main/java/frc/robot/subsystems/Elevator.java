@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
@@ -73,8 +74,8 @@ public class Elevator extends SubsystemBase {
     drainpipeMotor.set(speed);
   }
 
-  public void setElevatorSpeed(double speed) {
-    elevatorMotor.set(speed);
+  public void setElevatorSpeed(Measure<Dimensionless> speed) {
+    elevatorMotor.set(speed.in(Units.Percent));
   }
 
   public void setVoltage(Measure<Voltage> voltage) {

@@ -20,6 +20,7 @@ import frc.robot.Constants.constShooter;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ManualElevator;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.Zeroing.ZeroClimber;
 import frc.robot.commands.Zeroing.ZeroElevator;
@@ -157,7 +158,8 @@ public class RobotContainer {
                 subTransfer,
                 subShooter)));
 
-    controller.btn_LeftBumper.whileTrue(new ManualPivot(subShooter, controller.axis_RightY));
+    controller.btn_LeftBumper.whileTrue(new ManualPivot(subShooter, controller.axis_RightY))
+        .whileTrue(new ManualElevator(subElevator, controller.axis_LeftY));
   }
 
   private void configureTestBindings(SN_XboxController controller) {
