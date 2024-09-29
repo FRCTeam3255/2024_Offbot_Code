@@ -44,6 +44,7 @@ public class NoneState extends Command {
     subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
     subTransfer.setFeederSpeed(Units.Percent.zero());
+    subTransfer.setGamePieceCollected(false);
     subShooter.setShootingNeutralOutput();
     subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
     if (subShooter.getShooterPosition().lte(constShooter.NEUTRAL_OUT_THRESHOLD)) {

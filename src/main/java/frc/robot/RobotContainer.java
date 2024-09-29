@@ -83,14 +83,27 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings(SN_XboxController controller) {
-    controller.btn_B.onTrue(Commands.runOnce(() -> subDrivetrain.resetModulesToAbsolute()));
+    /*
+     * TODO:
+     * Left Trigger: climb up
+     * Right Trigger: climb down
+     */
+
+    // Reset Pose
     controller.btn_North.onTrue(
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
+    /*
+     * TODO:
+     * btn_Start with axis_LeftY: Manual Elevator
+     * btn_B: Prep Amp
+     * btn_Y: Prep Sub Backwards
+     */
     // -- States --
 
+    // Intake
     controller.btn_LeftTrigger
         .whileTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subDrivetrain, subElevator, subIntake,
@@ -102,6 +115,7 @@ public class RobotContainer {
                 subShooter))
             .unless(gamePieceTrigger));
 
+    // Shoot
     controller.btn_RightTrigger.whileTrue(
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.SHOOTING,
             subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)))
@@ -111,34 +125,14 @@ public class RobotContainer {
                 subShooter))
             .unless(gamePieceTrigger));
 
-    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
-        .onTrue(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subDrivetrain, subElevator,
-                subIntake,
-                subTransfer, subShooter)));
-
-    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPIKE)))
-        .onTrue(
-            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SPIKE, subStateMachine, subDrivetrain,
-                subElevator, subIntake, subTransfer, subShooter)));
-
-    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
+    // Prep with vision
+    controller.btn_RightBumper.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
         .onTrue(Commands
             .deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain,
                 subElevator, subIntake, subTransfer, subShooter)));
 
-    // "Unalive Shooter"
-
-    controller.btn_B.onTrue(
-        Commands.either(
-            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,
-                subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)),
-            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE,
-                subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)),
-            gamePieceTrigger)
-            .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))));
-
-    controller.btn_West.whileTrue(Commands.deferredProxy(
+    // Ejecting
+    controller.btn_LeftBumper.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subDrivetrain, subElevator, subIntake,
             subTransfer,
             subShooter)))
@@ -147,7 +141,52 @@ public class RobotContainer {
                 subTransfer,
                 subShooter)));
 
-    controller.btn_LeftBumper.whileTrue(new ManualPivot(subShooter, controller.axis_RightY));
+    // Prep spike
+    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPIKE)))
+        .onTrue(
+            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SPIKE, subStateMachine, subDrivetrain,
+                subElevator, subIntake, subTransfer, subShooter)));
+
+    // "Unalive Shooter"
+    controller.btn_A.onTrue(
+        Commands.either(
+            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,
+                subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)),
+            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE,
+                subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)),
+            gamePieceTrigger)
+            .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))));
+
+    // Prep subwoofer
+    controller.btn_South.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subDrivetrain, subElevator,
+                subIntake, subTransfer, subShooter)));
+
+    // Prep wing
+    controller.btn_North.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_WING)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_WING, subStateMachine, subDrivetrain, subElevator,
+                subIntake, subTransfer, subShooter)));
+
+    // Prep shuffle
+    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_WING)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_WING, subStateMachine, subDrivetrain, subElevator,
+                subIntake, subTransfer, subShooter)));
+
+    // Game Piece Override
+    controller.btn_East.onTrue(Commands.runOnce(() -> subTransfer.setGamePieceCollected(true)));
+
+    // Manual Shooter Pivot
+    controller.btn_Back.whileTrue(new ManualPivot(subShooter, controller.axis_RightY));
+
+    // Zero Elevator and Climber
+    controller.btn_LeftStick.onTrue(new ZeroElevator(subElevator))
+        .onTrue(new ZeroClimber(subClimber));
+
+    // Zero Shooter
+    controller.btn_RightStick.onTrue(new ZeroShooterPivot(subShooter));
   }
 
   private void configureTestBindings(SN_XboxController controller) {

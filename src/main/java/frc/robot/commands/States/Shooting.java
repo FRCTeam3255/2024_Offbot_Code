@@ -43,11 +43,13 @@ public class Shooting extends Command {
       // Score through drainpipe if in PREP_AMP or CLIMBING (for trap)
       subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_SCORE_AMP_SPEED);
       subStateMachine.setRobotState(RobotState.SHOOTING);
+      subTransfer.setGamePieceCollected(false);
     } else {
       // Otherwise, shoot through the flywheels if they are up to speed
       if (subShooter.areBothShootersUpToSpeed()) {
         subTransfer.setFeederSpeed(constTransfer.SHOOTING_SPEED);
         subStateMachine.setRobotState(RobotState.SHOOTING);
+        subTransfer.setGamePieceCollected(false);
       }
     }
   }

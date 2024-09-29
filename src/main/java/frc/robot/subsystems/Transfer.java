@@ -21,6 +21,7 @@ public class Transfer extends SubsystemBase {
   TalonFX feederMotor;
   TalonFXConfiguration feederConfig = new TalonFXConfiguration();
   DigitalInput noteSensor;
+  boolean hasGamePiece;
 
   /** Creates a new Transfer. */
   public Transfer() {
@@ -47,7 +48,27 @@ public class Transfer extends SubsystemBase {
   }
 
   public boolean getGamePieceCollected() {
-    return (constTransfer.NOTE_SENSOR_INVERT) ? !noteSensor.get() : noteSensor.get();
+    // return (constTransfer.NOTE_SENSOR_INVERT) ? !noteSensor.get() :
+    // noteSensor.get();
+    if (constTransfer.NOTE_SENSOR_INVERT) {
+      if (!noteSensor.get() || hasGamePiece) {
+        hasGamePiece = true;
+      } else {
+        hasGamePiece = false;
+      }
+    } else {
+      if (noteSensor.get() || hasGamePiece) {
+        hasGamePiece = true;
+      } else {
+        hasGamePiece = false;
+      }
+    }
+
+    return hasGamePiece;
+  }
+
+  public void setGamePieceCollected(boolean isCollected) {
+    hasGamePiece = isCollected;
   }
 
   @Override
