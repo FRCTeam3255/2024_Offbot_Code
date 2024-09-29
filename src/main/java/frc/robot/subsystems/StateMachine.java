@@ -236,11 +236,8 @@ public class StateMachine extends SubsystemBase {
             return new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SPIKE);
           case PREP_AMP:
             return new UnPrepAmp(subStateMachine, subElevator, subShooter, subTransfer)
-                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
-                .andThen(new StoreFeeder(subStateMachine, subIntake, subTransfer,
-                    subShooter))
-                .andThen(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SPIKE))
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+                .andThen(Commands.runOnce(() -> setTargetState(TargetState.PREP_SPIKE)))
+                .andThen(new Intaking(subStateMachine, subIntake, subShooter, subTransfer));
         }
         break;
 

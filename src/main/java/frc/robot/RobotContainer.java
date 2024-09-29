@@ -198,7 +198,8 @@ public class RobotContainer {
    */
   public static Command zeroSubsystems() {
     Command returnedCommand = new ParallelCommandGroup(
-        new ZeroClimber(subClimber).withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
+        // new
+        // ZeroClimber(subClimber).withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
         new ZeroElevator(subElevator).withTimeout(constElevator.ZEROING_TIMEOUT.in(Units.Seconds)),
         new ZeroShooterPivot(subShooter).withTimeout(constShooter.ZEROING_TIMEOUT.in(Units.Seconds)))
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);
