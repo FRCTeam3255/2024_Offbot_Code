@@ -123,6 +123,10 @@ public class Elevator extends SubsystemBase {
     // (getElevatorPosition().minus(position)).lte(constElevator.AT_POSITION_TOLERANCE);
   }
 
+  public boolean isSafeToMoveShooterAboveLimit() {
+    return getElevatorPosition().gte(constElevator.SHOOTER_ABLE_TO_MOVE_LIMIT);
+  }
+
   public boolean getGamePieceStored() {
     return (constElevator.NOTE_SENSOR_INVERT) ? !noteSensor.get() : noteSensor.get();
   }

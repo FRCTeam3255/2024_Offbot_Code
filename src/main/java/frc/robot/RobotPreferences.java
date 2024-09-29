@@ -17,7 +17,7 @@ public class RobotPreferences {
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while manually driving
-    public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(360);
+    public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(3);
 
     /**
      * <p>
@@ -106,7 +106,7 @@ public class RobotPreferences {
   public static final class prefElevator {
     public static final double elevatorG = 0.3;
     public static final double elevatorS = 0.4;
-    public static final double elevatorP = 10;
+    public static final double elevatorP = 25;
     public static final double elevatorI = 0;
     public static final double elevatorD = 0;
   }

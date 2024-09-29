@@ -282,31 +282,33 @@ public final class Constants {
     public static class ShooterPositionGroup {
       public Measure<Angle> shooterAngle;
       public Measure<Velocity<Angle>> leftVelocity, rightVelocity;
+      public Measure<Distance> elevatorPosition;
 
       public ShooterPositionGroup(Measure<Angle> shooterAngle, Measure<Velocity<Angle>> leftVelocity,
-          Measure<Velocity<Angle>> rightVelocity) {
+          Measure<Velocity<Angle>> rightVelocity, Measure<Distance> elevatorPosition) {
         this.shooterAngle = shooterAngle;
         this.leftVelocity = leftVelocity;
         this.rightVelocity = rightVelocity;
+        this.elevatorPosition = elevatorPosition;
       }
     }
 
     // Amping w/o amper
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
-        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10));
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
     public static final ShooterPositionGroup PREP_AMP = new ShooterPositionGroup(Units.Degrees.of(99),
-        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10));
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.37));
     public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(47.5),
-        Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32));
+        Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(42),
-        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35));
+        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
-        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_VISION = new ShooterPositionGroup(Units.Degrees.of(0),
-        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(10.5),
-        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45));
+        Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
 
     /**
      * <p>
@@ -425,11 +427,13 @@ public final class Constants {
     public static final double MOTOR_ROTATION_TO_METERS = 1 / 0.0456842368;
 
     public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0.37);
+    public static final Measure<Distance> SHOOTER_ABLE_TO_MOVE_LIMIT = Units.Meters.of(0.3);
 
     public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0.05);
 
     public static final double DRAINPIPE_PREP_TO_AMP_SPEED = 0.2;
-    public static final double DRAINPIPE_SCORE_AMP_SPEED = 0.6;
+    public static final double DRAINPIPE_SCORE_AMP_SPEED = 1;
+    public static final double DRAINPIPE_EJECTING_SPEED = -0.2;
 
     public static final double MANUAL_ELEVATOR_PERCENTAGE = 0.2;
 

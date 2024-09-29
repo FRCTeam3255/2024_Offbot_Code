@@ -172,13 +172,13 @@ public class RobotContainer {
         .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
 
     controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SHUFFLE)))
-        .onTrue(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SHUFFLE));
+        .onTrue(new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_SHUFFLE));
 
     controller.btn_A.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION)));
     controller.btn_Y.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT)));
 
     controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
-        .whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer))
+        .whileTrue(new Ejecting(subStateMachine, subIntake, subElevator, subTransfer))
         .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
   }
 

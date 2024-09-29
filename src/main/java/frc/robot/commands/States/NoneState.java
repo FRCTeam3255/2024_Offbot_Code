@@ -69,6 +69,6 @@ public class NoneState extends Command {
   @Override
   public boolean isFinished() {
     return subElevator.isElevatorAtPosition(constElevator.BACKWARD_LIMIT)
-        || subShooter.getShooterPosition().lte(constShooter.ELEVATOR_ABLE_TO_MOVE_LIMIT);
+        || subShooter.isSafeToMoveElevator();
   }
 }
