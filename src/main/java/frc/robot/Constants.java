@@ -504,7 +504,7 @@ public final class Constants {
     // The below values are accounted for in the limelight interface, NOT in code
     public static final Measure<Distance> LL_FORWARD = Units.Inches.of(11.875);
     public static final Measure<Distance> LL_RIGHT = Units.Inches.of(0);
-    public static final Measure<Distance> LL_UP = Units.Inches.of(7.0
+    public static final Measure<Distance> LL_UP = Units.Inches.of(7.0);
 
     public static final Measure<Angle> LL_ROLL = Units.Degrees.of(0);
     public static final Measure<Angle> LL_PITCH = Units.Degrees.of(20);
