@@ -69,8 +69,9 @@ public class Drive extends Command {
     Measure<Velocity<Distance>> xVelocity = Units.MetersPerSecond.of(xAxis.getAsDouble() * transMultiplier);
     Measure<Velocity<Distance>> yVelocity = Units.MetersPerSecond.of(-yAxis.getAsDouble() * transMultiplier);
 
-    Measure<Velocity<Angle>> rVelocity = Units.RadiansPerSecond.of(-rotationAxis.getAsDouble())
-        .times(prefDrivetrain.manualTurnSpeed.getValue());
+    Measure<Velocity<Angle>> rVelocity = Units.RadiansPerSecond
+        .of(prefDrivetrain.maxTurnSpeed.in(Units.DegreesPerSecond))
+        .times(-rotationAxis.getAsDouble());
 
     // Requesting snapping ignores any previously calculated rotational speeds
     if (north.getAsBoolean()) {
