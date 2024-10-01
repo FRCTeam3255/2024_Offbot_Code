@@ -106,6 +106,13 @@ public class Shooter extends SubsystemBase {
 
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_BACKWARD_LIMIT.in(Units.Rotations);
+
+    // - Current Limits -
+    pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = constShooter.PIVOT_ENABLE_CURRENT_LIMITING;
+    pivotConfig.CurrentLimits.SupplyCurrentThreshold = constShooter.PIVOT_CURRENT_THRESH;
+    pivotConfig.CurrentLimits.SupplyCurrentLimit = constShooter.PIVOT_CURRENT_LIMIT;
+    pivotConfig.CurrentLimits.SupplyTimeThreshold = constShooter.PIVOT_CURRENT_TIME_THRESH;
+
     pivotMotor.getConfigurator().apply(pivotConfig);
   }
 

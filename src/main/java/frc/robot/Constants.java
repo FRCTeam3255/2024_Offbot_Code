@@ -279,6 +279,12 @@ public final class Constants {
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
 
+    // -- Current Limiting --
+    public static final boolean PIVOT_ENABLE_CURRENT_LIMITING = true;
+    public static final double PIVOT_CURRENT_THRESH = 50;
+    public static final double PIVOT_CURRENT_LIMIT = 30;
+    public static final double PIVOT_CURRENT_TIME_THRESH = 0.1;
+
     public static class ShooterPositionGroup {
       public Measure<Angle> shooterAngle;
       public Measure<Velocity<Angle>> leftVelocity, rightVelocity;
