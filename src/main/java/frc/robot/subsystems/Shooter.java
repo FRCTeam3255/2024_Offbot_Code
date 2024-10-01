@@ -192,6 +192,10 @@ public class Shooter extends SubsystemBase {
     return Units.Rotations.of(pivotMotor.getPosition().getValueAsDouble());
   }
 
+  public boolean isSafeToMoveElevator() {
+    return getShooterPosition().lte(constShooter.ELEVATOR_ABLE_TO_MOVE_LIMIT);
+  }
+
   /**
    * @return If the shooter position is within tolerance of desired position
    */

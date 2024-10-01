@@ -7,6 +7,7 @@ package frc.robot;
 import com.frcteam3255.joystick.SN_XboxController;
 
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -19,6 +20,7 @@ import frc.robot.Constants.constShooter;
 import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ManualElevator;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.Zeroing.ZeroClimber;
 import frc.robot.commands.Zeroing.ZeroElevator;
@@ -55,6 +57,7 @@ public class RobotContainer {
   private final static Limelight subLimelight = new Limelight();
 
   private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceCollected());
+  private final Trigger readyToShoot = new Trigger(() -> subDrivetrain.isDrivetrainFacingSpeaker());
 
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
@@ -73,7 +76,15 @@ public class RobotContainer {
             .deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subDrivetrain,
                 subElevator, subIntake, subTransfer, subShooter))
             .andThen(Commands.deferredProxy(
-                () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer))));
+                () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer,
+                    subElevator))));
+
+    readyToShoot.onTrue(
+        Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, constControllers.DRIVER_RUMBLE)).alongWith(
+            Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, constControllers.OPERATOR_RUMBLE))))
+        .onFalse(
+            Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, 0)).alongWith(
+                Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
 
     subDrivetrain.resetModulesToAbsolute();
 
@@ -122,9 +133,9 @@ public class RobotContainer {
             Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SPIKE, subStateMachine, subDrivetrain,
                 subElevator, subIntake, subTransfer, subShooter)));
 
-    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
+    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP)))
         .onTrue(Commands
-            .deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain,
+            .deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine, subDrivetrain,
                 subElevator, subIntake, subTransfer, subShooter)));
 
     // "Unalive Shooter"
@@ -147,7 +158,8 @@ public class RobotContainer {
                 subTransfer,
                 subShooter)));
 
-    controller.btn_LeftBumper.whileTrue(new ManualPivot(subShooter, controller.axis_RightY));
+    controller.btn_LeftBumper.whileTrue(new ManualPivot(subShooter, controller.axis_RightY))
+        .whileTrue(new ManualElevator(subElevator, controller.axis_LeftY));
   }
 
   private void configureTestBindings(SN_XboxController controller) {
@@ -159,17 +171,14 @@ public class RobotContainer {
         .whileTrue(new Shooting(subStateMachine, subElevator, subShooter, subTransfer))
         .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
 
-    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SPEAKER)))
-        .onTrue(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SPEAKER));
-
     controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SHUFFLE)))
-        .onTrue(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_SHUFFLE));
+        .onTrue(new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_SHUFFLE));
 
-    controller.btn_A.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_AMP)))
-        .onTrue(new PrepTargetState(subStateMachine, subShooter, TargetState.PREP_AMP_SHOOTER));
+    controller.btn_A.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION)));
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT)));
 
     controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
-        .whileTrue(new Ejecting(subStateMachine, subIntake, subTransfer))
+        .whileTrue(new Ejecting(subStateMachine, subIntake, subElevator, subTransfer))
         .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
   }
 
@@ -189,7 +198,8 @@ public class RobotContainer {
    */
   public static Command zeroSubsystems() {
     Command returnedCommand = new ParallelCommandGroup(
-        new ZeroClimber(subClimber).withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
+        // new
+        // ZeroClimber(subClimber).withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
         new ZeroElevator(subElevator).withTimeout(constElevator.ZEROING_TIMEOUT.in(Units.Seconds)),
         new ZeroShooterPivot(subShooter).withTimeout(constShooter.ZEROING_TIMEOUT.in(Units.Seconds)))
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);

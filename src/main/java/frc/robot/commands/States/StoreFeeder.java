@@ -35,7 +35,7 @@ public class StoreFeeder extends Command {
   public void initialize() {
     subStateMachine.setRobotState(RobotState.STORE_FEEDER);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
-    subTransfer.setFeederSpeed(Units.Percent.zero());
+    subTransfer.setFeederSpeed(0);
     subShooter.setShooterPercentOutput(Units.Percent.zero());
 
     // This allows StoreFeeder to effectively also act as our "Unalive Shooter"
