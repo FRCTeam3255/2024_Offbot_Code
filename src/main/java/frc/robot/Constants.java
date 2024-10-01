@@ -231,7 +231,7 @@ public final class Constants {
     public static final InvertedValue RIGHT_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final InvertedValue PIVOT_INVERT = InvertedValue.CounterClockwise_Positive;
 
-    public static final double PIVOT_GEAR_RATIO = 70.2;
+    public static final double PIVOT_GEAR_RATIO = 58.5;
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
     public static final GravityTypeValue PIVOT_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
