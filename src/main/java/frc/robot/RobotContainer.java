@@ -71,6 +71,7 @@ public class RobotContainer {
     // subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
     // subLimelight));
 
+    // - Manual Triggers -
     gamePieceTrigger
         .onTrue(Commands
             .deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subDrivetrain,
@@ -85,6 +86,12 @@ public class RobotContainer {
         .onFalse(
             Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, 0)).alongWith(
                 Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
+    // TODO: Controller Rumble on Ready to Shoot
+    // - RPM's up
+    // - Shooter aimed
+    // - DT Aimed
+    // - In the correct State
+    // - Ends after the note exits the robot
 
     subDrivetrain.resetModulesToAbsolute();
 

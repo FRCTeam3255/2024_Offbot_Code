@@ -48,23 +48,8 @@ public class Transfer extends SubsystemBase {
   }
 
   public boolean getGamePieceCollected() {
-    // return (constTransfer.NOTE_SENSOR_INVERT) ? !noteSensor.get() :
-    // noteSensor.get();
-    if (constTransfer.NOTE_SENSOR_INVERT) {
-      if (!noteSensor.get() || hasGamePiece) {
-        hasGamePiece = true;
-      } else {
-        hasGamePiece = false;
-      }
-    } else {
-      if (noteSensor.get() || hasGamePiece) {
-        hasGamePiece = true;
-      } else {
-        hasGamePiece = false;
-      }
-    }
-
-    return hasGamePiece;
+    boolean noteSensorValue = (constTransfer.NOTE_SENSOR_INVERT) ? !noteSensor.get() : noteSensor.get();
+    return (noteSensorValue || hasGamePiece);
   }
 
   public void setGamePieceCollected(boolean isCollected) {
