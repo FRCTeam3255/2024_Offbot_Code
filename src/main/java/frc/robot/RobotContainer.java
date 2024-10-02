@@ -57,7 +57,9 @@ public class RobotContainer {
   private final static Limelight subLimelight = new Limelight();
 
   private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceCollected());
-  private final Trigger readyToShoot = new Trigger(() -> subDrivetrain.isDrivetrainFacingSpeaker());
+  private final Trigger readyToShoot = new Trigger(() -> subDrivetrain.isDrivetrainFacingSpeaker()
+      && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
+      && subTransfer.getGamePieceCollected());
 
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
@@ -86,12 +88,6 @@ public class RobotContainer {
         .onFalse(
             Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, 0)).alongWith(
                 Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
-    // TODO: Controller Rumble on Ready to Shoot
-    // - RPM's up
-    // - Shooter aimed
-    // - DT Aimed
-    // - In the correct State
-    // - Ends after the note exits the robot
 
     subDrivetrain.resetModulesToAbsolute();
 
