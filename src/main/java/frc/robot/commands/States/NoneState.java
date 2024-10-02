@@ -41,16 +41,16 @@ public class NoneState extends Command {
   public void initialize() {
     subStateMachine.setTargetState(TargetState.PREP_NONE);
     subStateMachine.setRobotState(RobotState.NONE);
-    subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
     subElevator.setDrainpipeSpeed(0);
     subTransfer.setFeederSpeed(0);
     subShooter.setShootingNeutralOutput();
     subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
+
     if (subShooter.getShooterPosition().lte(constShooter.NEUTRAL_OUT_THRESHOLD)) {
       subShooter.setPivotNeutralOutput();
     } else {
-      subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
+      subShooter.setPivotPosition(constShooter.PIVOT_FORWARD_INTAKE_LIMIT);
     }
   }
 
@@ -63,6 +63,7 @@ public class NoneState extends Command {
   @Override
   public void end(boolean interrupted) {
     subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
+    subShooter.setPivotNeutralOutput();
   }
 
   // Returns true when the command should end.

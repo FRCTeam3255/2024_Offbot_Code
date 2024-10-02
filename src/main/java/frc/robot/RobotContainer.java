@@ -122,9 +122,9 @@ public class RobotContainer {
                 subShooter))
             .unless(gamePieceTrigger));
 
-    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SUB_BACKWARDS)))
         .onTrue(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subDrivetrain, subElevator,
+            () -> subStateMachine.tryState(RobotState.PREP_SUB_BACKWARDS, subStateMachine, subDrivetrain, subElevator,
                 subIntake,
                 subTransfer, subShooter)));
 
