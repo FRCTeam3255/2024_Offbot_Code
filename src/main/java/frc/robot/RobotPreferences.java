@@ -98,8 +98,7 @@ public class RobotPreferences {
     public static final double pivotShooterV = 0.0;
     public static final double pivotShooterG = 0.53;
     public static final double pivotShooterA = 0.0;
-    // TODO: See if this value is still WAY too high
-    public static final double pivotShooterP = 100;
+    public static final double pivotShooterP = 90;
     public static final double pivotShooterI = 0;
     public static final double pivotShooterD = 0;
   }

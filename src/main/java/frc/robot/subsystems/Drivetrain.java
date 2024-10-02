@@ -206,17 +206,6 @@ public class Drivetrain extends SN_SuperSwerve {
   }
 
   /**
-   * Resets the driving orientation depending on alliance.
-   */
-  public void resetDriving(BooleanSupplier isRedAlliance) {
-    if (isRedAlliance.getAsBoolean()) {
-      resetYaw();
-    } else {
-      resetYaw(180);
-    }
-  }
-
-  /**
    * @return The current rate of rotation for the Pigeon 2. <b>Units:</b> Degrees
    *         per Second
    */

@@ -200,7 +200,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isSafeToMoveElevator() {
-    return getShooterPosition().lte(constShooter.ELEVATOR_ABLE_TO_MOVE_LIMIT);
+    return getShooterPosition().lte(constShooter.NEUTRAL_OUT_THRESHOLD);
   }
 
   /**
@@ -324,6 +324,7 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
     SmartDashboard.putNumber("Shooter/Pivot Velocity", pivotMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putBoolean("Shooter/Safe to Move Elevator", isSafeToMoveElevator());
 
   }
 }

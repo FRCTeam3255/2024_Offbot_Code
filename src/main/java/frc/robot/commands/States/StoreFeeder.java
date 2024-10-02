@@ -38,10 +38,8 @@ public class StoreFeeder extends Command {
     subTransfer.setFeederSpeed(0);
     subShooter.setShooterPercentOutput(Units.Percent.zero());
 
-    // This allows StoreFeeder to effectively also act as our "Unalive Shooter"
-    // command from last year
-    // We don't care if it actually gets there- just that its going there
-    subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_LIMIT);
+    // TODO: Revist this with more brains
+    subShooter.setPivotPosition(constShooter.NONE_STATE_ANGLE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
