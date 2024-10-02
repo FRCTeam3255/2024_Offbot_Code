@@ -29,6 +29,12 @@ public class Intake extends SubsystemBase {
 
   public void configure() {
     rollerConfig.MotorOutput.Inverted = constIntake.MOTOR_INVERT;
+
+    rollerConfig.CurrentLimits.SupplyCurrentLimitEnable = constIntake.ENABLE_CURRENT_LIMITING;
+    rollerConfig.CurrentLimits.SupplyCurrentLimit = constIntake.CURRENT_LIMIT;
+    rollerConfig.CurrentLimits.SupplyCurrentThreshold = constIntake.CURRENT_THRESH;
+    rollerConfig.CurrentLimits.SupplyTimeThreshold = constIntake.CURRENT_TIME_THRESH;
+
     rollerMotor.getConfigurator().apply(rollerConfig);
   }
 

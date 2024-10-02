@@ -424,6 +424,12 @@ public final class Constants {
     public static final Measure<Distance> ZEROED_POS = Units.Meters.of(0);
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+
+    // -- Current Limiting --
+    public static final boolean ENABLE_CURRENT_LIMITING = true;
+    public static final double CURRENT_LIMIT = 30;
+    public static final double CURRENT_THRESH = 50;
+    public static final double CURRENT_TIME_THRESH = 0.1;
   }
 
   public static class constElevator {
@@ -475,12 +481,29 @@ public final class Constants {
     public static final Measure<Distance> ZEROED_POS = Units.Meters.of(0);
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+
+    // -- Current Limiting --
+    public static final boolean ELEVATOR_ENABLE_CURRENT_LIMITING = true;
+    public static final double ELEVATOR_CURRENT_LIMIT = 30;
+    public static final double ELEVATOR_CURRENT_THRESH = 50;
+    public static final double ELEVATOR_CURRENT_TIME_THRESH = 0.1;
+
+    public static final boolean DRAINPIPE_ENABLE_CURRENT_LIMITING = true;
+    public static final double DRAINPIPE_CURRENT_LIMIT = 30;
+    public static final double DRAINPIPE_CURRENT_THRESH = 40;
+    public static final double DRAINPIPE_CURRENT_TIME_THRESH = 0.1;
   }
 
   public static class constIntake {
     public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
     public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+
+    // -- Current Limiting --
+    public static final boolean ENABLE_CURRENT_LIMITING = true;
+    public static final double CURRENT_LIMIT = 30;
+    public static final double CURRENT_THRESH = 40;
+    public static final double CURRENT_TIME_THRESH = 0.1;
   }
 
   public static class constTransfer {
@@ -494,6 +517,12 @@ public final class Constants {
     public static final double PREP_TO_AMP_SPEED = 0.2;
 
     public static final double SHOOTING_SPEED = 0.5;
+
+    // -- Current Limiting --
+    public static final boolean ENABLE_CURRENT_LIMITING = true;
+    public static final double CURRENT_LIMIT = 30;
+    public static final double CURRENT_THRESH = 40;
+    public static final double CURRENT_TIME_THRESH = 0.1;
   }
 
   public static class constLimelight {
