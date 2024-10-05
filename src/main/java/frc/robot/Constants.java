@@ -75,7 +75,7 @@ public final class Constants {
      * </p>
      * <b>Units:</b> Meters Per Second
      */
-    public static final double THEORETICAL_MAX_DRIVE_SPEED = SN_SwerveConstants.MK4I.FALCON.L3.maxSpeedMeters;
+    public static final double THEORETICAL_MAX_DRIVE_SPEED = SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters;
 
     /**
      * <p>
@@ -91,10 +91,10 @@ public final class Constants {
     public static final double WHEELBASE = Units.Meters.convertFrom(19.75, Units.Inches);
 
     public static final SN_SwerveConstants SWERVE_CONSTANTS = new SN_SwerveConstants(
-        SN_SwerveConstants.MK4I.FALCON.L3.steerGearRatio,
+        SN_SwerveConstants.MK4I.KRAKEN.L3.steerGearRatio,
         WHEEL_CIRCUMFERENCE,
-        SN_SwerveConstants.MK4I.FALCON.L3.driveGearRatio,
-        SN_SwerveConstants.MK4I.FALCON.L3.maxSpeedMeters);
+        SN_SwerveConstants.MK4I.KRAKEN.L3.driveGearRatio,
+        SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters);
 
     public static final Measure<Angle> AT_ROTATION_TOLERANCE = Units.Degrees.of(20);
   }
