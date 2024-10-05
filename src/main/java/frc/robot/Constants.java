@@ -214,7 +214,7 @@ public final class Constants {
   }
 
   public static class constShooter {
-    public static final Rotation2d SHOOTER_TO_ROBOT = new Rotation2d(Units.Degrees.of(180));
+    public static final Rotation2d SHOOTER_TO_ROBOT = new Rotation2d(Units.Degrees.of(0));
     /**
      * The position, in meters, of the center of rotation for the pivot motor
      * relative to the center of the robot (Robot Coordinates).
@@ -361,6 +361,7 @@ public final class Constants {
     public static final Map<TargetState, RobotState> TARGET_TO_ROBOT_STATE = new HashMap<TargetState, RobotState>();
 
     static {
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_NONE, RobotState.PREP_NONE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP_SHOOTER, RobotState.PREP_AMP_SHOOTER);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SHUFFLE, RobotState.PREP_SHUFFLE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPEAKER, RobotState.PREP_SPEAKER);
@@ -377,6 +378,7 @@ public final class Constants {
     public static Map<TargetState, ShooterPositionGroup> TARGET_TO_PRESET_GROUP = new HashMap<TargetState, ShooterPositionGroup>();
 
     static {
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_NONE, constShooter.PREP_NONE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_AMP_SHOOTER, constShooter.PREP_AMP_SHOOTER);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SHUFFLE, constShooter.PREP_SHUFFLE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPEAKER, constShooter.PREP_SUB);
