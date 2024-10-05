@@ -298,7 +298,9 @@ public final class Constants {
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
     public static final ShooterPositionGroup PREP_AMP = new ShooterPositionGroup(Units.Degrees.of(99),
-        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.37));
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.46));
+    public static final ShooterPositionGroup PREP_SUB_BACKWARDS = new ShooterPositionGroup(Units.Degrees.of(111),
+        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0.41));
     public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(47.5),
         Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(42),
@@ -417,7 +419,7 @@ public final class Constants {
   }
 
   public static class constElevator {
-    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0.5);
+    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0.52);
     public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue ELEVATOR_NEUTRAL_MODE = NeutralModeValue.Brake;
@@ -426,8 +428,8 @@ public final class Constants {
     public static final boolean NOTE_SENSOR_INVERT = true;
     public static final double MOTOR_ROTATION_TO_METERS = 1 / 0.0456842368;
 
-    public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0.37);
-    public static final Measure<Distance> SHOOTER_ABLE_TO_MOVE_LIMIT = Units.Meters.of(0.3);
+    public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0.38);
+    public static final Measure<Distance> SHOOTER_ABLE_TO_MOVE_LIMIT = Units.Meters.of(0.37);
 
     public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0.05);
 

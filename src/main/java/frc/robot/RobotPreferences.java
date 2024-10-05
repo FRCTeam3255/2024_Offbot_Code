@@ -17,7 +17,7 @@ public class RobotPreferences {
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while manually driving
-    public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(3);
+    public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(120);
 
     /**
      * <p>
