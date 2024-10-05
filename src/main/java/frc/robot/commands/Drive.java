@@ -83,25 +83,26 @@ public class Drive extends Command {
       rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(90)));
     }
 
-    // TODO: make it so that the driver providing driver input overrides any
-    // rotation
-    switch (subStateMachine.getRobotState()) {
-      case PREP_SHUFFLE:
-        // rVelocity =
-        // subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
-        break;
-      case PREP_AMP:
-        // rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(270));
-        break;
-      case PREP_VISION:
-        rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
-        break;
-      case CLIMBING:
-        rVelocity = subDrivetrain.getVelocityToChain();
-        break;
+    // Ignore calculated rotation if a driver rotation is given
+    if (rVelocity.equals(Units.RadiansPerSecond.of(0))) {
+      switch (subStateMachine.getRobotState()) {
+        case PREP_SHUFFLE:
+          // rVelocity =
+          // subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
+          break;
+        case PREP_AMP:
+          rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(270));
+          break;
+        case PREP_VISION:
+          rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
+          break;
+        case CLIMBING:
+          rVelocity = subDrivetrain.getVelocityToChain();
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
     }
 
     subDrivetrain.drive(new Translation2d(xVelocity.in(Units.MetersPerSecond), yVelocity.in(Units.MetersPerSecond)),
