@@ -41,7 +41,6 @@ import frc.robot.RobotPreferences.prefVision;
 public class Drivetrain extends SN_SuperSwerve {
   private static TalonFXConfiguration driveConfiguration = new TalonFXConfiguration();
   private static TalonFXConfiguration steerConfiguration = new TalonFXConfiguration();
-  private static Pigeon2Configuration pigeon2Configuration = new Pigeon2Configuration();
   private static PIDController yawSnappingController;
 
   StructPublisher<Pose2d> robotPosePublisher = NetworkTableInstance.getDefault()
@@ -106,8 +105,7 @@ public class Drivetrain extends SN_SuperSwerve {
     steerConfiguration.Slot0.kI = prefDrivetrain.steerI.getValue();
     steerConfiguration.Slot0.kD = prefDrivetrain.steerD.getValue();
 
-    pigeon2Configuration.MountPose = new MountPoseConfigs().withMountPoseYaw(180);
-    pigeon.getConfigurator().apply(pigeon2Configuration);
+    pigeon.getConfigurator().apply(new Pigeon2Configuration());
 
     SN_SwerveModule.driveConfiguration = driveConfiguration;
     SN_SwerveModule.steerConfiguration = steerConfiguration;
