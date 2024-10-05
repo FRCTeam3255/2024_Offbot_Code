@@ -43,6 +43,7 @@ public class Shooter extends SubsystemBase {
   private boolean ignoreFlywheelSpeed = false;
   private Measure<Velocity<Angle>> desiredLeftVelocity = Units.RotationsPerSecond.of(0);
   private Measure<Velocity<Angle>> desiredRightVelocity = Units.RotationsPerSecond.of(0);
+  private Measure<Angle> lastDesiredPivotAngle = Units.Degrees.of(0);
 
   public Shooter() {
     leftMotor = new TalonFX(mapShooter.SHOOTER_LEFT_MOTOR_CAN, "rio");
@@ -266,6 +267,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setPivotPosition(Measure<Angle> position) {
+    lastDesiredPivotAngle = position;
     pivotMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
   }
 
@@ -302,6 +304,10 @@ public class Shooter extends SubsystemBase {
     Measure<Angle> desiredLockingAngle = Units.Degrees.of(constShooter.DISTANCE_MAP.get(distanceFromSpeaker));
 
     return desiredLockingAngle;
+  }
+
+  public boolean readyToShoot() {
+    return isLeftShooterUpToSpeed() && isRightShooterUpToSpeed() && isShooterAtPosition(lastDesiredPivotAngle);
   }
 
   @Override
