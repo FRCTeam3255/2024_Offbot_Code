@@ -36,10 +36,6 @@ public class StoreFeeder extends Command {
     subStateMachine.setRobotState(RobotState.STORE_FEEDER);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
     subTransfer.setFeederSpeed(0);
-    subShooter.setShooterPercentOutput(Units.Percent.zero());
-
-    // TODO: Revist this with more brains
-    subShooter.setPivotPosition(constShooter.NONE_STATE_ANGLE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -243,7 +243,7 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
     public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
-    public static final Measure<Angle> NONE_STATE_ANGLE = NEUTRAL_OUT_THRESHOLD.minus(Units.Degrees.of(25));
+    public static final Measure<Angle> NONE_STATE_ANGLE = Units.Degrees.of(25);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(3);
 
@@ -298,7 +298,8 @@ public final class Constants {
       }
     }
 
-    // Amping w/o amper
+    public static final ShooterPositionGroup PREP_NONE = new ShooterPositionGroup(NONE_STATE_ANGLE,
+        Units.RotationsPerSecond.of(0), Units.RotationsPerSecond.of(0), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
