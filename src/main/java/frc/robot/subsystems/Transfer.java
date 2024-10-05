@@ -36,6 +36,12 @@ public class Transfer extends SubsystemBase {
     // -- Feeder Motor --
     feederConfig.MotorOutput.Inverted = constTransfer.MOTOR_INVERT;
     feederConfig.MotorOutput.NeutralMode = constTransfer.FEEDER_NEUTRAL_MODE;
+
+    feederConfig.CurrentLimits.SupplyCurrentLimitEnable = constTransfer.ENABLE_CURRENT_LIMITING;
+    feederConfig.CurrentLimits.SupplyCurrentLimit = constTransfer.CURRENT_LIMIT;
+    feederConfig.CurrentLimits.SupplyCurrentThreshold = constTransfer.CURRENT_THRESH;
+    feederConfig.CurrentLimits.SupplyTimeThreshold = constTransfer.CURRENT_TIME_THRESH;
+
     feederMotor.getConfigurator().apply(feederConfig);
   }
 

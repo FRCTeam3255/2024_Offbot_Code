@@ -64,9 +64,19 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constElevator.BACKWARD_LIMIT.in(Units.Meters);
 
+    elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = constElevator.ELEVATOR_ENABLE_CURRENT_LIMITING;
+    elevatorConfig.CurrentLimits.SupplyCurrentLimit = constElevator.ELEVATOR_CURRENT_LIMIT;
+    elevatorConfig.CurrentLimits.SupplyCurrentThreshold = constElevator.ELEVATOR_CURRENT_THRESH;
+    elevatorConfig.CurrentLimits.SupplyTimeThreshold = constElevator.ELEVATOR_CURRENT_TIME_THRESH;
+
     elevatorMotor.getConfigurator().apply(elevatorConfig);
 
     // -- Drainpipe Motor --
+    drainpipeConfig.CurrentLimits.SupplyCurrentLimitEnable = constElevator.DRAINPIPE_ENABLE_CURRENT_LIMITING;
+    drainpipeConfig.CurrentLimits.SupplyCurrentLimit = constElevator.DRAINPIPE_CURRENT_LIMIT;
+    drainpipeConfig.CurrentLimits.SupplyCurrentThreshold = constElevator.DRAINPIPE_CURRENT_THRESH;
+    drainpipeConfig.CurrentLimits.SupplyTimeThreshold = constElevator.DRAINPIPE_CURRENT_TIME_THRESH;
+
     drainpipeMotor.getConfigurator().apply(drainpipeConfig);
   }
 

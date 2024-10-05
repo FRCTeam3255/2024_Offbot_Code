@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.constControllers;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -33,8 +32,8 @@ public class GamePieceRumble extends SequentialCommandGroup {
                     Math.cosh((Timer.getFPGATimestamp() - startTime) * 2))))
             .until(() -> startTime + duration.in(Units.Seconds) >= Timer.getFPGATimestamp()),
 
-        Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, constControllers.DRIVER_RUMBLE)),
-        Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, constControllers.DRIVER_RUMBLE))
+        Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, 0)),
+        Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))
 
     );
   }

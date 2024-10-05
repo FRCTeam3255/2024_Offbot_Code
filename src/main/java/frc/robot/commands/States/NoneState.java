@@ -5,6 +5,7 @@
 package frc.robot.commands.States;
 
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constShooter;
@@ -47,10 +48,11 @@ public class NoneState extends Command {
     subTransfer.setFeederSpeed(0);
     subShooter.setShootingNeutralOutput();
     subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
-    if (subShooter.getShooterPosition().lte(constShooter.NEUTRAL_OUT_THRESHOLD)) {
+
+    if (subShooter.isSafeToMoveElevator()) {
       subShooter.setPivotNeutralOutput();
     } else {
-      subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
+      subShooter.setPivotPosition(constShooter.NONE_STATE_ANGLE);
     }
   }
 
@@ -62,13 +64,13 @@ public class NoneState extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    subShooter.setPivotNeutralOutput();
     subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return subElevator.isElevatorAtPosition(constElevator.BACKWARD_LIMIT)
-        || subShooter.isSafeToMoveElevator();
+    return subShooter.isSafeToMoveElevator();
   }
 }

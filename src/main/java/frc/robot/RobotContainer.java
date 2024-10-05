@@ -82,15 +82,18 @@ public class RobotContainer {
                 subElevator, subIntake, subTransfer, subShooter))
             .andThen(Commands.deferredProxy(
                 () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer,
-                    subElevator))))
-        .onTrue(new GamePieceRumble(conDriver, conOperator));
+                    subElevator))));
+    // .onTrue(new GamePieceRumble(conDriver, conOperator));
 
-    readyToShoot.onTrue(
-        Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, constControllers.DRIVER_RUMBLE)).alongWith(
-            Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, constControllers.OPERATOR_RUMBLE))))
-        .onFalse(
-            Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, 0)).alongWith(
-                Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
+    // readyToShoot.onTrue(
+    // Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
+    // constControllers.DRIVER_RUMBLE)).alongWith(
+    // Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
+    // constControllers.OPERATOR_RUMBLE))))
+    // .onFalse(
+    // Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
+    // 0)).alongWith(
+    // Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
 
     subDrivetrain.resetModulesToAbsolute();
 
@@ -112,14 +115,7 @@ public class RobotContainer {
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
-    /*
-     * TODO:
-     * btn_Start with axis_LeftY: Manual Elevator
-     * btn_B: Prep Amp
-     * btn_Y: Prep Sub Backwards
-     */
     // -- States --
-
     // Intake
     controller.btn_LeftTrigger
         .whileTrue(Commands.deferredProxy(
@@ -164,14 +160,20 @@ public class RobotContainer {
             Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_SPIKE, subStateMachine, subDrivetrain,
                 subElevator, subIntake, subTransfer, subShooter)));
 
+    controller.btn_B.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_AMP, subStateMachine, subDrivetrain, subElevator,
+                subIntake, subTransfer, subShooter)));
+
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SUB_BACKWARDS)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_SUB_BACKWARDS, subStateMachine, subDrivetrain, subElevator,
+                subIntake, subTransfer, subShooter)));
+
     // "Unalive Shooter"
     controller.btn_A.onTrue(
-        Commands.either(
-            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.STORE_FEEDER,
-                subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)),
-            Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE,
-                subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)),
-            gamePieceTrigger)
+        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_NONE,
+            subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
             .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))));
 
     // Prep subwoofer
@@ -193,10 +195,14 @@ public class RobotContainer {
                 subIntake, subTransfer, subShooter)));
 
     // Game Piece Override
-    controller.btn_East.onTrue(Commands.runOnce(() -> subTransfer.setGamePieceCollected(true)));
+    controller.btn_East.onTrue(Commands.runOnce(() -> subTransfer.setGamePieceCollected(true))
+        .alongWith(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.STORE_FEEDER))));
 
     // Manual Shooter Pivot
     controller.btn_Back.whileTrue(new ManualPivot(subShooter, controller.axis_RightY));
+
+    // Manual Elevator Pivot
+    controller.btn_Start.whileTrue(new ManualElevator(subElevator, controller.axis_LeftY));
 
     // Zero Elevator and Climber
     controller.btn_LeftStick.onTrue(new ZeroElevator(subElevator))
