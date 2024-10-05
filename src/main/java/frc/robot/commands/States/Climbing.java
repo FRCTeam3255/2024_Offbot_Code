@@ -51,7 +51,9 @@ public class Climbing extends SequentialCommandGroup {
 
         // Move the elevator and shooter to a point where we can safely climb
         Commands.runOnce(() -> subElevator.setElevatorPosition(desiredShooterPosition.elevatorPosition)),
+        Commands.waitUntil(() -> subElevator.isElevatorAtPosition(desiredShooterPosition.elevatorPosition)),
         Commands.runOnce(() -> subShooter.setDesiredPosition(desiredShooterPosition)),
+        Commands.waitUntil(() -> subShooter.isShooterAtPosition(desiredShooterPosition.shooterAngle)),
 
         // Driver will now use joysticks to move the climbers up and down
         Commands.runOnce(() -> subClimber.setSafeToMoveClimber(true)));

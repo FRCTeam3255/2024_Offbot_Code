@@ -73,8 +73,8 @@ public class RobotContainer {
                 conDriver.btn_LeftBumper,
                 conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X));
 
-    // subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
-    // subLimelight));
+    subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
+        subLimelight));
 
     // - Manual Triggers -
     gamePieceTrigger
@@ -233,11 +233,11 @@ public class RobotContainer {
   private void configureTestBindings(SN_XboxController controller) {
     controller.btn_LeftTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.INTAKING)))
         .whileTrue(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
-        .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
+        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer));
 
     controller.btn_RightTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.SHOOTING)))
         .whileTrue(new Shooting(subStateMachine, subElevator, subShooter, subTransfer))
-        .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
+        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer));
 
     controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SHUFFLE)))
         .onTrue(new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_SHUFFLE));
@@ -247,7 +247,7 @@ public class RobotContainer {
 
     controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
         .whileTrue(new Ejecting(subStateMachine, subIntake, subElevator, subTransfer))
-        .onFalse(new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer));
+        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer));
   }
 
   public Command getAutonomousCommand() {

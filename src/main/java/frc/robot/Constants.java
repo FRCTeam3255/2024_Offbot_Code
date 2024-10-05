@@ -53,10 +53,10 @@ public final class Constants {
     // In Rotations: Obtain by aligning all of the wheels in the correct direction
     // and
     // copy-pasting the Raw Absolute Encoder value
-    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = -0.079834;
-    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = 0.249268;
-    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = -0.240479;
-    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = 0.209717;
+    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = 0.207520;
+    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = -0.246826;
+    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = 0.239502;
+    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = -0.082764;
 
     public static final InvertedValue DRIVE_MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final InvertedValue STEER_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
@@ -395,14 +395,16 @@ public final class Constants {
   }
 
   public static class constClimber {
-    public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
-    public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
+    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0);
+    public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     // TODO: Get real gear ratio values
     public static final double MECHANICAL_GEAR_RATIO = 1;
     public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Meters.of(1);
     public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO
         * FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
+
+    public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0.1);
 
     // -- Zeroing --
     /**

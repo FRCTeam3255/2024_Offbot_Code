@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.constClimber;
 import frc.robot.Constants.constStateMachine;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -75,7 +76,14 @@ public class StateMachine extends SubsystemBase {
           case EJECTING:
           case SHOOTING:
           case NONE:
-            return new NoneState(subStateMachine, subElevator, subIntake, subShooter, subTransfer);
+            return new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer);
+          case CLIMBING:
+            if (subClimber.isClimberAtPosition(constClimber.BACKWARD_LIMIT)) {
+              return new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer);
+            } else {
+              return Commands
+                  .print("Attempted to cancel CLIMBING, but the CLIMBER is UP! Please move the climber first :p");
+            }
         }
         break;
 
@@ -105,7 +113,6 @@ public class StateMachine extends SubsystemBase {
         break;
 
       case CLIMBING:
-        // oh here we go >:)
         switch (currentState) {
           case STORE_FEEDER:
           case PREP_SPEAKER:
