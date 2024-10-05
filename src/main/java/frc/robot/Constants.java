@@ -53,10 +53,10 @@ public final class Constants {
     // In Rotations: Obtain by aligning all of the wheels in the correct direction
     // and
     // copy-pasting the Raw Absolute Encoder value
-    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = -0.079834;
-    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.249268;
-    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = -0.240479;
-    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = 0.209717;
+    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = -0.079834;
+    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = 0.249268;
+    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = -0.240479;
+    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = 0.209717;
 
     public static final InvertedValue DRIVE_MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final InvertedValue STEER_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
@@ -75,7 +75,7 @@ public final class Constants {
      * </p>
      * <b>Units:</b> Meters Per Second
      */
-    public static final double THEORETICAL_MAX_DRIVE_SPEED = SN_SwerveConstants.MK4I.FALCON.L3.maxSpeedMeters;
+    public static final double THEORETICAL_MAX_DRIVE_SPEED = SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters;
 
     /**
      * <p>
@@ -91,10 +91,10 @@ public final class Constants {
     public static final double WHEELBASE = Units.Meters.convertFrom(19.75, Units.Inches);
 
     public static final SN_SwerveConstants SWERVE_CONSTANTS = new SN_SwerveConstants(
-        SN_SwerveConstants.MK4I.FALCON.L3.steerGearRatio,
+        SN_SwerveConstants.MK4I.KRAKEN.L3.steerGearRatio,
         WHEEL_CIRCUMFERENCE,
-        SN_SwerveConstants.MK4I.FALCON.L3.driveGearRatio,
-        SN_SwerveConstants.MK4I.FALCON.L3.maxSpeedMeters);
+        SN_SwerveConstants.MK4I.KRAKEN.L3.driveGearRatio,
+        SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters);
 
     public static final Measure<Angle> AT_ROTATION_TOLERANCE = Units.Degrees.of(20);
   }
@@ -214,7 +214,7 @@ public final class Constants {
   }
 
   public static class constShooter {
-    public static final Rotation2d SHOOTER_TO_ROBOT = new Rotation2d(Units.Degrees.of(180));
+    public static final Rotation2d SHOOTER_TO_ROBOT = new Rotation2d(Units.Degrees.of(0));
     /**
      * The position, in meters, of the center of rotation for the pivot motor
      * relative to the center of the robot (Robot Coordinates).
@@ -231,7 +231,7 @@ public final class Constants {
     public static final InvertedValue RIGHT_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final InvertedValue PIVOT_INVERT = InvertedValue.CounterClockwise_Positive;
 
-    public static final double PIVOT_GEAR_RATIO = 70.2;
+    public static final double PIVOT_GEAR_RATIO = 58.5;
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
     public static final GravityTypeValue PIVOT_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
@@ -242,9 +242,8 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_FORWARD_INTAKE_LIMIT = PIVOT_FORWARD_LIMIT.minus(Units.Degrees.of(10));
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
-    public static final Measure<Angle> ELEVATOR_ABLE_TO_MOVE_LIMIT = Units.Degrees.of(81);
-
     public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
+    public static final Measure<Angle> NONE_STATE_ANGLE = Units.Degrees.of(25);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(3);
 
@@ -279,6 +278,12 @@ public final class Constants {
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
 
+    // -- Current Limiting --
+    public static final boolean PIVOT_ENABLE_CURRENT_LIMITING = true;
+    public static final double PIVOT_CURRENT_THRESH = 50;
+    public static final double PIVOT_CURRENT_LIMIT = 30;
+    public static final double PIVOT_CURRENT_TIME_THRESH = 0.1;
+
     public static class ShooterPositionGroup {
       public Measure<Angle> shooterAngle;
       public Measure<Velocity<Angle>> leftVelocity, rightVelocity;
@@ -293,7 +298,8 @@ public final class Constants {
       }
     }
 
-    // Amping w/o amper
+    public static final ShooterPositionGroup PREP_NONE = new ShooterPositionGroup(NONE_STATE_ANGLE,
+        Units.RotationsPerSecond.of(0), Units.RotationsPerSecond.of(0), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
@@ -355,12 +361,14 @@ public final class Constants {
     public static final Map<TargetState, RobotState> TARGET_TO_ROBOT_STATE = new HashMap<TargetState, RobotState>();
 
     static {
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_NONE, RobotState.PREP_NONE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP_SHOOTER, RobotState.PREP_AMP_SHOOTER);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SHUFFLE, RobotState.PREP_SHUFFLE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPEAKER, RobotState.PREP_SPEAKER);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPIKE, RobotState.PREP_SPIKE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_WING, RobotState.PREP_WING);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP, RobotState.PREP_AMP);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SUB_BACKWARDS, RobotState.PREP_SUB_BACKWARDS);
     }
 
     /**
@@ -370,6 +378,7 @@ public final class Constants {
     public static Map<TargetState, ShooterPositionGroup> TARGET_TO_PRESET_GROUP = new HashMap<TargetState, ShooterPositionGroup>();
 
     static {
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_NONE, constShooter.PREP_NONE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_AMP_SHOOTER, constShooter.PREP_AMP_SHOOTER);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SHUFFLE, constShooter.PREP_SHUFFLE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPEAKER, constShooter.PREP_SUB);
@@ -377,6 +386,7 @@ public final class Constants {
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_VISION, constShooter.PREP_VISION);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SPIKE, constShooter.PREP_SPIKE);
       TARGET_TO_PRESET_GROUP.put(TargetState.PREP_WING, constShooter.PREP_WING);
+      TARGET_TO_PRESET_GROUP.put(TargetState.PREP_SUB_BACKWARDS, constShooter.PREP_SUB_BACKWARDS);
     }
   }
 
@@ -416,6 +426,12 @@ public final class Constants {
     public static final Measure<Distance> ZEROED_POS = Units.Meters.of(0);
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+
+    // -- Current Limiting --
+    public static final boolean ENABLE_CURRENT_LIMITING = true;
+    public static final double CURRENT_LIMIT = 30;
+    public static final double CURRENT_THRESH = 50;
+    public static final double CURRENT_TIME_THRESH = 0.1;
   }
 
   public static class constElevator {
@@ -467,12 +483,29 @@ public final class Constants {
     public static final Measure<Distance> ZEROED_POS = Units.Meters.of(0);
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+
+    // -- Current Limiting --
+    public static final boolean ELEVATOR_ENABLE_CURRENT_LIMITING = true;
+    public static final double ELEVATOR_CURRENT_LIMIT = 30;
+    public static final double ELEVATOR_CURRENT_THRESH = 50;
+    public static final double ELEVATOR_CURRENT_TIME_THRESH = 0.1;
+
+    public static final boolean DRAINPIPE_ENABLE_CURRENT_LIMITING = true;
+    public static final double DRAINPIPE_CURRENT_LIMIT = 30;
+    public static final double DRAINPIPE_CURRENT_THRESH = 40;
+    public static final double DRAINPIPE_CURRENT_TIME_THRESH = 0.1;
   }
 
   public static class constIntake {
     public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
     public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+
+    // -- Current Limiting --
+    public static final boolean ENABLE_CURRENT_LIMITING = true;
+    public static final double CURRENT_LIMIT = 30;
+    public static final double CURRENT_THRESH = 40;
+    public static final double CURRENT_TIME_THRESH = 0.1;
   }
 
   public static class constTransfer {
@@ -486,6 +519,12 @@ public final class Constants {
     public static final double PREP_TO_AMP_SPEED = 0.2;
 
     public static final double SHOOTING_SPEED = 0.5;
+
+    // -- Current Limiting --
+    public static final boolean ENABLE_CURRENT_LIMITING = true;
+    public static final double CURRENT_LIMIT = 30;
+    public static final double CURRENT_THRESH = 40;
+    public static final double CURRENT_TIME_THRESH = 0.1;
   }
 
   public static class constLimelight {

@@ -40,6 +40,12 @@ public class Climber extends SubsystemBase {
 
     climberConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     climberConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constClimber.FORWARD_LIMIT.in(Units.Rotations);
+
+    climberConfig.CurrentLimits.SupplyCurrentLimitEnable = constClimber.ENABLE_CURRENT_LIMITING;
+    climberConfig.CurrentLimits.SupplyCurrentLimit = constClimber.CURRENT_LIMIT;
+    climberConfig.CurrentLimits.SupplyCurrentThreshold = constClimber.CURRENT_THRESH;
+    climberConfig.CurrentLimits.SupplyTimeThreshold = constClimber.CURRENT_TIME_THRESH;
+
     climberMotor.getConfigurator().apply(climberConfig);
   }
 

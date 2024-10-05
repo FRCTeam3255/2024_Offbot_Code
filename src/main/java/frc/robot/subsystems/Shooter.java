@@ -107,6 +107,13 @@ public class Shooter extends SubsystemBase {
 
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_BACKWARD_LIMIT.in(Units.Rotations);
+
+    // - Current Limits -
+    pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = constShooter.PIVOT_ENABLE_CURRENT_LIMITING;
+    pivotConfig.CurrentLimits.SupplyCurrentThreshold = constShooter.PIVOT_CURRENT_THRESH;
+    pivotConfig.CurrentLimits.SupplyCurrentLimit = constShooter.PIVOT_CURRENT_LIMIT;
+    pivotConfig.CurrentLimits.SupplyTimeThreshold = constShooter.PIVOT_CURRENT_TIME_THRESH;
+
     pivotMotor.getConfigurator().apply(pivotConfig);
   }
 
@@ -194,7 +201,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isSafeToMoveElevator() {
-    return getShooterPosition().lte(constShooter.ELEVATOR_ABLE_TO_MOVE_LIMIT);
+    return getShooterPosition().lte(constShooter.NEUTRAL_OUT_THRESHOLD);
   }
 
   /**
@@ -323,6 +330,7 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
     SmartDashboard.putNumber("Shooter/Pivot Velocity", pivotMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putBoolean("Shooter/Safe to Move Elevator", isSafeToMoveElevator());
 
   }
 }

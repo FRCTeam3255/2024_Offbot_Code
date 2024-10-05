@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.configs.MountPoseConfigs;
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.frcteam3255.components.swerve.SN_SuperSwerve;
 import com.frcteam3255.components.swerve.SN_SwerveModule;
@@ -102,6 +104,8 @@ public class Drivetrain extends SN_SuperSwerve {
     steerConfiguration.Slot0.kP = prefDrivetrain.steerP.getValue();
     steerConfiguration.Slot0.kI = prefDrivetrain.steerI.getValue();
     steerConfiguration.Slot0.kD = prefDrivetrain.steerD.getValue();
+
+    pigeon.getConfigurator().apply(new Pigeon2Configuration());
 
     SN_SwerveModule.driveConfiguration = driveConfiguration;
     SN_SwerveModule.steerConfiguration = steerConfiguration;
@@ -203,17 +207,6 @@ public class Drivetrain extends SN_SuperSwerve {
     List<Pose2d> chainPositions = constField.getChainPositions();
     Pose2d nearestChain = getPose().nearest(chainPositions);
     return getVelocityToSnap(nearestChain.getRotation());
-  }
-
-  /**
-   * Resets the driving orientation depending on alliance.
-   */
-  public void resetDriving(BooleanSupplier isRedAlliance) {
-    if (isRedAlliance.getAsBoolean()) {
-      resetYaw();
-    } else {
-      resetYaw(180);
-    }
   }
 
   /**

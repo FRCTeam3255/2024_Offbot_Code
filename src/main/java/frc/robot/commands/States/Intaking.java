@@ -42,7 +42,7 @@ public class Intaking extends Command {
 
     if (subShooter.getShooterPosition().lte(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT)) {
       subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
-    } else if (subShooter.getShooterPosition().gte(constShooter.PIVOT_FORWARD_LIMIT)) {
+    } else if (subShooter.getShooterPosition().gte(constShooter.PIVOT_FORWARD_INTAKE_LIMIT)) {
       subShooter.setPivotPosition(constShooter.PIVOT_FORWARD_INTAKE_LIMIT);
     } else {
       subShooter.setPivotPosition(subShooter.getShooterPosition());
