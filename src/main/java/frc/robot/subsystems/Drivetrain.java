@@ -42,6 +42,7 @@ public class Drivetrain extends SN_SuperSwerve {
   private static TalonFXConfiguration driveConfiguration = new TalonFXConfiguration();
   private static TalonFXConfiguration steerConfiguration = new TalonFXConfiguration();
   private static PIDController yawSnappingController;
+  private static String[] moduleNames = { "Front Left", "Front Right", "Back Left", "Back Right" };
 
   StructPublisher<Pose2d> robotPosePublisher = NetworkTableInstance.getDefault()
       .getStructTopic("/SmartDashboard/Drivetrain/Robot Pose", Pose2d.struct).publish();
@@ -235,22 +236,24 @@ public class Drivetrain extends SN_SuperSwerve {
     super.periodic();
 
     for (SN_SwerveModule mod : modules) {
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Desired Speed (FPS)",
+      SmartDashboard.putNumber("Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Desired Speed (FPS)",
           Units.Meters.convertFrom(Math.abs(getDesiredModuleStates()[mod.moduleNumber].speedMetersPerSecond),
               Units.Feet));
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Actual Speed (FPS)",
+      SmartDashboard.putNumber("Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Actual Speed (FPS)",
           Units.Meters.convertFrom(Math.abs(getActualModuleStates()[mod.moduleNumber].speedMetersPerSecond),
               Units.Feet));
 
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Desired Angle (Degrees)",
+      SmartDashboard.putNumber("Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Desired Angle (Degrees)",
           Math.abs(
               Units.Meters.convertFrom(getDesiredModuleStates()[mod.moduleNumber].angle.getDegrees(), Units.Feet)));
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Actual Angle (Degrees)",
+      SmartDashboard.putNumber("Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Actual Angle (Degrees)",
           Math.abs(Units.Meters.convertFrom(getActualModuleStates()[mod.moduleNumber].angle.getDegrees(), Units.Feet)));
 
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Offset Absolute Encoder Angle (Rotations)",
+      SmartDashboard.putNumber(
+          "Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Offset Absolute Encoder Angle (Rotations)",
           mod.getAbsoluteEncoder());
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Absolute Encoder Raw Value (Rotations)",
+      SmartDashboard.putNumber(
+          "Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Absolute Encoder Raw Value (Rotations)",
           mod.getRawAbsoluteEncoder());
     }
 
