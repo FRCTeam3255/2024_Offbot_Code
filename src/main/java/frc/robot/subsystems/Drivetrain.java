@@ -5,9 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.List;
-import java.util.function.BooleanSupplier;
 
-import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.frcteam3255.components.swerve.SN_SuperSwerve;
@@ -136,7 +134,6 @@ public class Drivetrain extends SN_SuperSwerve {
     yawSetpoint = MathUtil.clamp(yawSetpoint, -prefDrivetrain.maxTurnSpeed.in(Units.DegreesPerSecond),
         prefDrivetrain.maxTurnSpeed.in(Units.DegreesPerSecond));
 
-    SmartDashboard.putNumber("!!!!!!!!! DEBUG DESIRED YAW SETPOINT, degrees/second", yawSetpoint);
     return Units.DegreesPerSecond.of(yawSetpoint);
   }
 

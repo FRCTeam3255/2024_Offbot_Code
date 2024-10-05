@@ -87,8 +87,7 @@ public class Drive extends Command {
     if (rVelocity.equals(Units.RadiansPerSecond.of(0))) {
       switch (subStateMachine.getRobotState()) {
         case PREP_SHUFFLE:
-          // rVelocity =
-          // subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
+          rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
           break;
         case PREP_AMP:
           rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(270));

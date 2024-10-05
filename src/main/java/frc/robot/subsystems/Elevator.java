@@ -8,9 +8,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
-import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
@@ -99,7 +97,6 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setElevatorPosition(Measure<Distance> position) {
-    // TODO: Surely this works!
     elevatorMotor.setControl(positionRequest.withPosition(position.in(Units.Meters)));
   }
 

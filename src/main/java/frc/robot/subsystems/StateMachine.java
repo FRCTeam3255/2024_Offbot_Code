@@ -11,7 +11,6 @@ import frc.robot.Constants.constClimber;
 import frc.robot.Constants.constStateMachine;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.commands.States.Climbing;
 import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
