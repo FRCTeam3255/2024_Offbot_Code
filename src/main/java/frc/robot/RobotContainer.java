@@ -187,9 +187,9 @@ public class RobotContainer {
                 subIntake, subTransfer, subShooter)));
 
     // Prep shuffle
-    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_WING)))
+    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
         .onTrue(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_WING, subStateMachine, subDrivetrain, subElevator,
+            () -> subStateMachine.tryState(RobotState.PREP_SHUFFLE, subStateMachine, subDrivetrain, subElevator,
                 subIntake, subTransfer, subShooter)));
 
     // Game Piece Override
