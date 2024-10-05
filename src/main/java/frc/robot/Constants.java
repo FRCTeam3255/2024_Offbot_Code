@@ -318,6 +318,10 @@ public final class Constants {
     public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(10.5),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
 
+    // TODO: Get values
+    public static final ShooterPositionGroup CLIMBING = new ShooterPositionGroup(Units.Degrees.of(99),
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.46));
+
     /**
      * <p>
      * Determines the necessary angle for the shooter depending on the distance from

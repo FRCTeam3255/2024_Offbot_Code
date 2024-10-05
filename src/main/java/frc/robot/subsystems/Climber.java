@@ -23,6 +23,8 @@ public class Climber extends SubsystemBase {
   TalonFXConfiguration climberConfig = new TalonFXConfiguration();
   VoltageOut voltageRequest;
 
+  boolean isSafeToMoveClimber = false;
+
   /** Creates a new Climber. */
   public Climber() {
     climberMotor = new TalonFX(mapClimber.CLIMBER_MOTOR_CAN, "rio");
@@ -56,7 +58,9 @@ public class Climber extends SubsystemBase {
   }
 
   public void setClimberSpeed(double speed) {
-    climberMotor.set(speed);
+    if (isSafeToMoveClimber) {
+      climberMotor.set(speed);
+    }
   }
 
   public void setVoltage(Measure<Voltage> voltage) {
@@ -72,6 +76,14 @@ public class Climber extends SubsystemBase {
 
   public Measure<Velocity<Distance>> getVelocity() {
     return Units.MetersPerSecond.of(climberMotor.getVelocity().getValueAsDouble());
+  }
+
+  public boolean isSafeToMoveClimber() {
+    return isSafeToMoveClimber;
+  }
+
+  public void setSafeToMoveClimber(boolean isSafe) {
+    isSafeToMoveClimber = isSafe;
   }
 
   @Override

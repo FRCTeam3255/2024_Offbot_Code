@@ -11,6 +11,7 @@ import frc.robot.Constants.constStateMachine;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import frc.robot.commands.States.Climbing;
 import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
@@ -57,7 +58,8 @@ public class StateMachine extends SubsystemBase {
    *                     possible from your current state
    * @return The Command to run for that desired state
    */
-  public Command tryState(RobotState desiredState, StateMachine subStateMachine, Drivetrain subDrivetrain,
+  public Command tryState(RobotState desiredState, StateMachine subStateMachine, Climber subClimber,
+      Drivetrain subDrivetrain,
       Elevator subElevator, Intake subIntake,
       Transfer subTransfer, Shooter subShooter) {
 
@@ -102,6 +104,21 @@ public class StateMachine extends SubsystemBase {
         }
         break;
 
+      case CLIMBING:
+        // oh here we go >:)
+        switch (currentState) {
+          case STORE_FEEDER:
+          case PREP_SPEAKER:
+          case PREP_VISION:
+          case PREP_AMP_SHOOTER:
+          case PREP_SPIKE:
+          case PREP_WING:
+          case PREP_AMP:
+          case PREP_NONE:
+          case PREP_SUB_BACKWARDS:
+            return new Climbing(subClimber, subElevator, subStateMachine, subShooter, subTransfer);
+        }
+
       case EJECTING:
         switch (currentState) {
           case NONE:
@@ -120,6 +137,24 @@ public class StateMachine extends SubsystemBase {
         }
         break;
 
+      case SHOOTING:
+        switch (currentState) {
+          case PREP_SPEAKER:
+          case PREP_VISION:
+          case PREP_SHUFFLE:
+          case PREP_AMP:
+          case PREP_AMP_SHOOTER:
+          case PREP_SPIKE:
+          case PREP_WING:
+          case PREP_SUB_BACKWARDS:
+          case PREP_NONE:
+          case CLIMBING:
+          case SHOOTING:
+            return new Shooting(subStateMachine, subElevator, subShooter, subTransfer);
+        }
+        break;
+
+      // -- PREPS --
       case PREP_SHUFFLE:
         switch (currentState) {
           case NONE:
@@ -166,22 +201,6 @@ public class StateMachine extends SubsystemBase {
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
             return new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_AMP);
-        }
-        break;
-
-      case SHOOTING:
-        switch (currentState) {
-          case PREP_SPEAKER:
-          case PREP_VISION:
-          case PREP_SHUFFLE:
-          case PREP_AMP:
-          case PREP_AMP_SHOOTER:
-          case PREP_SPIKE:
-          case PREP_WING:
-          case PREP_SUB_BACKWARDS:
-          case PREP_NONE:
-          case SHOOTING:
-            return new Shooting(subStateMachine, subElevator, subShooter, subTransfer);
         }
         break;
 

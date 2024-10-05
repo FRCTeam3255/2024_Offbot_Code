@@ -83,8 +83,8 @@ public class Drive extends Command {
       rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(90)));
     }
 
-    // Override any previously calculated rotational speeds if the robot demands it
-    // >:(
+    // TODO: make it so that the driver providing driver input overrides any
+    // rotation
     switch (subStateMachine.getRobotState()) {
       case PREP_SHUFFLE:
         // rVelocity =
