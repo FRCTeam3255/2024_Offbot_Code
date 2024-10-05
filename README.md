@@ -29,7 +29,7 @@ Check out our diagram below or visit the interactive link [here.](https://www.tl
 ![State Machine Diagram](src/main/assets/StateMachine.png)
 
 ## Controls
-Coming Soon!
+![Controller Map](src/main/assets/Controller_Map.png)
 
 ## Robot Simulation
 Coming Soon!
