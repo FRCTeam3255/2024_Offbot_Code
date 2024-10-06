@@ -29,6 +29,9 @@ public class Climbing extends SequentialCommandGroup {
 
     addCommands(
         Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.CLIMBING)),
+        Commands.runOnce(
+            () -> subShooter.setDesiredVelocities(Units.RotationsPerSecond.of(-30), Units.RotationsPerSecond.of(-30))),
+        Commands.runOnce(() -> subShooter.getUpToSpeed()),
 
         // Check if we have a gp: if we do, put it in the drainpipe using prep amp
         Commands.either(
@@ -42,9 +45,6 @@ public class Climbing extends SequentialCommandGroup {
                 Commands.waitUntil(() -> subElevator.getGamePieceStored()),
                 // Stop motors
                 Commands.runOnce(() -> subTransfer.setFeederSpeed(0)),
-                Commands.runOnce(() -> subShooter.setShootingNeutralOutput()),
-                Commands.runOnce(() -> subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(),
-                    Units.RotationsPerSecond.zero())),
                 Commands.runOnce(() -> subElevator.setDrainpipeSpeed(0))),
 
             Commands.print("Climb was initiated, but no Game Piece was found!"),
@@ -57,6 +57,13 @@ public class Climbing extends SequentialCommandGroup {
         Commands.waitUntil(() -> subShooter.isShooterAtPosition(desiredShooterPosition.shooterAngle)),
 
         // Driver will now use joysticks to move the climbers up and down
-        Commands.runOnce(() -> subClimber.setSafeToMoveClimber(true)));
+        Commands.runOnce(() -> subClimber.setSafeToMoveClimber(true)),
+
+        Commands.waitUntil(() -> subClimber.getClimberPosition().in(Units.Meters) >= 0.3),
+        Commands.runOnce(() -> subShooter.setShootingNeutralOutput()),
+        Commands.runOnce(() -> subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(),
+            Units.RotationsPerSecond.zero()))
+
+    );
   }
 }

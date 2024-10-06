@@ -331,8 +331,8 @@ public final class Constants {
     public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(10.5),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
 
-    public static final ShooterPositionGroup CLIMBING = new ShooterPositionGroup(Units.Degrees.of(123),
-        Units.RotationsPerSecond.of(0), Units.RotationsPerSecond.of(0), constElevator.FORWARD_LIMIT);
+    public static final ShooterPositionGroup CLIMBING = new ShooterPositionGroup(Units.Degrees.of(115),
+        Units.RotationsPerSecond.of(-30), Units.RotationsPerSecond.of(-30), constElevator.FORWARD_LIMIT);
 
     /**
      * <p>
@@ -448,7 +448,7 @@ public final class Constants {
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
 
     // -- Current Limiting --
-    public static final boolean ENABLE_CURRENT_LIMITING = true;
+    public static final boolean ENABLE_CURRENT_LIMITING = false;
     public static final double CURRENT_LIMIT = 30;
     public static final double CURRENT_THRESH = 50;
     public static final double CURRENT_TIME_THRESH = 0.1;

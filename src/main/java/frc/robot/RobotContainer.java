@@ -120,8 +120,8 @@ public class RobotContainer {
         .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
 
     // Climb down
-    controller.btn_LeftBumper
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(-controller.getLeftTriggerAxis() / 1.5)))
+    controller.btn_LeftTrigger
+        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(-controller.getLeftTriggerAxis())))
         .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
   }
 

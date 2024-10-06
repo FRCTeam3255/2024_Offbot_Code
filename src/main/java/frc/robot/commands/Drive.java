@@ -99,10 +99,6 @@ public class Drive extends Command {
         case PREP_VISION:
           rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
           break;
-        case CLIMBING:
-          rVelocity = subDrivetrain.getVelocityToChain();
-          break;
-
         default:
           break;
       }
