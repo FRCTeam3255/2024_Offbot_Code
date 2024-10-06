@@ -16,6 +16,7 @@ import frc.robot.Constants.constShooter;
 import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.Shooting;
 import frc.robot.commands.States.StoreFeeder;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -29,6 +30,7 @@ import frc.robot.subsystems.StateMachine.RobotState;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PreloadOnly extends SequentialCommandGroup {
   StateMachine subStateMachine;
+  Climber subClimber;
   Drivetrain subDrivetrain;
   Elevator subElevator;
   Intake subIntake;
@@ -36,10 +38,13 @@ public class PreloadOnly extends SequentialCommandGroup {
   Transfer subTransfer;
 
   /** Creates a new PreloadOnly. */
-  public PreloadOnly(StateMachine subStateMachine, Drivetrain subDrivetrain, Elevator subElevator, Intake subIntake,
+  public PreloadOnly(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,
+      Intake subIntake,
       Shooter subShooter,
       Transfer subTransfer) {
     this.subStateMachine = subStateMachine;
+    this.subClimber = subClimber;
+    this.subDrivetrain = subDrivetrain;
     this.subElevator = subElevator;
     this.subIntake = subIntake;
     this.subShooter = subShooter;
@@ -58,19 +63,22 @@ public class PreloadOnly extends SequentialCommandGroup {
 
         // Aim at speaker
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subDrivetrain, subElevator,
+            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subClimber, subDrivetrain,
+                subElevator,
                 subIntake, subTransfer, subShooter)),
 
         // Shoot! (Ends when we don't have a game piece anymore)
         Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.SHOOTING, subStateMachine, subDrivetrain, subElevator, subIntake, subTransfer,
+            .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
+                subTransfer,
                 subShooter)
             .until(() -> !subTransfer.getGamePieceCollected())),
 
         Commands.waitSeconds(constShooter.AUTO_PREP_NONE_DELAY.in(Units.Seconds)),
 
         // Reset subsystems to chill
-        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subDrivetrain,
-            subElevator, subIntake, subTransfer, subShooter)));
+        Commands.deferredProxy(() -> subStateMachine
+            .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer,
+                subShooter)));
   }
 }

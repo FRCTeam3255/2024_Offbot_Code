@@ -13,6 +13,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.constShooter;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -26,31 +27,37 @@ import frc.robot.subsystems.StateMachine.RobotState;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class WingOnly extends SequentialCommandGroup {
   StateMachine subStateMachine;
+  Climber subClimber;
   Drivetrain subDrivetrain;
   Elevator subElevator;
   Intake subIntake;
   Transfer subTransfer;
   Shooter subShooter;
+
   boolean goesDown;
 
   /** Creates a new WingDown. */
-  public WingOnly(StateMachine subStateMachine, Drivetrain subDrivetrain, Elevator subElevator, Intake subIntake,
-      boolean goesDown) {
+  public WingOnly(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,
+      Intake subIntake, Transfer subTransfer, Shooter subShooter, boolean goesDown) {
     this.subStateMachine = subStateMachine;
+    this.subClimber = subClimber;
     this.subDrivetrain = subDrivetrain;
     this.subElevator = subElevator;
+    this.subIntake = subIntake;
+    this.subTransfer = subTransfer;
+    this.subShooter = subShooter;
+
     this.goesDown = goesDown;
 
     addCommands(
         // Resetting pose
-        Commands.runOnce(() -> subDrivetrain.resetYaw(
-            getInitialPose().get().getRotation().getDegrees())),
-        Commands.runOnce(
-            () -> subDrivetrain.resetPoseToPose(getInitialPose().get())),
+        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(
+            getInitialPose().get())),
 
         // Intake
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subDrivetrain, subElevator, subIntake,
+            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber, subDrivetrain, subElevator,
+                subIntake,
                 subTransfer, subShooter)),
 
         // Drive to first note
@@ -58,17 +65,21 @@ public class WingOnly extends SequentialCommandGroup {
 
         // Aim at speaker
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain, subElevator,
+            () -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subClimber, subDrivetrain,
+                subElevator,
                 subIntake, subTransfer, subShooter)),
 
         // Shoot
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.SHOOTING, subStateMachine, subDrivetrain, subElevator, subIntake,
-                subTransfer, subShooter).until(() -> !subTransfer.getGamePieceCollected())),
+            () -> subStateMachine
+                .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
+                    subTransfer, subShooter)
+                .until(() -> !subTransfer.getGamePieceCollected())),
 
         // Intake
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subDrivetrain, subElevator, subIntake,
+            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber, subDrivetrain, subElevator,
+                subIntake,
                 subTransfer, subShooter)),
 
         // Drive to second note
@@ -76,17 +87,21 @@ public class WingOnly extends SequentialCommandGroup {
 
         // Aim at speaker
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain, subElevator,
+            () -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subClimber, subDrivetrain,
+                subElevator,
                 subIntake, subTransfer, subShooter)),
 
         // Shoot
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.SHOOTING, subStateMachine, subDrivetrain, subElevator, subIntake,
-                subTransfer, subShooter).until(() -> !subTransfer.getGamePieceCollected())),
+            () -> subStateMachine
+                .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
+                    subTransfer, subShooter)
+                .until(() -> !subTransfer.getGamePieceCollected())),
 
         // Intake
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subDrivetrain, subElevator, subIntake,
+            () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber, subDrivetrain, subElevator,
+                subIntake,
                 subTransfer, subShooter)),
 
         // Drive to third note
@@ -94,19 +109,23 @@ public class WingOnly extends SequentialCommandGroup {
 
         // Aim at speaker
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subDrivetrain, subElevator,
+            () -> subStateMachine.tryState(RobotState.PREP_VISION, subStateMachine, subClimber, subDrivetrain,
+                subElevator,
                 subIntake, subTransfer, subShooter)),
 
         // Shoot
         Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.SHOOTING, subStateMachine, subDrivetrain, subElevator, subIntake,
-                subTransfer, subShooter).until(() -> !subTransfer.getGamePieceCollected())),
+            () -> subStateMachine
+                .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
+                    subTransfer, subShooter)
+                .until(() -> !subTransfer.getGamePieceCollected())),
 
         Commands.waitSeconds(constShooter.AUTO_PREP_NONE_DELAY.in(Units.Seconds)),
 
         // Reset subsystems to chill
-        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subDrivetrain,
-            subElevator, subIntake, subTransfer, subShooter)));
+        Commands
+            .deferredProxy(() -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain,
+                subElevator, subIntake, subTransfer, subShooter)));
   }
 
   public String determinePathName() {
