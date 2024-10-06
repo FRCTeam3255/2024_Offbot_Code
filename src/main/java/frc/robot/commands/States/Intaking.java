@@ -4,8 +4,6 @@
 
 package frc.robot.commands.States;
 
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constIntake;
 import frc.robot.Constants.constShooter;
@@ -42,7 +40,7 @@ public class Intaking extends Command {
 
     if (subShooter.getShooterPosition().lte(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT)) {
       subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
-    } else if (subShooter.getShooterPosition().gte(constShooter.PIVOT_FORWARD_LIMIT)) {
+    } else if (subShooter.getShooterPosition().gte(constShooter.PIVOT_FORWARD_INTAKE_LIMIT)) {
       subShooter.setPivotPosition(constShooter.PIVOT_FORWARD_INTAKE_LIMIT);
     } else {
       subShooter.setPivotPosition(subShooter.getShooterPosition());

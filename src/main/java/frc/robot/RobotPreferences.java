@@ -2,7 +2,10 @@ package frc.robot;
 
 import com.frcteam3255.preferences.SN_DoublePreference;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
 
 public class RobotPreferences {
   public static final class prefDrivetrain {
@@ -13,10 +16,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference driveSpeed = new SN_DoublePreference("driveSpeed",
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
-    // Rotational speed (degrees per second) while manually driving
-    public static final SN_DoublePreference manualTurnSpeed = new SN_DoublePreference("manualTurnSpeed", 3);
-
-    public static final double maxTurnSpeed = 360;
+    // Rotational speed (degrees per second) while MANUALLY driving
+    public static final Measure<Velocity<Angle>> maxManualTurnSpeed = Units.DegreesPerSecond.of(120);
+    public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(360);
 
     /**
      * <p>
@@ -72,7 +74,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference autoSteerD = new SN_DoublePreference("autoSteerD", 0.0);
 
     // Teleop Snapping to Rotation (Yaw)
-    public static final double yawSnapP = 0.5;
+    public static final double yawSnapP = 3;
     public static final double yawSnapI = 0;
     public static final double yawSnapD = 0;
   }
@@ -97,15 +99,17 @@ public class RobotPreferences {
     public static final double pivotShooterV = 0.0;
     public static final double pivotShooterG = 0.53;
     public static final double pivotShooterA = 0.0;
-    public static final double pivotShooterP = 150;
+    public static final double pivotShooterP = 90;
     public static final double pivotShooterI = 0;
     public static final double pivotShooterD = 0;
   }
 
   public static final class prefElevator {
-    public static final SN_DoublePreference elevatorShooterP = new SN_DoublePreference("elevatorShooterP", 0);
-    public static final SN_DoublePreference elevatorShooterI = new SN_DoublePreference("elevatorShooterI", 0);
-    public static final SN_DoublePreference elevatorShooterD = new SN_DoublePreference("elevatorShooterD", 0);
+    public static final double elevatorG = 0.3;
+    public static final double elevatorS = 0.4;
+    public static final double elevatorP = 25;
+    public static final double elevatorI = 0;
+    public static final double elevatorD = 0;
   }
 
   public static final class prefVision {

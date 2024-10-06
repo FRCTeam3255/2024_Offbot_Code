@@ -5,9 +5,11 @@
 package frc.robot.commands.States;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constIntake;
 import frc.robot.Constants.constTransfer;
 import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
@@ -15,13 +17,15 @@ import frc.robot.subsystems.Transfer;
 public class Ejecting extends Command {
   StateMachine subStateMachine;
   Intake subIntake;
+  Elevator subElevator;
   Transfer subTransfer;
 
   /** Creates a new Eject. */
-  public Ejecting(StateMachine subStateMachine, Intake subIntake, Transfer subTransfer) {
+  public Ejecting(StateMachine subStateMachine, Intake subIntake, Elevator subElevator, Transfer subTransfer) {
     this.subStateMachine = subStateMachine;
     this.subIntake = subIntake;
     this.subTransfer = subTransfer;
+    this.subElevator = subElevator;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subStateMachine);
@@ -32,6 +36,7 @@ public class Ejecting extends Command {
   public void initialize() {
     subStateMachine.setRobotState(RobotState.EJECTING);
     subIntake.setIntakeRollerSpeed(constIntake.EJECTING_SPEED);
+    subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_EJECTING_SPEED);
     subTransfer.setFeederSpeed(constTransfer.EJECTING_SPEED);
   }
 

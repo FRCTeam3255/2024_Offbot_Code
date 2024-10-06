@@ -7,7 +7,6 @@ package frc.robot.commands.States;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.StateMachine.RobotState;
-import frc.robot.Constants.constShooter;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
@@ -35,13 +34,7 @@ public class StoreFeeder extends Command {
   public void initialize() {
     subStateMachine.setRobotState(RobotState.STORE_FEEDER);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
-    subTransfer.setFeederSpeed(Units.Percent.zero());
-    subShooter.setShooterPercentOutput(Units.Percent.zero());
-
-    // This allows StoreFeeder to effectively also act as our "Unalive Shooter"
-    // command from last year
-    // We don't care if it actually gets there- just that its going there
-    subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_LIMIT);
+    subTransfer.setFeederSpeed(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

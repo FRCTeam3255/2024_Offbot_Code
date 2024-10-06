@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.Optional;
+
 import com.frcteam3255.utils.LimelightHelpers;
 import com.frcteam3255.utils.LimelightHelpers.PoseEstimate;
 
@@ -19,7 +21,8 @@ public class AddVisionMeasurement extends Command {
   Drivetrain subDrivetrain;
   Limelight subLimelight;
 
-  PoseEstimate estimatedPose;
+  Optional<PoseEstimate> estimatedPose;
+  PoseEstimate lastEstimatedPose;
   double drivetrainRotation = 0;
 
   public AddVisionMeasurement(Drivetrain subDrivetrain, Limelight subLimelight) {
@@ -38,11 +41,14 @@ public class AddVisionMeasurement extends Command {
     LimelightHelpers.SetRobotOrientation("limelight",
         subDrivetrain.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
 
-    estimatedPose = subLimelight.getPoseEstimate();
+    estimatedPose = Optional.of(subLimelight.getPoseEstimate());
     Measure<Velocity<Angle>> gyroRate = Units.DegreesPerSecond.of(subDrivetrain.getGyroRate());
 
-    if (!subLimelight.rejectUpdate(estimatedPose, gyroRate)) {
-      subDrivetrain.addVisionMeasurement(estimatedPose.pose, estimatedPose.timestampSeconds);
+    if (estimatedPose.isPresent()) {
+      lastEstimatedPose = estimatedPose.get();
+      if (!subLimelight.rejectUpdate(lastEstimatedPose, gyroRate)) {
+        subDrivetrain.addVisionMeasurement(lastEstimatedPose.pose, lastEstimatedPose.timestampSeconds);
+      }
     }
   }
 

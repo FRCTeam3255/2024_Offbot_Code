@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.Optional;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -13,11 +11,9 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Dimensionless;
 import edu.wpi.first.units.Measure;
@@ -43,6 +39,7 @@ public class Shooter extends SubsystemBase {
   private boolean ignoreFlywheelSpeed = false;
   private Measure<Velocity<Angle>> desiredLeftVelocity = Units.RotationsPerSecond.of(0);
   private Measure<Velocity<Angle>> desiredRightVelocity = Units.RotationsPerSecond.of(0);
+  private Measure<Angle> lastDesiredPivotAngle = Units.Degrees.of(0);
 
   public Shooter() {
     leftMotor = new TalonFX(mapShooter.SHOOTER_LEFT_MOTOR_CAN, "rio");
@@ -106,6 +103,13 @@ public class Shooter extends SubsystemBase {
 
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_BACKWARD_LIMIT.in(Units.Rotations);
+
+    // - Current Limits -
+    pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = constShooter.PIVOT_ENABLE_CURRENT_LIMITING;
+    pivotConfig.CurrentLimits.SupplyCurrentThreshold = constShooter.PIVOT_CURRENT_THRESH;
+    pivotConfig.CurrentLimits.SupplyCurrentLimit = constShooter.PIVOT_CURRENT_LIMIT;
+    pivotConfig.CurrentLimits.SupplyTimeThreshold = constShooter.PIVOT_CURRENT_TIME_THRESH;
+
     pivotMotor.getConfigurator().apply(pivotConfig);
   }
 
@@ -192,6 +196,10 @@ public class Shooter extends SubsystemBase {
     return Units.Rotations.of(pivotMotor.getPosition().getValueAsDouble());
   }
 
+  public boolean isSafeToMoveElevator() {
+    return getShooterPosition().lte(constShooter.NEUTRAL_OUT_THRESHOLD);
+  }
+
   /**
    * @return If the shooter position is within tolerance of desired position
    */
@@ -262,6 +270,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setPivotPosition(Measure<Angle> position) {
+    lastDesiredPivotAngle = position;
     pivotMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
   }
 
@@ -300,6 +309,10 @@ public class Shooter extends SubsystemBase {
     return desiredLockingAngle;
   }
 
+  public boolean readyToShoot() {
+    return isLeftShooterUpToSpeed() && isRightShooterUpToSpeed() && isShooterAtPosition(lastDesiredPivotAngle);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -313,6 +326,7 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
     SmartDashboard.putNumber("Shooter/Pivot Velocity", pivotMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putBoolean("Shooter/Safe to Move Elevator", isSafeToMoveElevator());
 
   }
 }

@@ -10,6 +10,7 @@ import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constShooter;
 import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine.TargetState;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -18,15 +19,17 @@ import frc.robot.subsystems.Transfer;
 
 public class NoneState extends Command {
   StateMachine subStateMachine;
+  Climber subClimber;
   Elevator subElevator;
   Intake subIntake;
   Shooter subShooter;
   Transfer subTransfer;
 
   /** Creates a new NoneState. */
-  public NoneState(StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
+  public NoneState(StateMachine subStateMachine, Climber subClimber, Elevator subElevator, Intake subIntake,
       Shooter subShooter, Transfer subTransfer) {
     this.subStateMachine = subStateMachine;
+    this.subClimber = subClimber;
     this.subElevator = subElevator;
     this.subIntake = subIntake;
     this.subShooter = subShooter;
@@ -41,15 +44,18 @@ public class NoneState extends Command {
   public void initialize() {
     subStateMachine.setTargetState(TargetState.PREP_NONE);
     subStateMachine.setRobotState(RobotState.NONE);
-    subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
-    subTransfer.setFeederSpeed(Units.Percent.zero());
+    subTransfer.setGamePieceCollected(false);
+    subClimber.setSafeToMoveClimber(false);
+    subElevator.setDrainpipeSpeed(0);
+    subTransfer.setFeederSpeed(0);
     subShooter.setShootingNeutralOutput();
     subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
-    if (subShooter.getShooterPosition().lte(constShooter.NEUTRAL_OUT_THRESHOLD)) {
+
+    if (subShooter.isSafeToMoveElevator()) {
       subShooter.setPivotNeutralOutput();
     } else {
-      subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
+      subShooter.setPivotPosition(constShooter.NONE_STATE_ANGLE);
     }
   }
 
@@ -61,11 +67,13 @@ public class NoneState extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    subShooter.setPivotNeutralOutput();
+    subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return subShooter.isSafeToMoveElevator();
   }
 }
