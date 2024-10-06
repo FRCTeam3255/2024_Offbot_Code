@@ -41,7 +41,7 @@ public class AddVisionMeasurement extends Command {
     LimelightHelpers.SetRobotOrientation("limelight",
         subDrivetrain.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
 
-    estimatedPose = Optional.of(subLimelight.getPoseEstimate());
+    estimatedPose = subLimelight.getPoseEstimate();
     Measure<Velocity<Angle>> gyroRate = Units.DegreesPerSecond.of(subDrivetrain.getGyroRate());
 
     if (estimatedPose.isPresent()) {

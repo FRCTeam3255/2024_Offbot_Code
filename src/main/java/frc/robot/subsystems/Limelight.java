@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import com.frcteam3255.utils.LimelightHelpers;
 import com.frcteam3255.utils.LimelightHelpers.PoseEstimate;
 
@@ -17,8 +19,8 @@ public class Limelight extends SubsystemBase {
   public Limelight() {
   }
 
-  public PoseEstimate getPoseEstimate() {
-    return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+  public Optional<PoseEstimate> getPoseEstimate() {
+    return Optional.of(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight"));
   }
 
   /**

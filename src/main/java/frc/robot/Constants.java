@@ -98,6 +98,8 @@ public final class Constants {
         SN_SwerveConstants.MK4I.KRAKEN.L3.driveGearRatio,
         SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters);
 
+    public static final Measure<Angle> AUTO_PRELOAD_TAXI_ROTATION = Units.Degrees.of(119.62);
+
     public static final Measure<Angle> AT_ROTATION_TOLERANCE = Units.Degrees.of(20);
 
     public static final boolean DRIVE_ENABLE_CURRENT_LIMITING = true;
@@ -262,9 +264,11 @@ public final class Constants {
 
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
-    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(5);
+    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(2);
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
     public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
+
+    public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(1);
 
     // -- Zeroing --
     /**

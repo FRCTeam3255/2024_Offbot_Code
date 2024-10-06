@@ -1,0 +1,95 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.4628998272081055,
+        "y": 4.090195222643967
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.462899827208104,
+        "y": 4.090195222643967
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.648044732709184,
+        "y": 4.2058191158635845
+      },
+      "prevControl": {
+        "x": 2.6793680212167326,
+        "y": 4.15310431325332
+      },
+      "nextControl": {
+        "x": 2.0554722799586447,
+        "y": 5.203075194882785
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.648044732709184,
+        "y": 5.549946874541637
+      },
+      "prevControl": {
+        "x": 1.983207346696384,
+        "y": 5.70892972771861
+      },
+      "nextControl": {
+        "x": 2.9014549502500198,
+        "y": 5.489348779042741
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.648044732709184,
+        "y": 6.850715673262332
+      },
+      "prevControl": {
+        "x": 1.665241640342436,
+        "y": 6.850715673262332
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -24.775140568831905,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 28.0724869358529,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

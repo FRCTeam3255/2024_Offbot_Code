@@ -6,6 +6,10 @@ package frc.robot;
 
 import com.frcteam3255.joystick.SN_XboxController;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +26,9 @@ import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.commands.GamePieceRumble;
 import frc.robot.commands.ManualElevator;
+import frc.robot.commands.Autos.PreloadOnly;
+import frc.robot.commands.Autos.PreloadTaxi;
+import frc.robot.commands.Autos.WingOnly;
 import frc.robot.commands.ManualPivot;
 import frc.robot.commands.Zeroing.ZeroClimber;
 import frc.robot.commands.Zeroing.ZeroElevator;
@@ -62,6 +69,8 @@ public class RobotContainer {
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
       && subTransfer.getGamePieceCollected());
 
+  SendableChooser<Command> autoChooser = new SendableChooser<>();
+
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
 
@@ -85,15 +94,15 @@ public class RobotContainer {
                     subElevator))));
     // .onTrue(new GamePieceRumble(conDriver, conOperator));
 
-    // readyToShoot.onTrue(
-    // Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
-    // constControllers.DRIVER_RUMBLE)).alongWith(
-    // Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
-    // constControllers.OPERATOR_RUMBLE))))
-    // .onFalse(
-    // Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
-    // 0)).alongWith(
-    // Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
+    readyToShoot.onTrue(
+        Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
+            constControllers.DRIVER_RUMBLE)).alongWith(
+                Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
+                    constControllers.OPERATOR_RUMBLE))))
+        .onFalse(
+            Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
+                0)).alongWith(
+                    Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
 
     subDrivetrain.resetModulesToAbsolute();
 
@@ -102,6 +111,8 @@ public class RobotContainer {
     configureDriverBindings(conDriver);
     configureOperatorBindings(conOperator);
     configureTestBindings(conTestOperator);
+
+    configureAutoSelector();
   }
 
   private void configureDriverBindings(SN_XboxController controller) {
@@ -262,8 +273,21 @@ public class RobotContainer {
             subShooter, subTransfer));
   }
 
+  private void configureAutoSelector() {
+    autoChooser.setDefaultOption("Preload Only",
+        new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));
+    autoChooser.addOption("Preload Taxi",
+        new PreloadTaxi(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));
+    autoChooser.addOption("Wing Only Down", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
+        subIntake, subTransfer, subShooter, true));
+    autoChooser.addOption("Wing Only Up", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
+        subIntake, subTransfer, subShooter, false));
+
+    SmartDashboard.putData(autoChooser);
+  }
+
   public Command getAutonomousCommand() {
-    return null;
+    return autoChooser.getSelected();
   }
 
   /**

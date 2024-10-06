@@ -167,14 +167,21 @@ public class Shooter extends SubsystemBase {
    * @return If the left shooter motor is at its desired velocity
    */
   public boolean isLeftShooterUpToSpeed() {
-    return (getLeftShooterVelocity().minus(desiredLeftVelocity)).lte(constShooter.UP_TO_SPEED_TOLERANCE);
+    if (desiredLeftVelocity.baseUnitMagnitude() == 0) {
+      return false;
+    }
+    return (desiredLeftVelocity.minus(getLeftShooterVelocity())).lte(constShooter.UP_TO_SPEED_TOLERANCE);
   }
 
   /**
    * @return If the right shooter motor is at its desired velocity
    */
   public boolean isRightShooterUpToSpeed() {
-    return (getRightShooterVelocity().minus(desiredRightVelocity)).lte(constShooter.UP_TO_SPEED_TOLERANCE);
+    if (desiredRightVelocity.baseUnitMagnitude() == 0) {
+      return false;
+    }
+
+    return (desiredRightVelocity.minus(getRightShooterVelocity())).lte(constShooter.UP_TO_SPEED_TOLERANCE);
   }
 
   /**
@@ -182,11 +189,7 @@ public class Shooter extends SubsystemBase {
    *         desired velocities
    */
   public boolean areBothShootersUpToSpeed() {
-    return (isLeftShooterUpToSpeed()
-        && isRightShooterUpToSpeed()
-        && !(getLeftShooterVelocity().equals(Units.RotationsPerSecond.zero()))
-        && !(getLeftShooterVelocity().equals(Units.RotationsPerSecond.zero()))
-        || ignoreFlywheelSpeed);
+    return (isLeftShooterUpToSpeed() && isRightShooterUpToSpeed() || ignoreFlywheelSpeed);
   }
 
   /**
@@ -327,6 +330,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
     SmartDashboard.putNumber("Shooter/Pivot Velocity", pivotMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putBoolean("Shooter/Safe to Move Elevator", isSafeToMoveElevator());
+    SmartDashboard.putBoolean("Shooter/Ready to Shoot", readyToShoot());
 
   }
 }
