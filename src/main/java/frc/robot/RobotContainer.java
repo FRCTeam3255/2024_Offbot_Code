@@ -307,8 +307,7 @@ public class RobotContainer {
         new ZeroShooterPivot(subShooter).withTimeout(constShooter.ZEROING_TIMEOUT.in(Units.Seconds)))
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);
     returnedCommand.addRequirements(subStateMachine);
-    // return returnedCommand;
-    return Commands.print(":p");
+    return returnedCommand;
   };
 
 }

@@ -52,9 +52,6 @@ public class PreloadOnly extends SequentialCommandGroup {
     this.subTransfer = subTransfer;
 
     // TODO: Add param for each sub so we can reset pose
-
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)),
 
@@ -70,8 +67,6 @@ public class PreloadOnly extends SequentialCommandGroup {
                 subTransfer,
                 subShooter)
             .until(() -> !subTransfer.getGamePieceCollected())),
-
-        Commands.waitSeconds(constShooter.AUTO_PREP_NONE_DELAY.in(Units.Seconds)),
 
         // Reset subsystems to chill
         Commands.deferredProxy(() -> subStateMachine
