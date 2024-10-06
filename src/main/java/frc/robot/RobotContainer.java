@@ -9,6 +9,7 @@ import com.frcteam3255.joystick.SN_XboxController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -281,6 +282,8 @@ public class RobotContainer {
         subIntake, subTransfer, subShooter, true));
     autoChooser.addOption("Wing Only Up", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
         subIntake, subTransfer, subShooter, false));
+
+    SmartDashboard.putData(autoChooser);
   }
 
   public Command getAutonomousCommand() {
