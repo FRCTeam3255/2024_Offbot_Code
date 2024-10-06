@@ -30,7 +30,8 @@ public class Drive extends Command {
   double slowMultiplier = 0;
 
   public Drive(Drivetrain subDrivetrain, StateMachine subStateMachine, DoubleSupplier xAxis, DoubleSupplier yAxis,
-      DoubleSupplier rotationAxis, Trigger slowMode, Trigger north, Trigger east, Trigger south, Trigger west) {
+      DoubleSupplier rotationAxis, Trigger slowMode, Trigger chain, Trigger north, Trigger east, Trigger south,
+      Trigger west) {
     this.subDrivetrain = subDrivetrain;
     this.subStateMachine = subStateMachine;
     this.xAxis = xAxis;
@@ -41,6 +42,7 @@ public class Drive extends Command {
     this.east = east;
     this.south = south;
     this.west = west;
+    this.chain = chain;
 
     isOpenLoop = true;
 
@@ -85,23 +87,28 @@ public class Drive extends Command {
 
     // Ignore calculated rotation if a driver rotation is given
     if (rVelocity.equals(Units.RadiansPerSecond.of(0))) {
-      switch (subStateMachine.getRobotState()) {
-        case PREP_SHUFFLE:
-          rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
-          break;
-        case PREP_AMP:
-          rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(90));
-          break;
-        case PREP_VISION:
-          rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
-          break;
-        case CLIMBING:
-          rVelocity = subDrivetrain.getVelocityToChain();
-          break;
+      if (chain.getAsBoolean()) {
+        rVelocity = subDrivetrain.getVelocityToChain();
+      } else {
+        switch (subStateMachine.getRobotState()) {
+          case PREP_SHUFFLE:
+            rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
+            break;
+          case PREP_AMP:
+            rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(90));
+            break;
+          case PREP_VISION:
+            rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
+            break;
+          case CLIMBING:
+            rVelocity = subDrivetrain.getVelocityToChain();
+            break;
 
-        default:
-          break;
+          default:
+            break;
+        }
       }
+
     }
 
     subDrivetrain.drive(new Translation2d(xVelocity.in(Units.MetersPerSecond), yVelocity.in(Units.MetersPerSecond)),

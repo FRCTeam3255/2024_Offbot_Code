@@ -184,13 +184,13 @@ public final class Constants {
       // 0.457m = The height of the AMP opening
       // 0.660m = The height between the floor and the bottom of the opening
 
-      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(300)));
+      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(120)));
       private static final Pose3d LEFT_STAGE = new Pose3d(
-          new Pose2d(4.541771411895752, 4.736017227172852, Rotation2d.fromDegrees(120)));
+          new Pose2d(4.541771411895752, 4.736017227172852, Rotation2d.fromDegrees(300)));
       private static final Pose3d CENTER_STAGE = new Pose3d(
-          new Pose2d(5.554078578948975, 4.124814033508301, Rotation2d.fromDegrees(0)));
+          new Pose2d(5.554078578948975, 4.124814033508301, Rotation2d.fromDegrees(180)));
       private static final Pose3d RIGHT_STAGE = new Pose3d(
-          new Pose2d(4.524875164031982, 3.488827705383301, Rotation2d.fromDegrees(240)));
+          new Pose2d(4.524875164031982, 3.488827705383301, Rotation2d.fromDegrees(60)));
 
       private static final Pose3d SUBWOOFER = new Pose3d(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(0)));
 
@@ -213,11 +213,11 @@ public final class Constants {
 
       private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(60)));
       private static final Pose3d LEFT_STAGE = new Pose3d(
-          new Pose2d(12.0610990524292, 3.4952545166015625, Rotation2d.fromDegrees(300)));
+          new Pose2d(12.0610990524292, 3.4952545166015625, Rotation2d.fromDegrees(120)));
       private static final Pose3d CENTER_STAGE = new Pose3d(
-          new Pose2d(10.983105659484863, 4.096443176269531, Rotation2d.fromDegrees(180)));
+          new Pose2d(10.983105659484863, 4.096443176269531, Rotation2d.fromDegrees(0)));
       private static final Pose3d RIGHT_STAGE = new Pose3d(
-          new Pose2d(12.021082878112793, 4.7371745109558105, Rotation2d.fromDegrees(60)));
+          new Pose2d(12.021082878112793, 4.7371745109558105, Rotation2d.fromDegrees(240)));
 
       private static final Pose3d SUBWOOFER = new Pose3d(
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(180)));

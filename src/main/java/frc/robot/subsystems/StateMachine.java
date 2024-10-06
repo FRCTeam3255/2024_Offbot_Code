@@ -106,6 +106,7 @@ public class StateMachine extends SubsystemBase {
 
       case CLIMBING:
         switch (currentState) {
+          case NONE:
           case STORE_FEEDER:
           case PREP_SPEAKER:
           case PREP_VISION:
@@ -118,6 +119,7 @@ public class StateMachine extends SubsystemBase {
             return new Climbing(subClimber, subElevator, subStateMachine, subShooter, subTransfer);
         }
 
+        break;
       case EJECTING:
         switch (currentState) {
           case NONE:

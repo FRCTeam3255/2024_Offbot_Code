@@ -31,27 +31,24 @@ public class Climbing extends SequentialCommandGroup {
         Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.CLIMBING)),
 
         // Check if we have a gp: if we do, put it in the drainpipe using prep amp
-        // Commands.either(
-        // Commands.sequence(
-        // new PrepTargetState(subElevator, subStateMachine, subShooter,
-        // TargetState.PREP_AMP),
-        // // Spin feeder and drainpipe motors
-        // Commands.runOnce(() ->
-        // subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
-        // Commands.runOnce(() ->
-        // subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_PREP_TO_AMP_SPEED)),
-        // // Wait for the note to transfer to drainpipe
-        // Commands.waitUntil(() -> subElevator.getGamePieceStored()),
-        // // Stop motors
-        // Commands.runOnce(() -> subTransfer.setFeederSpeed(0)),
-        // Commands.runOnce(() -> subShooter.setShootingNeutralOutput()),
-        // Commands.runOnce(() ->
-        // subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(),
-        // Units.RotationsPerSecond.zero())),
-        // Commands.runOnce(() -> subElevator.setDrainpipeSpeed(0))),
+        Commands.either(
+            Commands.sequence(
+                new PrepTargetState(subElevator, subStateMachine, subShooter,
+                    TargetState.PREP_AMP),
+                // Spin feeder and drainpipe motors
+                Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
+                Commands.runOnce(() -> subElevator.setDrainpipeSpeed(constElevator.DRAINPIPE_PREP_TO_AMP_SPEED)),
+                // Wait for the note to transfer to drainpipe
+                Commands.waitUntil(() -> subElevator.getGamePieceStored()),
+                // Stop motors
+                Commands.runOnce(() -> subTransfer.setFeederSpeed(0)),
+                Commands.runOnce(() -> subShooter.setShootingNeutralOutput()),
+                Commands.runOnce(() -> subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(),
+                    Units.RotationsPerSecond.zero())),
+                Commands.runOnce(() -> subElevator.setDrainpipeSpeed(0))),
 
-        // Commands.print("Climb was initiated, but no Game Piece was found!"),
-        // () -> subTransfer.getGamePieceCollected()),
+            Commands.print("Climb was initiated, but no Game Piece was found!"),
+            () -> subTransfer.getGamePieceCollected()),
 
         // Move the elevator and shooter to a point where we can safely climb
         Commands.runOnce(() -> subElevator.setElevatorPosition(desiredShooterPosition.elevatorPosition)),

@@ -68,7 +68,7 @@ public class RobotContainer {
     subDrivetrain
         .setDefaultCommand(
             new Drive(subDrivetrain, subStateMachine, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
-                conDriver.btn_LeftBumper,
+                conDriver.btn_LeftBumper, conDriver.btn_RightBumper,
                 conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X));
 
     subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
@@ -97,6 +97,8 @@ public class RobotContainer {
 
     subDrivetrain.resetModulesToAbsolute();
 
+    conDriver.setTriggerPressThreshold(0.2);
+
     configureDriverBindings(conDriver);
     configureOperatorBindings(conOperator);
     configureTestBindings(conTestOperator);
@@ -108,17 +110,19 @@ public class RobotContainer {
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
 
     // Climb up
-    controller.btn_LeftTrigger.onTrue(
+    controller.btn_RightTrigger.onTrue(
         Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP)))
         .onTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.CLIMBING, subStateMachine,
                 subClimber, subDrivetrain, subElevator,
                 subIntake, subTransfer, subShooter)))
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(controller.getLeftTriggerAxis() / 4)));
+        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(controller.getRightTriggerAxis() / 4)))
+        .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
 
     // Climb down
-    controller.btn_RightTrigger
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(-controller.getRightTriggerAxis() / 4)));
+    controller.btn_LeftBumper
+        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(-controller.getLeftTriggerAxis() / 1.5)))
+        .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
