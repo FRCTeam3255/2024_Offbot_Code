@@ -83,30 +83,28 @@ public class Drive extends Command {
       rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(180)));
     } else if (west.getAsBoolean()) {
       rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(90)));
+    } else if (chain.getAsBoolean()) {
+      rVelocity = subDrivetrain.getVelocityToChain();
     }
 
     // Ignore calculated rotation if a driver rotation is given
     if (rVelocity.equals(Units.RadiansPerSecond.of(0))) {
-      if (chain.getAsBoolean()) {
-        rVelocity = subDrivetrain.getVelocityToChain();
-      } else {
-        switch (subStateMachine.getRobotState()) {
-          case PREP_SHUFFLE:
-            rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
-            break;
-          case PREP_AMP:
-            rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(90));
-            break;
-          case PREP_VISION:
-            rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
-            break;
-          case CLIMBING:
-            rVelocity = subDrivetrain.getVelocityToChain();
-            break;
+      switch (subStateMachine.getRobotState()) {
+        case PREP_SHUFFLE:
+          rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
+          break;
+        case PREP_AMP:
+          rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(90));
+          break;
+        case PREP_VISION:
+          rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
+          break;
+        case CLIMBING:
+          rVelocity = subDrivetrain.getVelocityToChain();
+          break;
 
-          default:
-            break;
-        }
+        default:
+          break;
       }
 
     }
