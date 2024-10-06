@@ -24,6 +24,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
 import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.TargetState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -55,36 +56,13 @@ public class PreloadOnly extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        // Commands.runOnce(() -> subDrivetrain.resetYaw(
-        // getInitialPose().get().getRotation().getDegrees())),
-        // Commands.runOnce(
-        // () -> subDrivetrain.resetPoseToPose(getInitialPose().get())),
-
-        Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subClimber, subDrivetrain,
-                subElevator,
-                subIntake, subTransfer, subShooter))
-            .withTimeout(0),
+        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)),
 
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
             .until(() -> subTransfer.getGamePieceCollected()),
 
-        Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subClimber, subDrivetrain,
-                subElevator, subIntake, subTransfer, subShooter))
-            .withTimeout(1),
-
-        Commands.waitSeconds(1),
-
-        // Aim at speaker
-        Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER, subStateMachine, subClimber, subDrivetrain,
-                subElevator,
-                subIntake, subTransfer, subShooter))
-            .until(() -> subShooter.readyToShoot()),
-
-        Commands.waitSeconds(1),
+        Commands.waitUntil(() -> subShooter.readyToShoot()),
 
         // Shoot! (Ends when we don't have a game piece anymore)
         Commands.deferredProxy(() -> subStateMachine
@@ -93,7 +71,6 @@ public class PreloadOnly extends SequentialCommandGroup {
                 subShooter)
             .until(() -> !subTransfer.getGamePieceCollected())),
 
-        Commands.waitSeconds(1),
         Commands.waitSeconds(constShooter.AUTO_PREP_NONE_DELAY.in(Units.Seconds)),
 
         // Reset subsystems to chill

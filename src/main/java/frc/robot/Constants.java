@@ -264,7 +264,7 @@ public final class Constants {
 
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
-    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(5);
+    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(2);
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
     public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 

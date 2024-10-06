@@ -94,15 +94,15 @@ public class RobotContainer {
                     subElevator))));
     // .onTrue(new GamePieceRumble(conDriver, conOperator));
 
-    // readyToShoot.onTrue(
-    // Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
-    // constControllers.DRIVER_RUMBLE)).alongWith(
-    // Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
-    // constControllers.OPERATOR_RUMBLE))))
-    // .onFalse(
-    // Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
-    // 0)).alongWith(
-    // Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
+    readyToShoot.onTrue(
+        Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
+            constControllers.DRIVER_RUMBLE)).alongWith(
+                Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
+                    constControllers.OPERATOR_RUMBLE))))
+        .onFalse(
+            Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
+                0)).alongWith(
+                    Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
 
     subDrivetrain.resetModulesToAbsolute();
 
@@ -307,7 +307,8 @@ public class RobotContainer {
         new ZeroShooterPivot(subShooter).withTimeout(constShooter.ZEROING_TIMEOUT.in(Units.Seconds)))
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);
     returnedCommand.addRequirements(subStateMachine);
-    return returnedCommand;
+    // return returnedCommand;
+    return Commands.print(":p");
   };
 
 }
