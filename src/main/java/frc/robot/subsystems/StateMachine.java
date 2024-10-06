@@ -76,13 +76,6 @@ public class StateMachine extends SubsystemBase {
           case SHOOTING:
           case NONE:
             return new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer);
-          case CLIMBING:
-            if (subClimber.isClimberAtPosition(constClimber.BACKWARD_LIMIT)) {
-              return new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer);
-            } else {
-              return Commands
-                  .print("Attempted to cancel CLIMBING, but the CLIMBER is UP! Please move the climber first :p");
-            }
         }
         break;
 
@@ -312,6 +305,13 @@ public class StateMachine extends SubsystemBase {
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
             return new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_NONE);
+          case CLIMBING:
+            if (subClimber.isClimberAtPosition(constClimber.BACKWARD_LIMIT)) {
+              return new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer);
+            } else {
+              return Commands
+                  .print("Attempted to cancel CLIMBING, but the CLIMBER is UP! Please move the climber first :p");
+            }
 
         }
     }
