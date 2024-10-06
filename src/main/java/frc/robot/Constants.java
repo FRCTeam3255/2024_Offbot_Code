@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.lang.annotation.Target;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.RobotEnableValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.frcteam3255.components.swerve.SN_SwerveConstants;
@@ -53,10 +55,10 @@ public final class Constants {
     // In Rotations: Obtain by aligning all of the wheels in the correct direction
     // and
     // copy-pasting the Raw Absolute Encoder value
-    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = -0.079834;
-    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = 0.249268;
-    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = -0.240479;
-    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = 0.209717;
+    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = 0.207520;
+    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = -0.246826;
+    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = 0.239502;
+    public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = -0.082764;
 
     public static final InvertedValue DRIVE_MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final InvertedValue STEER_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
@@ -97,6 +99,17 @@ public final class Constants {
         SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters);
 
     public static final Measure<Angle> AT_ROTATION_TOLERANCE = Units.Degrees.of(20);
+
+    public static final boolean DRIVE_ENABLE_CURRENT_LIMITING = true;
+    public static final double DRIVE_CURRENT_THRESH = 40;
+    public static final double DRIVE_CURRENT_LIMIT = 30;
+    public static final double DRIVE_CURRENT_TIME_THRESH = 0.1;
+
+    public static final boolean STEER_ENABLE_CURRENT_LIMITING = true;
+    public static final double STEER_CURRENT_THRESH = 40;
+    public static final double STEER_CURRENT_LIMIT = 30;
+    public static final double STEER_CURRENT_TIME_THRESH = 0.1;
+
   }
 
   public static class constField {
@@ -171,13 +184,13 @@ public final class Constants {
       // 0.457m = The height of the AMP opening
       // 0.660m = The height between the floor and the bottom of the opening
 
-      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(300)));
+      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(120)));
       private static final Pose3d LEFT_STAGE = new Pose3d(
-          new Pose2d(4.541771411895752, 4.736017227172852, Rotation2d.fromDegrees(120)));
+          new Pose2d(4.541771411895752, 4.736017227172852, Rotation2d.fromDegrees(300)));
       private static final Pose3d CENTER_STAGE = new Pose3d(
-          new Pose2d(5.554078578948975, 4.124814033508301, Rotation2d.fromDegrees(0)));
+          new Pose2d(5.554078578948975, 4.124814033508301, Rotation2d.fromDegrees(180)));
       private static final Pose3d RIGHT_STAGE = new Pose3d(
-          new Pose2d(4.524875164031982, 3.488827705383301, Rotation2d.fromDegrees(240)));
+          new Pose2d(4.524875164031982, 3.488827705383301, Rotation2d.fromDegrees(60)));
 
       private static final Pose3d SUBWOOFER = new Pose3d(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(0)));
 
@@ -200,11 +213,11 @@ public final class Constants {
 
       private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(60)));
       private static final Pose3d LEFT_STAGE = new Pose3d(
-          new Pose2d(12.0610990524292, 3.4952545166015625, Rotation2d.fromDegrees(300)));
+          new Pose2d(12.0610990524292, 3.4952545166015625, Rotation2d.fromDegrees(120)));
       private static final Pose3d CENTER_STAGE = new Pose3d(
-          new Pose2d(10.983105659484863, 4.096443176269531, Rotation2d.fromDegrees(180)));
+          new Pose2d(10.983105659484863, 4.096443176269531, Rotation2d.fromDegrees(0)));
       private static final Pose3d RIGHT_STAGE = new Pose3d(
-          new Pose2d(12.021082878112793, 4.7371745109558105, Rotation2d.fromDegrees(60)));
+          new Pose2d(12.021082878112793, 4.7371745109558105, Rotation2d.fromDegrees(240)));
 
       private static final Pose3d SUBWOOFER = new Pose3d(
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(180)));
@@ -243,7 +256,7 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
     public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
-    public static final Measure<Angle> NONE_STATE_ANGLE = Units.Degrees.of(25);
+    public static final Measure<Angle> NONE_STATE_ANGLE = Units.Degrees.of(45);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(3);
 
@@ -304,9 +317,9 @@ public final class Constants {
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
     public static final ShooterPositionGroup PREP_AMP = new ShooterPositionGroup(Units.Degrees.of(99),
-        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.45));
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.46));
     public static final ShooterPositionGroup PREP_SUB_BACKWARDS = new ShooterPositionGroup(Units.Degrees.of(111),
-        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0.4));
+        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0.41));
     public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(47.5),
         Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(42),
@@ -317,6 +330,9 @@ public final class Constants {
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(10.5),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
+
+    public static final ShooterPositionGroup CLIMBING = new ShooterPositionGroup(Units.Degrees.of(115),
+        Units.RotationsPerSecond.of(-30), Units.RotationsPerSecond.of(-30), constElevator.FORWARD_LIMIT);
 
     /**
      * <p>
@@ -363,12 +379,13 @@ public final class Constants {
     static {
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_NONE, RobotState.PREP_NONE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP_SHOOTER, RobotState.PREP_AMP_SHOOTER);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP, RobotState.PREP_AMP);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SHUFFLE, RobotState.PREP_SHUFFLE);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SUB_BACKWARDS, RobotState.PREP_SUB_BACKWARDS);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPEAKER, RobotState.PREP_SPEAKER);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_VISION, RobotState.PREP_VISION);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPIKE, RobotState.PREP_SPIKE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_WING, RobotState.PREP_WING);
-      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP, RobotState.PREP_AMP);
-      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SUB_BACKWARDS, RobotState.PREP_SUB_BACKWARDS);
     }
 
     /**
@@ -391,14 +408,17 @@ public final class Constants {
   }
 
   public static class constClimber {
-    public static final Measure<Angle> FORWARD_LIMIT = Units.Rotations.of(0);
-    public static final Measure<Angle> BACKWARD_LIMIT = Units.Rotations.of(0);
-    public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
-    // TODO: Get real gear ratio values
-    public static final double MECHANICAL_GEAR_RATIO = 1;
-    public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Meters.of(1);
+    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0.6);
+    public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
+    public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+    public static final NeutralModeValue NEUTRAL_MODE = NeutralModeValue.Brake;
+
+    public static final double MECHANICAL_GEAR_RATIO = 5;
+    public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Inches.of(1.432 * Math.PI);
     public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO
-        * FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
+        / FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
+
+    public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0.1);
 
     // -- Zeroing --
     /**
@@ -428,14 +448,14 @@ public final class Constants {
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
 
     // -- Current Limiting --
-    public static final boolean ENABLE_CURRENT_LIMITING = true;
+    public static final boolean ENABLE_CURRENT_LIMITING = false;
     public static final double CURRENT_LIMIT = 30;
     public static final double CURRENT_THRESH = 50;
     public static final double CURRENT_TIME_THRESH = 0.1;
   }
 
   public static class constElevator {
-    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0.5);
+    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0.52);
     public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue ELEVATOR_NEUTRAL_MODE = NeutralModeValue.Brake;
@@ -444,8 +464,8 @@ public final class Constants {
     public static final boolean NOTE_SENSOR_INVERT = true;
     public static final double MOTOR_ROTATION_TO_METERS = 1 / 0.0456842368;
 
-    public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0.37);
-    public static final Measure<Distance> SHOOTER_ABLE_TO_MOVE_LIMIT = Units.Meters.of(0.3);
+    public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0.38);
+    public static final Measure<Distance> SHOOTER_ABLE_TO_MOVE_LIMIT = Units.Meters.of(0.37);
 
     public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0.05);
 

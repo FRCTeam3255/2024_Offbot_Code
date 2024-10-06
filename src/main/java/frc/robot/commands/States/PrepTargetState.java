@@ -8,8 +8,6 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.constElevator;
-import frc.robot.Constants.constShooter;
 import frc.robot.Constants.constStateMachine;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.subsystems.Elevator;

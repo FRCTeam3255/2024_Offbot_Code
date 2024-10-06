@@ -5,9 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.List;
-import java.util.function.BooleanSupplier;
 
-import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.frcteam3255.components.swerve.SN_SuperSwerve;
@@ -42,6 +40,7 @@ public class Drivetrain extends SN_SuperSwerve {
   private static TalonFXConfiguration driveConfiguration = new TalonFXConfiguration();
   private static TalonFXConfiguration steerConfiguration = new TalonFXConfiguration();
   private static PIDController yawSnappingController;
+  private static String[] moduleNames = { "Front Left", "Front Right", "Back Left", "Back Right" };
 
   StructPublisher<Pose2d> robotPosePublisher = NetworkTableInstance.getDefault()
       .getStructTopic("/SmartDashboard/Drivetrain/Robot Pose", Pose2d.struct).publish();
@@ -101,9 +100,27 @@ public class Drivetrain extends SN_SuperSwerve {
     driveConfiguration.Slot0.kI = prefDrivetrain.driveI.getValue();
     driveConfiguration.Slot0.kD = prefDrivetrain.driveD.getValue();
 
+    driveConfiguration.CurrentLimits.SupplyCurrentLimitEnable = constDrivetrain.DRIVE_ENABLE_CURRENT_LIMITING;
+    driveConfiguration.CurrentLimits.SupplyCurrentThreshold = constDrivetrain.DRIVE_CURRENT_THRESH;
+    driveConfiguration.CurrentLimits.SupplyCurrentLimit = constDrivetrain.DRIVE_CURRENT_LIMIT;
+    driveConfiguration.CurrentLimits.SupplyTimeThreshold = constDrivetrain.DRIVE_CURRENT_TIME_THRESH;
+
+    driveConfiguration.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.1;
+    driveConfiguration.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.1;
+    driveConfiguration.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
+
     steerConfiguration.Slot0.kP = prefDrivetrain.steerP.getValue();
     steerConfiguration.Slot0.kI = prefDrivetrain.steerI.getValue();
     steerConfiguration.Slot0.kD = prefDrivetrain.steerD.getValue();
+
+    steerConfiguration.CurrentLimits.SupplyCurrentLimitEnable = constDrivetrain.STEER_ENABLE_CURRENT_LIMITING;
+    steerConfiguration.CurrentLimits.SupplyCurrentThreshold = constDrivetrain.STEER_CURRENT_THRESH;
+    steerConfiguration.CurrentLimits.SupplyCurrentLimit = constDrivetrain.STEER_CURRENT_LIMIT;
+    steerConfiguration.CurrentLimits.SupplyTimeThreshold = constDrivetrain.STEER_CURRENT_TIME_THRESH;
+
+    steerConfiguration.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.1;
+    steerConfiguration.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.1;
+    steerConfiguration.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
     pigeon.getConfigurator().apply(new Pigeon2Configuration());
 
@@ -135,7 +152,6 @@ public class Drivetrain extends SN_SuperSwerve {
     yawSetpoint = MathUtil.clamp(yawSetpoint, -prefDrivetrain.maxTurnSpeed.in(Units.DegreesPerSecond),
         prefDrivetrain.maxTurnSpeed.in(Units.DegreesPerSecond));
 
-    SmartDashboard.putNumber("!!!!!!!!! DEBUG DESIRED YAW SETPOINT, degrees/second", yawSetpoint);
     return Units.DegreesPerSecond.of(yawSetpoint);
   }
 
@@ -235,22 +251,24 @@ public class Drivetrain extends SN_SuperSwerve {
     super.periodic();
 
     for (SN_SwerveModule mod : modules) {
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Desired Speed (FPS)",
+      SmartDashboard.putNumber("Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Desired Speed (FPS)",
           Units.Meters.convertFrom(Math.abs(getDesiredModuleStates()[mod.moduleNumber].speedMetersPerSecond),
               Units.Feet));
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Actual Speed (FPS)",
+      SmartDashboard.putNumber("Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Actual Speed (FPS)",
           Units.Meters.convertFrom(Math.abs(getActualModuleStates()[mod.moduleNumber].speedMetersPerSecond),
               Units.Feet));
 
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Desired Angle (Degrees)",
+      SmartDashboard.putNumber("Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Desired Angle (Degrees)",
           Math.abs(
               Units.Meters.convertFrom(getDesiredModuleStates()[mod.moduleNumber].angle.getDegrees(), Units.Feet)));
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Actual Angle (Degrees)",
+      SmartDashboard.putNumber("Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Actual Angle (Degrees)",
           Math.abs(Units.Meters.convertFrom(getActualModuleStates()[mod.moduleNumber].angle.getDegrees(), Units.Feet)));
 
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Offset Absolute Encoder Angle (Rotations)",
+      SmartDashboard.putNumber(
+          "Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Offset Absolute Encoder Angle (Rotations)",
           mod.getAbsoluteEncoder());
-      SmartDashboard.putNumber("Drivetrain/Module " + mod.moduleNumber + "/Absolute Encoder Raw Value (Rotations)",
+      SmartDashboard.putNumber(
+          "Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Absolute Encoder Raw Value (Rotations)",
           mod.getRawAbsoluteEncoder());
     }
 

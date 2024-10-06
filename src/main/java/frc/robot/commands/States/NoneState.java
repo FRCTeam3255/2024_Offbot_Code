@@ -5,12 +5,12 @@
 package frc.robot.commands.States;
 
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constShooter;
 import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine.TargetState;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -19,15 +19,17 @@ import frc.robot.subsystems.Transfer;
 
 public class NoneState extends Command {
   StateMachine subStateMachine;
+  Climber subClimber;
   Elevator subElevator;
   Intake subIntake;
   Shooter subShooter;
   Transfer subTransfer;
 
   /** Creates a new NoneState. */
-  public NoneState(StateMachine subStateMachine, Elevator subElevator, Intake subIntake,
+  public NoneState(StateMachine subStateMachine, Climber subClimber, Elevator subElevator, Intake subIntake,
       Shooter subShooter, Transfer subTransfer) {
     this.subStateMachine = subStateMachine;
+    this.subClimber = subClimber;
     this.subElevator = subElevator;
     this.subIntake = subIntake;
     this.subShooter = subShooter;
@@ -44,6 +46,7 @@ public class NoneState extends Command {
     subStateMachine.setRobotState(RobotState.NONE);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
     subTransfer.setGamePieceCollected(false);
+    subClimber.setSafeToMoveClimber(false);
     subElevator.setDrainpipeSpeed(0);
     subTransfer.setFeederSpeed(0);
     subShooter.setShootingNeutralOutput();
