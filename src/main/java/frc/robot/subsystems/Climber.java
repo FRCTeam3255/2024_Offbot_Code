@@ -13,6 +13,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constClimber;
 import frc.robot.RobotMap.mapClimber;
@@ -36,11 +37,12 @@ public class Climber extends SubsystemBase {
     // -- Climber Motor --
     climberConfig.Feedback.SensorToMechanismRatio = constClimber.MOTOR_ROTATION_TO_METERS;
     climberConfig.MotorOutput.Inverted = constClimber.MOTOR_INVERT;
+    climberConfig.MotorOutput.NeutralMode = constClimber.NEUTRAL_MODE;
     climberConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     climberConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constClimber.FORWARD_LIMIT.in(Units.Meters);
 
     climberConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-    climberConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constClimber.FORWARD_LIMIT.in(Units.Meters);
+    climberConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constClimber.BACKWARD_LIMIT.in(Units.Meters);
 
     climberConfig.CurrentLimits.SupplyCurrentLimitEnable = constClimber.ENABLE_CURRENT_LIMITING;
     climberConfig.CurrentLimits.SupplyCurrentLimit = constClimber.CURRENT_LIMIT;
@@ -99,6 +101,7 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Climber/Position", getClimberPosition().in(Units.Meters));
+
   }
 }

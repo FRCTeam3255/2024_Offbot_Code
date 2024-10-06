@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.constClimber;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constField;
@@ -107,15 +108,17 @@ public class RobotContainer {
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
 
     // Climb up
-    controller.btn_LeftTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP)))
+    controller.btn_LeftTrigger.onTrue(
+        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP)))
         .onTrue(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.CLIMBING, subStateMachine, subClimber, subDrivetrain, subElevator,
+            () -> subStateMachine.tryState(RobotState.CLIMBING, subStateMachine,
+                subClimber, subDrivetrain, subElevator,
                 subIntake, subTransfer, subShooter)))
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(controller.getLeftTriggerAxis())));
+        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(controller.getLeftTriggerAxis() / 4)));
 
     // Climb down
     controller.btn_RightTrigger
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(-controller.getRightTriggerAxis())));
+        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(-controller.getRightTriggerAxis() / 4)));
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
@@ -154,12 +157,14 @@ public class RobotContainer {
 
     // Ejecting
     controller.btn_LeftBumper.whileTrue(Commands.deferredProxy(
-        () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine, subClimber, subDrivetrain, subElevator,
+        () -> subStateMachine.tryState(RobotState.EJECTING, subStateMachine,
+            subClimber, subDrivetrain, subElevator,
             subIntake,
             subTransfer,
             subShooter)))
         .onFalse(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator,
+            () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subClimber,
+                subDrivetrain, subElevator,
                 subIntake,
                 subTransfer,
                 subShooter)));
@@ -230,21 +235,27 @@ public class RobotContainer {
   private void configureTestBindings(SN_XboxController controller) {
     controller.btn_LeftTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.INTAKING)))
         .whileTrue(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
-        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer));
+        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake,
+            subShooter, subTransfer));
 
     controller.btn_RightTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.SHOOTING)))
-        .whileTrue(new Shooting(subStateMachine, subElevator, subShooter, subTransfer))
-        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer));
+        .whileTrue(new Shooting(subStateMachine, subElevator, subShooter,
+            subTransfer))
+        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake,
+            subShooter, subTransfer));
 
     controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SHUFFLE)))
-        .onTrue(new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_SHUFFLE));
+        .onTrue(new PrepTargetState(subElevator, subStateMachine, subShooter,
+            TargetState.PREP_SHUFFLE));
 
     controller.btn_A.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION)));
     controller.btn_Y.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT)));
 
     controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
-        .whileTrue(new Ejecting(subStateMachine, subIntake, subElevator, subTransfer))
-        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer));
+        .whileTrue(new Ejecting(subStateMachine, subIntake, subElevator,
+            subTransfer))
+        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake,
+            subShooter, subTransfer));
   }
 
   public Command getAutonomousCommand() {
@@ -263,8 +274,7 @@ public class RobotContainer {
    */
   public static Command zeroSubsystems() {
     Command returnedCommand = new ParallelCommandGroup(
-        // new
-        // ZeroClimber(subClimber).withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
+        new ZeroClimber(subClimber).withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
         new ZeroElevator(subElevator).withTimeout(constElevator.ZEROING_TIMEOUT.in(Units.Seconds)),
         new ZeroShooterPivot(subShooter).withTimeout(constShooter.ZEROING_TIMEOUT.in(Units.Seconds)))
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);

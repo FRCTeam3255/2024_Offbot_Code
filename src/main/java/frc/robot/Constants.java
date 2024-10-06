@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.lang.annotation.Target;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.RobotEnableValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.frcteam3255.components.swerve.SN_SwerveConstants;
@@ -97,6 +99,17 @@ public final class Constants {
         SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters);
 
     public static final Measure<Angle> AT_ROTATION_TOLERANCE = Units.Degrees.of(20);
+
+    public static final boolean DRIVE_ENABLE_CURRENT_LIMITING = true;
+    public static final double DRIVE_CURRENT_THRESH = 40;
+    public static final double DRIVE_CURRENT_LIMIT = 30;
+    public static final double DRIVE_CURRENT_TIME_THRESH = 0.1;
+
+    public static final boolean STEER_ENABLE_CURRENT_LIMITING = true;
+    public static final double STEER_CURRENT_THRESH = 40;
+    public static final double STEER_CURRENT_LIMIT = 30;
+    public static final double STEER_CURRENT_TIME_THRESH = 0.1;
+
   }
 
   public static class constField {
@@ -243,7 +256,7 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
     public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
-    public static final Measure<Angle> NONE_STATE_ANGLE = Units.Degrees.of(25);
+    public static final Measure<Angle> NONE_STATE_ANGLE = Units.Degrees.of(45);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(3);
 
@@ -319,8 +332,8 @@ public final class Constants {
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
 
     // TODO: Get values
-    public static final ShooterPositionGroup CLIMBING = new ShooterPositionGroup(Units.Degrees.of(99),
-        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.46));
+    public static final ShooterPositionGroup CLIMBING = new ShooterPositionGroup(Units.Degrees.of(123),
+        Units.RotationsPerSecond.of(0), Units.RotationsPerSecond.of(0), constElevator.FORWARD_LIMIT);
 
     /**
      * <p>
@@ -367,12 +380,13 @@ public final class Constants {
     static {
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_NONE, RobotState.PREP_NONE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP_SHOOTER, RobotState.PREP_AMP_SHOOTER);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP, RobotState.PREP_AMP);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SHUFFLE, RobotState.PREP_SHUFFLE);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SUB_BACKWARDS, RobotState.PREP_SUB_BACKWARDS);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPEAKER, RobotState.PREP_SPEAKER);
+      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_VISION, RobotState.PREP_VISION);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SPIKE, RobotState.PREP_SPIKE);
       TARGET_TO_ROBOT_STATE.put(TargetState.PREP_WING, RobotState.PREP_WING);
-      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_AMP, RobotState.PREP_AMP);
-      TARGET_TO_ROBOT_STATE.put(TargetState.PREP_SUB_BACKWARDS, RobotState.PREP_SUB_BACKWARDS);
     }
 
     /**
@@ -395,14 +409,15 @@ public final class Constants {
   }
 
   public static class constClimber {
-    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0);
+    public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0.6);
     public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
-    public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
-    // TODO: Get real gear ratio values
-    public static final double MECHANICAL_GEAR_RATIO = 1;
-    public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Meters.of(1);
+    public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+    public static final NeutralModeValue NEUTRAL_MODE = NeutralModeValue.Brake;
+
+    public static final double MECHANICAL_GEAR_RATIO = 5;
+    public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Inches.of(1.432 * Math.PI);
     public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO
-        * FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
+        / FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
 
     public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0.1);
 

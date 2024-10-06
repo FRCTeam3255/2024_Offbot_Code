@@ -16,8 +16,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference driveSpeed = new SN_DoublePreference("driveSpeed",
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
-    // Rotational speed (degrees per second) while manually driving
-    public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(180);
+    // Rotational speed (degrees per second) while MANUALLY driving
+    public static final Measure<Velocity<Angle>> maxManualTurnSpeed = Units.DegreesPerSecond.of(120);
+    public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(360);
 
     /**
      * <p>
