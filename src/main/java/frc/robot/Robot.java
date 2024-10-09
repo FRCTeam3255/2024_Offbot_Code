@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constField;
 
 public class Robot extends TimedRobot {
@@ -64,7 +65,7 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
-      RobotContainer.zeroSubsystems().andThen(m_autonomousCommand).schedule();
+      Commands.deferredProxy(() -> RobotContainer.zeroSubsystems().andThen(m_autonomousCommand)).schedule();
     } else {
       RobotContainer.zeroSubsystems().schedule();
     }

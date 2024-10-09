@@ -91,8 +91,8 @@ public class RobotContainer {
                     subElevator, subIntake, subTransfer, subShooter))
             .andThen(Commands.deferredProxy(
                 () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer,
-                    subElevator))));
-    // .onTrue(new GamePieceRumble(conDriver, conOperator));
+                    subElevator))))
+        .onTrue(new GamePieceRumble(conDriver, conOperator));
 
     readyToShoot.onTrue(
         Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
