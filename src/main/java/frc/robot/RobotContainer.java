@@ -274,8 +274,15 @@ public class RobotContainer {
   }
 
   private void configureAutoSelector() {
-    autoChooser.setDefaultOption("Preload Only",
-        new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));
+    // -- Preload Sub --
+    autoChooser.addOption("Preload Only Amp-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
+        subElevator, subIntake, subShooter, subTransfer, 0));
+    autoChooser.setDefaultOption("Preload Only Center",
+        new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer,
+            1));
+    autoChooser.addOption("Preload Only Source-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
+        subElevator, subIntake, subShooter, subTransfer, 3));
+
     autoChooser.addOption("Preload Taxi",
         new PreloadTaxi(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));
     autoChooser.addOption("Wing Only Down", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
