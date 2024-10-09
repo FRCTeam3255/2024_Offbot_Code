@@ -22,19 +22,17 @@ public class GamePieceRumble extends SequentialCommandGroup {
   Measure<Time> duration = Units.Seconds.of(1);
 
   public GamePieceRumble(SN_XboxController conDriver, SN_XboxController conOperator) {
-    startTime = Timer.getFPGATimestamp();
 
     addCommands(
+        Commands.runOnce(() -> startTime = Timer.getFPGATimestamp()),
         Commands.run(
             () -> conDriver.setRumble(RumbleType.kBothRumble, Math.cosh((Timer.getFPGATimestamp() - startTime) * 2)))
             .alongWith(
                 Commands.run(() -> conOperator.setRumble(RumbleType.kBothRumble,
-                    Math.cosh((Timer.getFPGATimestamp() - startTime) * 2))))
-            .until(() -> startTime + duration.in(Units.Seconds) >= Timer.getFPGATimestamp()),
+                    Math.cosh((Timer.getFPGATimestamp() - startTime) * 2)))),
+        Commands.waitSeconds(duration.in(Units.Seconds)),
 
         Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, 0)),
-        Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))
-
-    );
+        Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0)));
   }
 }
