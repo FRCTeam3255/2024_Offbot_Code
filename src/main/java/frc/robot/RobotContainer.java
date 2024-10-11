@@ -291,7 +291,7 @@ public class RobotContainer {
         new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer,
             1, preloadDelay));
     autoChooser.addOption("Preload Only Source-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
-        subElevator, subIntake, subShooter, subTransfer, 3, preloadDelay));
+        subElevator, subIntake, subShooter, subTransfer, 2, preloadDelay));
 
     autoChooser.addOption("Preload Taxi",
         new PreloadTaxi(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));

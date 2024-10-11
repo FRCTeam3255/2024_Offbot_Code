@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9191366129211131,
-        "y": 7.028675333688695
+        "x": 1.8256663591711995,
+        "y": 6.912578575750977
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 6.878059161523729
       },
       "prevControl": {
-        "x": 2.24566040394945,
-        "y": 6.940589678473823
+        "x": 1.9134141831229043,
+        "y": 6.4445901813418836
       },
       "nextControl": null,
       "isLocked": false,
@@ -63,7 +63,7 @@
   "reversed": false,
   "folder": "Wing Down",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 52.62,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -4,14 +4,18 @@
 
 package frc.robot.commands.Autos;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.constField;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -37,6 +41,33 @@ public class WingOnly extends SequentialCommandGroup {
 
   boolean goesDown;
 
+  BooleanSupplier readyToShoot = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
+      && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
+      && subTransfer.getGamePieceCollected());
+
+  // TODO: Move this into its own command so we can use it everywhere :)
+  SequentialCommandGroup shootSequence = new SequentialCommandGroup(
+      Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
+
+      Commands.runOnce(() -> subDrivetrain.drive(
+          new Translation2d(0, 0),
+          subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker()).in(Units.RadiansPerSecond), true))
+          .repeatedly().until(readyToShoot),
+
+      // Shoot! (Ends when we don't have a game piece anymore)
+      Commands.deferredProxy(() -> subStateMachine
+          .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
+              subTransfer,
+              subShooter)
+          .until(() -> !subTransfer.getGamePieceCollected())),
+
+      // Reset subsystems to chill
+      Commands.deferredProxy(() -> subStateMachine
+          .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer,
+              subShooter)),
+
+      Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)));
+
   /** Creates a new WingDown. */
   public WingOnly(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,
       Intake subIntake, Transfer subTransfer, Shooter subShooter, boolean goesDown) {
@@ -56,84 +87,37 @@ public class WingOnly extends SequentialCommandGroup {
             getInitialPose().get())),
 
         // -- PRELOAD --
-        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
-
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
             .until(() -> subTransfer.getGamePieceCollected()),
 
-        Commands.waitUntil(() -> subShooter.readyToShoot()),
-
-        // Shoot! (Ends when we don't have a game piece anymore)
-        Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-                subTransfer,
-                subShooter)
-            .until(() -> !subTransfer.getGamePieceCollected())),
-
-        // Reset subsystems to chill
-        Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer,
-                subShooter)),
+        Commands.deferredProxy(() -> shootSequence),
 
         // -- W1 / W3 --
-        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
-
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".1"),
 
-        Commands.waitUntil(() -> subShooter.readyToShoot()),
-
-        // Shoot! (Ends when we don't have a game piece anymore)
-        Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-                subTransfer,
-                subShooter)
-            .until(() -> !subTransfer.getGamePieceCollected())),
-
-        // Reset subsystems to chill
-        Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer,
-                subShooter)),
+        Commands.waitUntil(readyToShoot),
+        Commands.deferredProxy(() -> shootSequence),
 
         // -- W2 --
-        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
-
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".2"),
 
-        Commands.waitUntil(() -> subShooter.readyToShoot()),
-
-        // Shoot! (Ends when we don't have a game piece anymore)
-        Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-                subTransfer,
-                subShooter)
-            .until(() -> !subTransfer.getGamePieceCollected())),
-
-        // Reset subsystems to chill
-        Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer,
-                subShooter)),
+        Commands.waitUntil(readyToShoot),
+        Commands.deferredProxy(() -> shootSequence),
 
         // -- W3 / W1 --
-        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
-
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".3"),
 
-        Commands.waitUntil(() -> subShooter.readyToShoot()),
-
-        // Shoot! (Ends when we don't have a game piece anymore)
-        Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-                subTransfer,
-                subShooter)
-            .until(() -> !subTransfer.getGamePieceCollected())),
+        Commands.waitUntil(readyToShoot),
+        Commands.deferredProxy(() -> shootSequence),
 
         // Reset subsystems to chill
         Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer,
+            .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain,
+                subElevator, subIntake, subTransfer,
                 subShooter)));
   }
 
