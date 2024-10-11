@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.41,
-      "y": 7.3
+      "x": 1.4050878805982967,
+      "y": 7.298758259488349
     },
     "rotation": 0.0
   },
@@ -20,6 +20,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Wing Down",
   "choreoAuto": false
 }

@@ -5,7 +5,7 @@
       "x": 2.65,
       "y": 5.55
     },
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -20,6 +20,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Wing Up",
   "choreoAuto": false
 }
