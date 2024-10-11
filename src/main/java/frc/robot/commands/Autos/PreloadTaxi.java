@@ -10,14 +10,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.constDrivetrain;
 import frc.robot.Constants.constField;
-import frc.robot.Constants.constShooter;
-import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.StoreFeeder;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -62,9 +57,6 @@ public class PreloadTaxi extends SequentialCommandGroup {
             getInitialPose().get())),
 
         Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
-
-        // Skip directly to STORE_FEEDER since we already have a game piece
-        new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter),
 
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))

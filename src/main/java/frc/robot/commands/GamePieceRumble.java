@@ -25,12 +25,15 @@ public class GamePieceRumble extends SequentialCommandGroup {
 
     addCommands(
         Commands.runOnce(() -> startTime = Timer.getFPGATimestamp()),
-        Commands.run(
-            () -> conDriver.setRumble(RumbleType.kBothRumble, Math.cosh((Timer.getFPGATimestamp() - startTime) * 2)))
-            .alongWith(
-                Commands.run(() -> conOperator.setRumble(RumbleType.kBothRumble,
-                    Math.cosh((Timer.getFPGATimestamp() - startTime) * 2)))),
-        Commands.waitSeconds(duration.in(Units.Seconds)),
+
+        Commands.repeatingSequence(
+            Commands.runOnce(
+                () -> conDriver.setRumble(RumbleType.kBothRumble,
+                    Math.cosh((Timer.getFPGATimestamp() - startTime) * 3)))
+                .alongWith(
+                    Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
+                        Math.cosh((Timer.getFPGATimestamp() - startTime) * 3)))))
+            .until(() -> Timer.getFPGATimestamp() - startTime >= duration.in(Units.Seconds)),
 
         Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble, 0)),
         Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0)));

@@ -3,8 +3,9 @@
   "robotLength": 0.7366,
   "holonomicMode": true,
   "pathFolders": [
-    "Wing Up",
-    "Wing Down"
+    "Centerline",
+    "Wing Down",
+    "Wing Up"
   ],
   "autoFolders": [
     "Wing Up",

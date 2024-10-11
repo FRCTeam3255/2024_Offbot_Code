@@ -6,18 +6,12 @@ package frc.robot.commands.Autos;
 
 import java.util.function.Supplier;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.constField;
-import frc.robot.Constants.constShooter;
-import frc.robot.commands.States.NoneState;
-import frc.robot.commands.States.Shooting;
-import frc.robot.commands.States.StoreFeeder;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;

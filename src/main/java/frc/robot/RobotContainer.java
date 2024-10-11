@@ -93,7 +93,7 @@ public class RobotContainer {
             .andThen(Commands.deferredProxy(
                 () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer,
                     subElevator))))
-        .onTrue(new GamePieceRumble(conDriver, conOperator));
+        .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy());
 
     readyToShoot.onTrue(
         Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
