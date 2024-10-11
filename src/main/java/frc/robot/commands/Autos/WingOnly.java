@@ -140,7 +140,7 @@ public class WingOnly extends SequentialCommandGroup {
   }
 
   public String determinePathName() {
-    return (goesDown) ? "PsW1sW2sW3s" : "PsW3sW2sW1s";
+    return (goesDown) ? "PsW1W2W3" : "PsW3W2W1";
   }
 
   public Supplier<Pose2d> getInitialPose() {

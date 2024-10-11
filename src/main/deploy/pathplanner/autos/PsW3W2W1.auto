@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4050878805982967,
-      "y": 7.298758259488349
+      "x": 1.46,
+      "y": 4.09
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PsW1sW2sW3s"
+            "pathName": "PsW3W2W1"
           }
         }
       ]
     }
   },
-  "folder": "Wing Down",
+  "folder": "Wing Up",
   "choreoAuto": false
 }

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.65,
-      "y": 5.55
+      "x": 1.46,
+      "y": 4.09
     },
     "rotation": 0.0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PsW3sW2sW1s.3"
+            "pathName": "PsW3W2W1.1"
           }
         }
       ]
