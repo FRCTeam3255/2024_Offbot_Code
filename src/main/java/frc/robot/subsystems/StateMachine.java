@@ -13,6 +13,7 @@ import frc.robot.Constants.constStateMachine;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.States.Climbing;
 import frc.robot.commands.States.Ejecting;
+import frc.robot.commands.States.IntakeSource;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepTargetState;
@@ -86,6 +87,12 @@ public class StateMachine extends SubsystemBase {
             return new Intaking(subStateMachine, subIntake, subShooter, subTransfer);
         }
         break;
+
+      case INTAKE_SOURCE:
+        switch (currentState) {
+          case NONE:
+            return new IntakeSource(subStateMachine, subShooter, subTransfer);
+        }
 
       case STORE_FEEDER:
         switch (currentState) {
@@ -346,6 +353,7 @@ public class StateMachine extends SubsystemBase {
   public static enum RobotState {
     NONE,
     INTAKING,
+    INTAKE_SOURCE,
     STORE_FEEDER,
     PREP_NONE,
     PREP_AMP,
