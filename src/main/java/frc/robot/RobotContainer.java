@@ -82,9 +82,6 @@ public class RobotContainer {
                 conDriver.btn_LeftBumper, conDriver.btn_RightBumper,
                 conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X));
 
-    subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
-        subLimelight));
-
     // - Manual Triggers -
     gamePieceTrigger
         .onTrue(Commands
@@ -317,6 +314,11 @@ public class RobotContainer {
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);
     returnedCommand.addRequirements(subStateMachine);
     return returnedCommand;
-  };
+  }
+
+  public static Command AddVisionMeasurement() {
+    return new AddVisionMeasurement(subDrivetrain, subLimelight)
+        .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).ignoringDisable(true);
+  }
 
 }
