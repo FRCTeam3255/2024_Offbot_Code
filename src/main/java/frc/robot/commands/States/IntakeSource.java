@@ -50,6 +50,8 @@ public class IntakeSource extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    subTransfer.setFeederSpeed(0);
+    subShooter.setShootingNeutralOutput();
   }
 
   // Returns true when the command should end.
@@ -59,5 +61,9 @@ public class IntakeSource extends Command {
     // we have a game piece but when the sensor doesn't sense the note anymore (it's
     // far back enough to not touch the flywheels)
     return (hasGamePiece && !subTransfer.getGamePieceCollected());
+  }
+
+  public boolean getIntakeSourceGamePiece() {
+    return hasGamePiece;
   }
 }

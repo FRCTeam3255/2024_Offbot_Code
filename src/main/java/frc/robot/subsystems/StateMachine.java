@@ -98,6 +98,7 @@ public class StateMachine extends SubsystemBase {
         switch (currentState) {
           case STORE_FEEDER:
           case INTAKING:
+          case INTAKE_SOURCE:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
           case PREP_VISION:
@@ -131,6 +132,7 @@ public class StateMachine extends SubsystemBase {
         switch (currentState) {
           case NONE:
           case INTAKING:
+          case INTAKE_SOURCE:
           case STORE_FEEDER:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:

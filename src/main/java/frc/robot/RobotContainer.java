@@ -34,6 +34,7 @@ import frc.robot.commands.Zeroing.ZeroClimber;
 import frc.robot.commands.Zeroing.ZeroElevator;
 import frc.robot.commands.Zeroing.ZeroShooterPivot;
 import frc.robot.commands.States.Ejecting;
+import frc.robot.commands.States.IntakeSource;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepTargetState;
@@ -68,6 +69,7 @@ public class RobotContainer {
   private final Trigger readyToShoot = new Trigger(() -> subDrivetrain.isDrivetrainFacingSpeaker()
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
       && subTransfer.getGamePieceCollected());
+  private final IntakeSource comIntakeSource = new IntakeSource(subStateMachine, subShooter, subTransfer);
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -134,6 +136,13 @@ public class RobotContainer {
     controller.btn_LeftTrigger
         .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(-controller.getLeftTriggerAxis())))
         .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
+
+    // Intake from source
+    controller.btn_RightBumper.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKE_SOURCE,
+        subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)))
+        .onFalse(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subClimber,
+            subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
+            .unless(() -> comIntakeSource.getIntakeSourceGamePiece()));
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
