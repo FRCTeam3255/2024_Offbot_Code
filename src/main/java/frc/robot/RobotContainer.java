@@ -114,6 +114,8 @@ public class RobotContainer {
             subIntake, subTransfer, subShooter))
         .until(gamePieceTrigger));
 
+    SmartDashboard.putNumber("Preload Only Delay", 0);
+
     configureDriverBindings(conDriver);
     configureOperatorBindings(conOperator);
     configureTestBindings(conTestOperator);
@@ -280,14 +282,16 @@ public class RobotContainer {
   }
 
   private void configureAutoSelector() {
+    double preloadDelay = SmartDashboard.getNumber("Preload Only Auto", 0);
+
     // -- Preload Sub --
     autoChooser.addOption("Preload Only Amp-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
-        subElevator, subIntake, subShooter, subTransfer, 0));
+        subElevator, subIntake, subShooter, subTransfer, 0, preloadDelay));
     autoChooser.setDefaultOption("Preload Only Center",
         new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer,
-            1));
+            1, preloadDelay));
     autoChooser.addOption("Preload Only Source-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
-        subElevator, subIntake, subShooter, subTransfer, 3));
+        subElevator, subIntake, subShooter, subTransfer, 3, preloadDelay));
 
     autoChooser.addOption("Preload Taxi",
         new PreloadTaxi(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));

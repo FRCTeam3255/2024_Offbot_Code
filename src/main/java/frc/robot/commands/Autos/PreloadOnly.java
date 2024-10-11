@@ -34,6 +34,7 @@ public class PreloadOnly extends SequentialCommandGroup {
   Shooter subShooter;
   Transfer subTransfer;
   int position = 0;
+  double seconds = 0;
 
   // BLUE
   Pose2d S1B = new Pose2d(0.602, 6.747, Rotation2d.fromDegrees(60));
@@ -49,9 +50,7 @@ public class PreloadOnly extends SequentialCommandGroup {
 
   /** Creates a new PreloadOnly. */
   public PreloadOnly(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,
-      Intake subIntake,
-      Shooter subShooter,
-      Transfer subTransfer, int position) {
+      Intake subIntake, Shooter subShooter, Transfer subTransfer, int position, double seconds) {
     this.subStateMachine = subStateMachine;
     this.subClimber = subClimber;
     this.subDrivetrain = subDrivetrain;
@@ -60,6 +59,7 @@ public class PreloadOnly extends SequentialCommandGroup {
     this.subShooter = subShooter;
     this.subTransfer = subTransfer;
     this.position = position;
+    this.seconds = seconds;
 
     addCommands(
         // Resetting pose
@@ -67,6 +67,8 @@ public class PreloadOnly extends SequentialCommandGroup {
             getInitialPose().get())),
 
         Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)),
+
+        Commands.waitSeconds(seconds),
 
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
