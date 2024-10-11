@@ -42,15 +42,15 @@ public class PreloadOnly extends SequentialCommandGroup {
   int position = 0;
 
   // BLUE
-  Pose2d S1B = new Pose2d(0.602, 6.747, Rotation2d.fromDegrees(-120));
-  Pose2d S2B = new Pose2d(1.360, 5.563, Rotation2d.fromDegrees(180));
-  Pose2d S3B = new Pose2d(0.602, 4.348, Rotation2d.fromDegrees(120));
+  Pose2d S1B = new Pose2d(0.602, 6.747, Rotation2d.fromDegrees(-210));
+  Pose2d S2B = new Pose2d(1.360, 5.563, Rotation2d.fromDegrees(0));
+  Pose2d S3B = new Pose2d(0.602, 4.348, Rotation2d.fromDegrees(30));
   Pose2d[] startingPositionsBlue = { S1B, S2B, S3B };
 
   // RED
-  Pose2d S1R = new Pose2d(constField.FIELD_LENGTH.in(Units.Meters) - 0.602, 6.747, Rotation2d.fromDegrees(-210));
-  Pose2d S2R = new Pose2d(constField.FIELD_LENGTH.in(Units.Meters) - 1.360, 5.563, Rotation2d.fromDegrees(0));
-  Pose2d S3R = new Pose2d(constField.FIELD_LENGTH.in(Units.Meters) - 0.602, 4.348, Rotation2d.fromDegrees(30));
+  Pose2d S1R = new Pose2d(constField.FIELD_LENGTH.in(Units.Meters) - 0.602, 6.747, Rotation2d.fromDegrees(-120));
+  Pose2d S2R = new Pose2d(constField.FIELD_LENGTH.in(Units.Meters) - 1.360, 5.563, Rotation2d.fromDegrees(180));
+  Pose2d S3R = new Pose2d(constField.FIELD_LENGTH.in(Units.Meters) - 0.602, 4.348, Rotation2d.fromDegrees(120));
   Pose2d[] startingPositionsRed = { S1R, S2R, S3R };
 
   /** Creates a new PreloadOnly. */
