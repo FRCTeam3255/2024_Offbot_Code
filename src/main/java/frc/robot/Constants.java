@@ -268,8 +268,6 @@ public final class Constants {
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
     public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 
-    public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(1);
-
     // -- Zeroing --
     /**
      * The voltage supplied to the motor in order to zero
