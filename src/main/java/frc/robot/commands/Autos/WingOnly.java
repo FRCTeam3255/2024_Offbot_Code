@@ -57,9 +57,9 @@ public class WingOnly extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(
             getInitialPose().get())),
 
+        // -- PRELOAD --
         Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
-        // -- PRELOAD --
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
             .until(() -> subTransfer.getGamePieceCollected()),
