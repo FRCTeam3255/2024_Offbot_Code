@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.frcteam3255.joystick.SN_XboxController;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -107,6 +108,11 @@ public class RobotContainer {
     subDrivetrain.resetModulesToAbsolute();
 
     conDriver.setTriggerPressThreshold(0.2);
+
+    NamedCommands.registerCommand("Intaking", Commands.deferredProxy(
+        () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber, subDrivetrain, subElevator,
+            subIntake, subTransfer, subShooter))
+        .until(gamePieceTrigger));
 
     configureDriverBindings(conDriver);
     configureOperatorBindings(conOperator);
