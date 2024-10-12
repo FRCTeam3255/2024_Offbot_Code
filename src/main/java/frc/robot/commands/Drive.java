@@ -93,9 +93,9 @@ public class Drive extends Command {
         case PREP_SHUFFLE:
           rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToShuffle());
           break;
-        case PREP_AMP:
-          rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(90));
-          break;
+        // case PREP_AMP:
+        // rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(90));
+        // break;
         case PREP_VISION:
           rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
           break;

@@ -63,7 +63,7 @@
   "reversed": false,
   "folder": "Wing Up",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -48.389999999999986,
     "velocity": 0
   },
   "useDefaultConstraints": true

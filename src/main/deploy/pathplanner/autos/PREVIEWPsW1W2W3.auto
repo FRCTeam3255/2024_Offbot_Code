@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PsW1W2W3.1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PsW1W2W3.2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PsW1W2W3.3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Wing Down",
+  "choreoAuto": false
+}
