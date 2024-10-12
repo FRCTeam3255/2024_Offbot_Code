@@ -259,14 +259,20 @@ public final class Constants {
 
     public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
     public static final Measure<Angle> NONE_STATE_ANGLE = Units.Degrees.of(15);
+    public static final Measure<Angle> INTAKE_SOURCE_ANGLE = Units.Degrees.of(35);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(3);
 
+    // - Other -
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
     public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(2);
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
     public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
+
+    public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(1);
+
+    public static final Measure<Dimensionless> INTAKE_SOURCE_SPEED = Units.Percent.of(-0.3);
 
     // -- Zeroing --
     /**
@@ -536,6 +542,7 @@ public final class Constants {
     public static final NeutralModeValue FEEDER_NEUTRAL_MODE = NeutralModeValue.Brake;
 
     public static final double INTAKING_SPEED = 0.3;
+    public static final double INTAKE_SOURCE_SPEED = -0.2;
     public static final double EJECTING_SPEED = -0.3;
 
     public static final double PREP_TO_AMP_SPEED = 0.2;
