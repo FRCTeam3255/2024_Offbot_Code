@@ -16,11 +16,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constLimelight;
 
 public class Limelight extends SubsystemBase {
+  PoseEstimate lastEstimate = new PoseEstimate();
+
   public Limelight() {
   }
 
-  public Optional<PoseEstimate> getPoseEstimate() {
-    return Optional.of(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight"));
+  public PoseEstimate getPoseEstimate() {
+    return lastEstimate;
   }
 
   /**
@@ -54,5 +56,6 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
+    lastEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
   }
 }
