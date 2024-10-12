@@ -322,8 +322,8 @@ public final class Constants {
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.46));
     public static final ShooterPositionGroup PREP_SUB_BACKWARDS = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0.41));
-    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(47.5),
-        Units.RotationsPerSecond.of(45), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
+    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(42),
+        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(42),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
@@ -452,7 +452,7 @@ public final class Constants {
     // -- Current Limiting --
     public static final boolean ENABLE_CURRENT_LIMITING = false;
     public static final double CURRENT_LIMIT = 30;
-    public static final double CURRENT_THRESH = 50;
+    public static final double CURRENT_THRESH = 60;
     public static final double CURRENT_TIME_THRESH = 0.1;
   }
 

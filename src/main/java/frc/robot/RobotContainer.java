@@ -135,7 +135,7 @@ public class RobotContainer {
             () -> subStateMachine.tryState(RobotState.CLIMBING, subStateMachine,
                 subClimber, subDrivetrain, subElevator,
                 subIntake, subTransfer, subShooter)))
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(controller.getRightTriggerAxis() / 4)))
+        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(controller.getRightTriggerAxis())))
         .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
 
     // Climb down

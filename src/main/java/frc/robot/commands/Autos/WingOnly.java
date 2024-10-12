@@ -48,6 +48,9 @@ public class WingOnly extends SequentialCommandGroup {
   // TODO: Move this into its own command so we can use it everywhere :)
   SequentialCommandGroup shootSequence = new SequentialCommandGroup(
       Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
+      Commands.deferredProxy(
+          () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer,
+              subElevator)),
 
       Commands.runOnce(() -> subDrivetrain.drive(
           new Translation2d(0, 0),
