@@ -135,7 +135,7 @@ public class RobotContainer {
         .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
 
     // Intake from source
-    controller.btn_RightBumper.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKE_SOURCE,
+    controller.btn_East.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKE_SOURCE,
         subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)))
         .onFalse(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))

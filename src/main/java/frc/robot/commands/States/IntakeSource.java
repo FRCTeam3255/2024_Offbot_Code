@@ -36,7 +36,7 @@ public class IntakeSource extends Command {
     subStateMachine.setRobotState(RobotState.INTAKE_SOURCE);
     subTransfer.setFeederSpeed(constTransfer.INTAKE_SOURCE_SPEED);
     subShooter.setShooterPercentOutput(constShooter.INTAKE_SOURCE_SPEED);
-    subShooter.setPivotPosition(constShooter.PIVOT_BACKWARD_INTAKE_LIMIT);
+    subShooter.setPivotPosition(constShooter.INTAKE_SOURCE_ANGLE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,6 +52,7 @@ public class IntakeSource extends Command {
   public void end(boolean interrupted) {
     subTransfer.setFeederSpeed(0);
     subShooter.setShootingNeutralOutput();
+    hasGamePiece = false;
   }
 
   // Returns true when the command should end.

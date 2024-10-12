@@ -259,8 +259,7 @@ public final class Constants {
 
     public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
     public static final Measure<Angle> NONE_STATE_ANGLE = Units.Degrees.of(45);
-    // TODO: Get the actual value
-    public static final Measure<Angle> INTAKE_SOURCE_ANGLE = Units.Degrees.of(2);
+    public static final Measure<Angle> INTAKE_SOURCE_ANGLE = Units.Degrees.of(35);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(3);
 

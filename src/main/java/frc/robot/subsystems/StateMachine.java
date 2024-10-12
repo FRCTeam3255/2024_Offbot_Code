@@ -72,6 +72,7 @@ public class StateMachine extends SubsystemBase {
     switch (desiredState) {
       case NONE:
         switch (currentState) {
+          case INTAKE_SOURCE:
           case INTAKING:
           case EJECTING:
           case SHOOTING:
@@ -91,6 +92,7 @@ public class StateMachine extends SubsystemBase {
       case INTAKE_SOURCE:
         switch (currentState) {
           case NONE:
+          case INTAKE_SOURCE:
             return new IntakeSource(subStateMachine, subShooter, subTransfer);
         }
 
