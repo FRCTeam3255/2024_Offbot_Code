@@ -33,8 +33,12 @@ public class StoreFeeder extends Command {
   @Override
   public void initialize() {
     subStateMachine.setRobotState(RobotState.STORE_FEEDER);
-    subIntake.setIntakeRollerSpeed(Units.Percent.zero());
-    subTransfer.setFeederSpeed(0);
+    // Don't stop the feeders if we're intaking from source because it'll stop too
+    // soon
+    if (subStateMachine.getRobotState() != RobotState.INTAKE_SOURCE) {
+      subIntake.setIntakeRollerSpeed(Units.Percent.zero());
+      subTransfer.setFeederSpeed(0);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

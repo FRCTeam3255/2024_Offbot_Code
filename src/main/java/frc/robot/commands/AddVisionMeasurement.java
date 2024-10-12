@@ -21,8 +21,7 @@ public class AddVisionMeasurement extends Command {
   Drivetrain subDrivetrain;
   Limelight subLimelight;
 
-  Optional<PoseEstimate> estimatedPose;
-  PoseEstimate lastEstimatedPose;
+  PoseEstimate estimatedPose;
   double drivetrainRotation = 0;
 
   public AddVisionMeasurement(Drivetrain subDrivetrain, Limelight subLimelight) {
@@ -44,11 +43,8 @@ public class AddVisionMeasurement extends Command {
     estimatedPose = subLimelight.getPoseEstimate();
     Measure<Velocity<Angle>> gyroRate = Units.DegreesPerSecond.of(subDrivetrain.getGyroRate());
 
-    if (estimatedPose.isPresent()) {
-      lastEstimatedPose = estimatedPose.get();
-      if (!subLimelight.rejectUpdate(lastEstimatedPose, gyroRate)) {
-        subDrivetrain.addVisionMeasurement(lastEstimatedPose.pose, lastEstimatedPose.timestampSeconds);
-      }
+    if (!subLimelight.rejectUpdate(estimatedPose, gyroRate)) {
+      subDrivetrain.addVisionMeasurement(estimatedPose.pose, estimatedPose.timestampSeconds);
     }
   }
 

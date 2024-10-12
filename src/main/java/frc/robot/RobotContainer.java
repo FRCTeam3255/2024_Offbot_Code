@@ -34,6 +34,7 @@ import frc.robot.commands.Zeroing.ZeroClimber;
 import frc.robot.commands.Zeroing.ZeroElevator;
 import frc.robot.commands.Zeroing.ZeroShooterPivot;
 import frc.robot.commands.States.Ejecting;
+import frc.robot.commands.States.IntakeSource;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepTargetState;
@@ -68,6 +69,7 @@ public class RobotContainer {
   private final Trigger readyToShoot = new Trigger(() -> subDrivetrain.isDrivetrainFacingSpeaker()
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
       && subTransfer.getGamePieceCollected());
+  private final IntakeSource comIntakeSource = new IntakeSource(subStateMachine, subShooter, subTransfer);
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -79,9 +81,6 @@ public class RobotContainer {
             new Drive(subDrivetrain, subStateMachine, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
                 conDriver.btn_LeftBumper, conDriver.btn_RightBumper,
                 conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X));
-
-    subLimelight.setDefaultCommand(new AddVisionMeasurement(subDrivetrain,
-        subLimelight));
 
     // - Manual Triggers -
     gamePieceTrigger
@@ -134,6 +133,13 @@ public class RobotContainer {
     controller.btn_LeftTrigger
         .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(-controller.getLeftTriggerAxis())))
         .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
+
+    // Intake from source
+    controller.btn_East.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKE_SOURCE,
+        subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)))
+        .onFalse(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subClimber,
+            subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
+            .unless(() -> comIntakeSource.getIntakeSourceGamePiece()));
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
@@ -308,6 +314,11 @@ public class RobotContainer {
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);
     returnedCommand.addRequirements(subStateMachine);
     return returnedCommand;
-  };
+  }
+
+  public static Command AddVisionMeasurement() {
+    return new AddVisionMeasurement(subDrivetrain, subLimelight)
+        .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).ignoringDisable(true);
+  }
 
 }

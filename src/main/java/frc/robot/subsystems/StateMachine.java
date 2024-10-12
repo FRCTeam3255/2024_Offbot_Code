@@ -13,6 +13,7 @@ import frc.robot.Constants.constStateMachine;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.States.Climbing;
 import frc.robot.commands.States.Ejecting;
+import frc.robot.commands.States.IntakeSource;
 import frc.robot.commands.States.Intaking;
 import frc.robot.commands.States.NoneState;
 import frc.robot.commands.States.PrepTargetState;
@@ -71,6 +72,7 @@ public class StateMachine extends SubsystemBase {
     switch (desiredState) {
       case NONE:
         switch (currentState) {
+          case INTAKE_SOURCE:
           case INTAKING:
           case EJECTING:
           case SHOOTING:
@@ -87,10 +89,18 @@ public class StateMachine extends SubsystemBase {
         }
         break;
 
+      case INTAKE_SOURCE:
+        switch (currentState) {
+          case NONE:
+          case INTAKE_SOURCE:
+            return new IntakeSource(subStateMachine, subShooter, subTransfer);
+        }
+
       case STORE_FEEDER:
         switch (currentState) {
           case STORE_FEEDER:
           case INTAKING:
+          case INTAKE_SOURCE:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
           case PREP_VISION:
@@ -124,6 +134,7 @@ public class StateMachine extends SubsystemBase {
         switch (currentState) {
           case NONE:
           case INTAKING:
+          case INTAKE_SOURCE:
           case STORE_FEEDER:
           case PREP_SHUFFLE:
           case PREP_SPEAKER:
@@ -346,6 +357,7 @@ public class StateMachine extends SubsystemBase {
   public static enum RobotState {
     NONE,
     INTAKING,
+    INTAKE_SOURCE,
     STORE_FEEDER,
     PREP_NONE,
     PREP_AMP,
