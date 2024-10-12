@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constField;
+import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.TargetState;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -49,6 +51,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+    m_robotContainer.subStateMachine.setRobotState(RobotState.NONE);
+    m_robotContainer.subStateMachine.setTargetState(TargetState.PREP_NONE);
   }
 
   @Override

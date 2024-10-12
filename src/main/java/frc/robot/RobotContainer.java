@@ -57,7 +57,7 @@ public class RobotContainer {
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
   private final SN_XboxController conTestOperator = new SN_XboxController(mapControllers.TEST_OPERATOR_USB);
 
-  private final static StateMachine subStateMachine = new StateMachine();
+  public final static StateMachine subStateMachine = new StateMachine();
   private final static Climber subClimber = new Climber();
   private final static Drivetrain subDrivetrain = new Drivetrain();
   private final static Elevator subElevator = new Elevator();
@@ -91,7 +91,7 @@ public class RobotContainer {
                     subElevator, subIntake, subTransfer, subShooter))
             .andThen(Commands.deferredProxy(
                 () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer,
-                    subElevator))))
+                    subElevator, subDrivetrain))))
         .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy());
 
     readyToShoot.onTrue(

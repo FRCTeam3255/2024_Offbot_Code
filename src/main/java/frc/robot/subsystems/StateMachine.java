@@ -333,7 +333,10 @@ public class StateMachine extends SubsystemBase {
   }
 
   public Command tryTargetState(StateMachine subStateMachine, Intake subIntake,
-      Shooter subShooter, Transfer subTransfer, Elevator subElevator) {
+      Shooter subShooter, Transfer subTransfer, Elevator subElevator, Drivetrain subDrivetrain) {
+    if (currentTargetState.equals(TargetState.PREP_VISION)) {
+      return new PrepVision(subStateMachine, subDrivetrain, subShooter);
+    }
     return new PrepTargetState(subElevator, subStateMachine, subShooter, currentTargetState);
   }
 
