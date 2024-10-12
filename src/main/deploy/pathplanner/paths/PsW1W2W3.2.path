@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.91,
-        "y": 7.01
+        "x": 2.63,
+        "y": 6.89
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8115617598802762,
-        "y": 6.936042374607271
+        "x": 2.531561759880276,
+        "y": 6.816042374607271
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.418359431313457,
+        "x": 2.42,
         "y": 5.556066607628711
       },
       "prevControl": {
-        "x": 1.9653689757829964,
-        "y": 5.565311310802802
-      },
-      "nextControl": {
-        "x": 2.677816590568407,
-        "y": 5.550771563562284
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.91,
-        "y": 5.556066607628711
-      },
-      "prevControl": {
-        "x": 2.826797671433181,
-        "y": 5.546821904454621
+        "x": 1.4308167603722592,
+        "y": 6.0692661556263285
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "W2",
-      "waypointRelativePos": 1.05,
+      "waypointRelativePos": 0.85,
       "command": {
         "type": "parallel",
         "data": {

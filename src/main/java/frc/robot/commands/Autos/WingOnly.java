@@ -50,16 +50,18 @@ public class WingOnly extends SequentialCommandGroup {
       Commands.waitUntil(() -> subTransfer.getGamePieceCollected()),
       Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
-      Commands.deferredProxy(() -> subStateMachine
-          .tryState(RobotState.PREP_VISION, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-              subTransfer,
-              subShooter)
-          .repeatedly().until(() -> subShooter.readyToShoot())),
+      Commands.parallel(
+          Commands.deferredProxy(() -> subStateMachine
+              .tryState(RobotState.PREP_VISION, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
+                  subTransfer,
+                  subShooter)
+              .repeatedly()),
 
-      Commands.runOnce(() -> subDrivetrain.drive(
-          new Translation2d(0, 0),
-          subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker()).in(Units.RadiansPerSecond), true))
-          .repeatedly().until(readyToShoot),
+          Commands.runOnce(() -> subDrivetrain.drive(
+              new Translation2d(0, 0),
+              subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker()).in(Units.RadiansPerSecond), true))
+              .repeatedly())
+          .until(readyToShoot),
 
       // Shoot! (Ends when we don't have a game piece anymore)
       Commands.deferredProxy(() -> subStateMachine

@@ -53,6 +53,8 @@ public class PrepVision extends Command {
 
     ShooterPositionGroup desiredShooterPosition = constStateMachine.TARGET_TO_PRESET_GROUP.get(TargetState.PREP_VISION);
     subShooter.setDesiredVelocities(desiredShooterPosition.leftVelocity, desiredShooterPosition.rightVelocity);
+    Measure<Angle> calculatedAngle = subShooter.getDesiredAngleToLock(robotPose, fieldPoses);
+    subShooter.setPivotPosition(calculatedAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
