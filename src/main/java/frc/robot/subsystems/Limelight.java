@@ -56,6 +56,9 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    lastEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    PoseEstimate currentEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    if (currentEstimate != null) {
+      lastEstimate = currentEstimate;
+    }
   }
 }
