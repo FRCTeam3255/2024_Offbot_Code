@@ -47,6 +47,7 @@ public class WingOnly extends SequentialCommandGroup {
 
   // TODO: Move this into its own command so we can use it everywhere :)
   SequentialCommandGroup shootSequence = new SequentialCommandGroup(
+      Commands.waitUntil(() -> subTransfer.getGamePieceCollected()),
       Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
       Commands.deferredProxy(() -> subStateMachine
@@ -103,21 +104,18 @@ public class WingOnly extends SequentialCommandGroup {
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".1"),
 
-        Commands.waitUntil(readyToShoot),
         Commands.deferredProxy(() -> shootSequence),
 
         // -- W2 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".2"),
 
-        Commands.waitUntil(readyToShoot),
         Commands.deferredProxy(() -> shootSequence),
 
         // -- W3 / W1 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".3"),
 
-        Commands.waitUntil(readyToShoot),
         Commands.deferredProxy(() -> shootSequence),
 
         // Reset subsystems to chill
