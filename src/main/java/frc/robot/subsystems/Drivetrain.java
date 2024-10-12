@@ -277,5 +277,6 @@ public class Drivetrain extends SN_SuperSwerve {
     actualStatesPublisher.set(getActualModuleStates());
 
     SmartDashboard.putNumber("Drivetrain Rotation", getRotation().getDegrees());
+    SmartDashboard.putBoolean("Drivetrain Facing Speaker", isDrivetrainFacingSpeaker());
   }
 }

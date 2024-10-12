@@ -39,7 +39,7 @@ public class Shooter extends SubsystemBase {
   private boolean ignoreFlywheelSpeed = false;
   private Measure<Velocity<Angle>> desiredLeftVelocity = Units.RotationsPerSecond.of(0);
   private Measure<Velocity<Angle>> desiredRightVelocity = Units.RotationsPerSecond.of(0);
-  private Measure<Angle> lastDesiredPivotAngle = Units.Degrees.of(0);
+  private Measure<Angle> lastDesiredPivotAngle = Units.Degrees.of(-3255);
 
   public Shooter() {
     leftMotor = new TalonFX(mapShooter.SHOOTER_LEFT_MOTOR_CAN, "rio");
@@ -207,6 +207,9 @@ public class Shooter extends SubsystemBase {
    * @return If the shooter position is within tolerance of desired position
    */
   public boolean isShooterAtPosition(Measure<Angle> position) {
+    if (lastDesiredPivotAngle.in(Units.Degrees) == -3255) {
+      return false;
+    }
     return (Math.abs(getShooterPosition().minus(position).in(Units.Rotations)) < constShooter.AT_POSITION_TOLERANCE
         .in(Units.Rotations));
 
@@ -330,7 +333,9 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
     SmartDashboard.putNumber("Shooter/Pivot Velocity", pivotMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putBoolean("Shooter/Safe to Move Elevator", isSafeToMoveElevator());
-    SmartDashboard.putBoolean("Ready to Shoot", readyToShoot());
+    SmartDashboard.putBoolean("Shooter/Ready to Shoot", readyToShoot());
+    SmartDashboard.putBoolean("Shooter/Pivot at Desired Position", isShooterAtPosition(lastDesiredPivotAngle));
+    SmartDashboard.putNumber("Shooter/Last Desired Pivot Angle", lastDesiredPivotAngle.in(Units.Degrees));
 
   }
 }
