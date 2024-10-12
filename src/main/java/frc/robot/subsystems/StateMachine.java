@@ -74,7 +74,6 @@ public class StateMachine extends SubsystemBase {
         switch (currentState) {
           case INTAKE_SOURCE:
           case INTAKING:
-          case INTAKING_SHOOTER:
           case EJECTING:
           case SHOOTING:
           case NONE:
@@ -85,7 +84,7 @@ public class StateMachine extends SubsystemBase {
       case INTAKING:
         switch (currentState) {
           case NONE:
-          case INTAKING_SHOOTER:
+          case INTAKE_SOURCE:
           case SHOOTING:
             return new Intaking(subStateMachine, subIntake, subShooter, subTransfer);
         }
@@ -359,7 +358,7 @@ public class StateMachine extends SubsystemBase {
   public static enum RobotState {
     NONE,
     INTAKING,
-    INTAKING_SHOOTER,
+    INTAKE_SOURCE,
     STORE_FEEDER,
     PREP_NONE,
     PREP_AMP,
