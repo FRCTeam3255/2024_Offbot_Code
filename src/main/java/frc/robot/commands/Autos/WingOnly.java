@@ -47,7 +47,6 @@ public class WingOnly extends SequentialCommandGroup {
 
   // TODO: Move this into its own command so we can use it everywhere :)
   SequentialCommandGroup shootSequence = new SequentialCommandGroup(
-      Commands.waitUntil(() -> subTransfer.getGamePieceCollected()),
       Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
       Commands.parallel(
@@ -98,27 +97,31 @@ public class WingOnly extends SequentialCommandGroup {
         // -- PRELOAD --
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
-            .until(() -> subTransfer.getGamePieceCollected()),
+            .until(() -> subTransfer.getGamePieceCollected()).withTimeout(1),
 
-        Commands.deferredProxy(() -> shootSequence),
+        Commands.waitUntil(() -> subTransfer.getGamePieceCollected()).withTimeout(2),
+        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceCollected()),
 
         // -- W1 / W3 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".1"),
 
-        Commands.deferredProxy(() -> shootSequence),
+        Commands.waitUntil(() -> subTransfer.getGamePieceCollected()).withTimeout(2),
+        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceCollected()),
 
         // -- W2 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".2"),
 
-        Commands.deferredProxy(() -> shootSequence),
+        Commands.waitUntil(() -> subTransfer.getGamePieceCollected()).withTimeout(2),
+        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceCollected()),
 
         // -- W3 / W1 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".3"),
 
-        Commands.deferredProxy(() -> shootSequence),
+        Commands.waitUntil(() -> subTransfer.getGamePieceCollected()).withTimeout(2),
+        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceCollected()),
 
         // Reset subsystems to chill
         Commands.deferredProxy(() -> subStateMachine

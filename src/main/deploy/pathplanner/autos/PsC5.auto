@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.46,
-      "y": 4.09
+      "x": 0.77,
+      "y": 4.39
     },
-    "rotation": 0.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -14,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PsW3W2W1"
+            "pathName": "PsC5"
           }
         }
       ]
     }
   },
-  "folder": "Wing Up",
+  "folder": "Centerline Up",
   "choreoAuto": false
 }

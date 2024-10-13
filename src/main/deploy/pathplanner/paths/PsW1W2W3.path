@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5,
-        "y": 7.386517836098735
+        "x": 1.36,
+        "y": 7.34
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9191366129211131,
-        "y": 7.02519316978743
+        "x": 1.7791366129211132,
+        "y": 6.978675333688695
       },
       "isLocked": false,
       "linkedName": null
@@ -104,7 +104,7 @@
   "reversed": false,
   "folder": "Wing Down",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

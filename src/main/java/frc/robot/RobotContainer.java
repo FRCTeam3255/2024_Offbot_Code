@@ -27,6 +27,7 @@ import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.commands.GamePieceRumble;
 import frc.robot.commands.ManualElevator;
+import frc.robot.commands.Autos.Centerline;
 import frc.robot.commands.Autos.PreloadOnly;
 import frc.robot.commands.Autos.PreloadTaxi;
 import frc.robot.commands.Autos.WingOnly;
@@ -304,6 +305,9 @@ public class RobotContainer {
     autoChooser.addOption("Wing Only Down", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
         subIntake, subTransfer, subShooter, true));
     autoChooser.addOption("Wing Only Up", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
+        subIntake, subTransfer, subShooter, false));
+
+    autoChooser.addOption("Centerline :3", new Centerline(subStateMachine, subClimber, subDrivetrain, subElevator,
         subIntake, subTransfer, subShooter, false));
 
     SmartDashboard.putData(autoChooser);

@@ -1,0 +1,67 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5ScoreC1.1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5ScoreC1.2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5ScoreC1.3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5ScoreC1.4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5ScoreC1.5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5ScoreC1.6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5ScoreC1.7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5ScoreC1.8"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5ScoreC1.9"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Centerline Up",
+  "choreoAuto": false
+}

@@ -8,8 +8,9 @@
     "Wing Up"
   ],
   "autoFolders": [
-    "Wing Up",
-    "Wing Down"
+    "Centerline Up",
+    "Wing Down",
+    "Wing Up"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

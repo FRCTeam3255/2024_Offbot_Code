@@ -17,7 +17,7 @@ public class RobotPreferences {
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while MANUALLY driving
-    public static final Measure<Velocity<Angle>> maxManualTurnSpeed = Units.DegreesPerSecond.of(40);
+    public static final Measure<Velocity<Angle>> maxManualTurnSpeed = Units.DegreesPerSecond.of(30);
     public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(520);
 
     /**
@@ -65,7 +65,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference driveKv = new SN_DoublePreference("driveKv", (1 / driveSpeed.getValue()));
 
     // This PID is implemented on the Drivetrain subsystem
-    public static final SN_DoublePreference autoDriveP = new SN_DoublePreference("autoDriveP", 5);
+    public static final SN_DoublePreference autoDriveP = new SN_DoublePreference("autoDriveP", 4);
     public static final SN_DoublePreference autoDriveI = new SN_DoublePreference("autoDriveI", 0);
     public static final SN_DoublePreference autoDriveD = new SN_DoublePreference("autoDriveD", 0);
 
