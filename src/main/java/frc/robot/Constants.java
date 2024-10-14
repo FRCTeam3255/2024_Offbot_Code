@@ -258,7 +258,7 @@ public final class Constants {
     public static final Measure<Angle> PIVOT_BACKWARD_INTAKE_LIMIT = PIVOT_BACKWARD_LIMIT.plus(Units.Degrees.of(10));
 
     public static final Measure<Angle> NEUTRAL_OUT_THRESHOLD = Units.Degrees.of(65);
-    public static final Measure<Angle> NONE_STATE_ANGLE = Units.Degrees.of(45);
+    public static final Measure<Angle> NONE_STATE_ANGLE = Units.Degrees.of(15);
     public static final Measure<Angle> INTAKE_SOURCE_ANGLE = Units.Degrees.of(35);
 
     public static final Measure<Angle> AT_POSITION_TOLERANCE = Units.Degrees.of(3);
@@ -327,14 +327,14 @@ public final class Constants {
     public static final ShooterPositionGroup PREP_AMP = new ShooterPositionGroup(Units.Degrees.of(99),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.46));
     public static final ShooterPositionGroup PREP_SUB_BACKWARDS = new ShooterPositionGroup(Units.Degrees.of(111),
-        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0.41));
-    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(47.5),
-        Units.RotationsPerSecond.of(32), Units.RotationsPerSecond.of(32), Units.Meters.of(0));
+        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0.46));
+    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(42),
+        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(42),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
-    public static final ShooterPositionGroup PREP_VISION = new ShooterPositionGroup(Units.Degrees.of(0),
+    public static final ShooterPositionGroup PREP_VISION = new ShooterPositionGroup(Units.Degrees.of(-3255),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(10.5),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
@@ -418,10 +418,10 @@ public final class Constants {
   public static class constClimber {
     public static final Measure<Distance> FORWARD_LIMIT = Units.Meters.of(0.6);
     public static final Measure<Distance> BACKWARD_LIMIT = Units.Meters.of(0);
-    public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue NEUTRAL_MODE = NeutralModeValue.Brake;
 
-    public static final double MECHANICAL_GEAR_RATIO = 5;
+    public static final double MECHANICAL_GEAR_RATIO = 12.13;
     public static final Measure<Distance> FINAL_GEAR_CIRCUMFERENCE = Units.Inches.of(1.432 * Math.PI);
     public static final double MOTOR_ROTATION_TO_METERS = MECHANICAL_GEAR_RATIO
         / FINAL_GEAR_CIRCUMFERENCE.in(Units.Meters);
@@ -432,7 +432,7 @@ public final class Constants {
     /**
      * The voltage supplied to the motor in order to zero
      */
-    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-1);
+    public static final Measure<Voltage> ZEROING_VOLTAGE = Units.Volts.of(-2);
 
     /**
      * 
@@ -445,7 +445,7 @@ public final class Constants {
      * The velocity that the motor goes at once it has zeroed (and can no longer
      * continue in that direction)
      */
-    public static final Measure<Velocity<Distance>> ZEROED_VELOCITY = Units.MetersPerSecond.of(0.2);
+    public static final Measure<Velocity<Distance>> ZEROED_VELOCITY = Units.MetersPerSecond.of(0.05);
 
     /**
      * The value that the motor reports when it is at it's zeroed position. This
@@ -453,12 +453,12 @@ public final class Constants {
      */
     public static final Measure<Distance> ZEROED_POS = Units.Meters.of(0);
 
-    public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+    public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(5);
 
     // -- Current Limiting --
     public static final boolean ENABLE_CURRENT_LIMITING = false;
     public static final double CURRENT_LIMIT = 30;
-    public static final double CURRENT_THRESH = 50;
+    public static final double CURRENT_THRESH = 60;
     public static final double CURRENT_TIME_THRESH = 0.1;
   }
 

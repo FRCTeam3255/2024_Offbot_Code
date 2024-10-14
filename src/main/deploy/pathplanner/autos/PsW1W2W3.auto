@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.63,
-      "y": 4.46
+      "x": 1.34,
+      "y": 7.34
     },
-    "rotation": -60.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -14,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PsTaxi"
+            "pathName": "PsW1W2W3"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Wing Down",
   "choreoAuto": false
 }

@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import com.frcteam3255.joystick.SN_XboxController;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,6 +29,7 @@ import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.commands.GamePieceRumble;
 import frc.robot.commands.ManualElevator;
+import frc.robot.commands.Autos.Centerline;
 import frc.robot.commands.Autos.PreloadOnly;
 import frc.robot.commands.Autos.PreloadTaxi;
 import frc.robot.commands.Autos.WingOnly;
@@ -56,7 +60,7 @@ public class RobotContainer {
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
   private final SN_XboxController conTestOperator = new SN_XboxController(mapControllers.TEST_OPERATOR_USB);
 
-  private final static StateMachine subStateMachine = new StateMachine();
+  public final static StateMachine subStateMachine = new StateMachine();
   private final static Climber subClimber = new Climber();
   private final static Drivetrain subDrivetrain = new Drivetrain();
   private final static Elevator subElevator = new Elevator();
@@ -90,8 +94,8 @@ public class RobotContainer {
                     subElevator, subIntake, subTransfer, subShooter))
             .andThen(Commands.deferredProxy(
                 () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subShooter, subTransfer,
-                    subElevator))));
-    // .onTrue(new GamePieceRumble(conDriver, conOperator));
+                    subElevator, subDrivetrain))))
+        .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy());
 
     readyToShoot.onTrue(
         Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
@@ -106,6 +110,13 @@ public class RobotContainer {
     subDrivetrain.resetModulesToAbsolute();
 
     conDriver.setTriggerPressThreshold(0.2);
+
+    NamedCommands.registerCommand("Intaking", Commands.deferredProxy(
+        () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber, subDrivetrain, subElevator,
+            subIntake, subTransfer, subShooter))
+        .until(gamePieceTrigger));
+
+    SmartDashboard.putNumber("Preload Only Delay", 0);
 
     configureDriverBindings(conDriver);
     configureOperatorBindings(conOperator);
@@ -126,7 +137,7 @@ public class RobotContainer {
             () -> subStateMachine.tryState(RobotState.CLIMBING, subStateMachine,
                 subClimber, subDrivetrain, subElevator,
                 subIntake, subTransfer, subShooter)))
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(controller.getRightTriggerAxis() / 4)))
+        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(controller.getRightTriggerAxis())))
         .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
 
     // Climb down
@@ -280,13 +291,25 @@ public class RobotContainer {
   }
 
   private void configureAutoSelector() {
-    autoChooser.setDefaultOption("Preload Only",
-        new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));
+    DoubleSupplier preloadDelay = () -> SmartDashboard.getNumber("Preload Only Auto", 0);
+
+    // -- Preload Sub --
+    autoChooser.addOption("Preload Only Amp-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
+        subElevator, subIntake, subShooter, subTransfer, 0, preloadDelay));
+    autoChooser.setDefaultOption("Preload Only Center",
+        new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer,
+            1, preloadDelay));
+    autoChooser.addOption("Preload Only Source-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
+        subElevator, subIntake, subShooter, subTransfer, 2, preloadDelay));
+
     autoChooser.addOption("Preload Taxi",
         new PreloadTaxi(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));
     autoChooser.addOption("Wing Only Down", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
         subIntake, subTransfer, subShooter, true));
     autoChooser.addOption("Wing Only Up", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
+        subIntake, subTransfer, subShooter, false));
+
+    autoChooser.addOption("Centerline :3", new Centerline(subStateMachine, subClimber, subDrivetrain, subElevator,
         subIntake, subTransfer, subShooter, false));
 
     SmartDashboard.putData(autoChooser);

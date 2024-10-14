@@ -17,8 +17,8 @@ public class RobotPreferences {
         Constants.constDrivetrain.DRIVE_SPEED.in(Units.MetersPerSecond));
 
     // Rotational speed (degrees per second) while MANUALLY driving
-    public static final Measure<Velocity<Angle>> maxManualTurnSpeed = Units.DegreesPerSecond.of(120);
-    public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(360);
+    public static final Measure<Velocity<Angle>> maxManualTurnSpeed = Units.DegreesPerSecond.of(30);
+    public static final Measure<Velocity<Angle>> maxTurnSpeed = Units.DegreesPerSecond.of(520);
 
     /**
      * <p>
@@ -29,9 +29,9 @@ public class RobotPreferences {
     public static final SN_DoublePreference slowModeMultiplier = new SN_DoublePreference("slowModeMultiplier", .5);
 
     public static final SN_DoublePreference autoMaxSpeedFeet = new SN_DoublePreference(
-        "autoMaxSpeedFeet", 8);
+        "autoMaxSpeedFeet", 6);
     public static final SN_DoublePreference autoMaxAccelFeet = new SN_DoublePreference(
-        "autoMaxAccelFeet", 6);
+        "autoMaxAccelFeet", 4);
 
     /**
      * <p>
@@ -65,16 +65,16 @@ public class RobotPreferences {
     public static final SN_DoublePreference driveKv = new SN_DoublePreference("driveKv", (1 / driveSpeed.getValue()));
 
     // This PID is implemented on the Drivetrain subsystem
-    public static final SN_DoublePreference autoDriveP = new SN_DoublePreference("autoDriveP", 8);
+    public static final SN_DoublePreference autoDriveP = new SN_DoublePreference("autoDriveP", 4);
     public static final SN_DoublePreference autoDriveI = new SN_DoublePreference("autoDriveI", 0);
     public static final SN_DoublePreference autoDriveD = new SN_DoublePreference("autoDriveD", 0);
 
-    public static final SN_DoublePreference autoSteerP = new SN_DoublePreference("autoSteerP", 2.5);
+    public static final SN_DoublePreference autoSteerP = new SN_DoublePreference("autoSteerP", 3.255);
     public static final SN_DoublePreference autoSteerI = new SN_DoublePreference("autoSteerI", 0.0);
     public static final SN_DoublePreference autoSteerD = new SN_DoublePreference("autoSteerD", 0.0);
 
     // Teleop Snapping to Rotation (Yaw)
-    public static final double yawSnapP = 3;
+    public static final double yawSnapP = 4;
     public static final double yawSnapI = 0;
     public static final double yawSnapD = 0;
   }

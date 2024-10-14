@@ -8,8 +8,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constField;
 import frc.robot.Constants.constStateMachine;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
@@ -50,6 +53,8 @@ public class PrepVision extends Command {
 
     ShooterPositionGroup desiredShooterPosition = constStateMachine.TARGET_TO_PRESET_GROUP.get(TargetState.PREP_VISION);
     subShooter.setDesiredVelocities(desiredShooterPosition.leftVelocity, desiredShooterPosition.rightVelocity);
+    Measure<Angle> calculatedAngle = subShooter.getDesiredAngleToLock(robotPose, fieldPoses);
+    subShooter.setPivotPosition(calculatedAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

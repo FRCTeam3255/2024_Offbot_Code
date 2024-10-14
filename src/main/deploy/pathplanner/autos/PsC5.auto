@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.63,
-      "y": 4.46
+      "x": 0.77,
+      "y": 4.39
     },
     "rotation": -60.0
   },
@@ -14,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PsTaxi"
+            "pathName": "PsC5"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Centerline Up",
   "choreoAuto": false
 }

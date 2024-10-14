@@ -62,6 +62,6 @@ public class Transfer extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Transfer/Game Piece Detected", getGamePieceCollected());
+    SmartDashboard.putBoolean("Game Piece Detected", getGamePieceCollected());
   }
 }

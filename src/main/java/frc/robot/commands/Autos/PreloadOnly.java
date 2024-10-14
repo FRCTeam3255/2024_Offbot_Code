@@ -4,18 +4,15 @@
 
 package frc.robot.commands.Autos;
 
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.constShooter;
-import frc.robot.commands.States.NoneState;
-import frc.robot.commands.States.Shooting;
-import frc.robot.commands.States.StoreFeeder;
+import frc.robot.Constants.constField;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
@@ -37,12 +34,27 @@ public class PreloadOnly extends SequentialCommandGroup {
   Intake subIntake;
   Shooter subShooter;
   Transfer subTransfer;
+  int position = 0;
+  DoubleSupplier secondSupplier;
+
+  // BLUE
+  Pose2d SubAmpSideBlue = new Pose2d(0.602, 6.747, Rotation2d.fromDegrees(60));
+  Pose2d SubCenterBlue = new Pose2d(1.360, 5.563, Rotation2d.fromDegrees(0));
+  Pose2d SubSourceSideBlue = new Pose2d(0.602, 4.348, Rotation2d.fromDegrees(-60));
+  Pose2d[] startingPositionsBlue = { SubAmpSideBlue, SubCenterBlue, SubSourceSideBlue };
+
+  // RED
+  Pose2d SubAmpSideRed = new Pose2d(constField.FIELD_LENGTH.in(Units.Meters) - 0.602, 6.747,
+      Rotation2d.fromDegrees(120));
+  Pose2d SubCenterRed = new Pose2d(constField.FIELD_LENGTH.in(Units.Meters) - 1.360, 5.563,
+      Rotation2d.fromDegrees(180));
+  Pose2d SubSourceSideRed = new Pose2d(constField.FIELD_LENGTH.in(Units.Meters) - 0.602, 4.348,
+      Rotation2d.fromDegrees(-120));
+  Pose2d[] startingPositionsRed = { SubAmpSideRed, SubCenterRed, SubSourceSideRed };
 
   /** Creates a new PreloadOnly. */
   public PreloadOnly(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,
-      Intake subIntake,
-      Shooter subShooter,
-      Transfer subTransfer) {
+      Intake subIntake, Shooter subShooter, Transfer subTransfer, int position, DoubleSupplier secondSupplier) {
     this.subStateMachine = subStateMachine;
     this.subClimber = subClimber;
     this.subDrivetrain = subDrivetrain;
@@ -50,10 +62,17 @@ public class PreloadOnly extends SequentialCommandGroup {
     this.subIntake = subIntake;
     this.subShooter = subShooter;
     this.subTransfer = subTransfer;
+    this.position = position;
+    this.secondSupplier = secondSupplier;
 
-    // TODO: Add param for each sub so we can reset pose
     addCommands(
+        // Resetting pose
+        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(
+            getInitialPose().get())),
+
         Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)),
+
+        Commands.waitSeconds(secondSupplier.getAsDouble()),
 
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
@@ -73,4 +92,11 @@ public class PreloadOnly extends SequentialCommandGroup {
             .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer,
                 subShooter)));
   }
+
+  public Supplier<Pose2d> getInitialPose() {
+    return () -> (constField.isRedAlliance())
+        ? startingPositionsRed[position]
+        : startingPositionsBlue[position];
+  }
+
 }

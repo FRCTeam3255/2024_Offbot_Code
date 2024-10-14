@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.63,
-      "y": 4.46
+      "x": 8.05,
+      "y": 2.43
     },
-    "rotation": -60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PsTaxi"
+            "pathName": "C5HopC1.2"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Centerline Up",
   "choreoAuto": false
 }
