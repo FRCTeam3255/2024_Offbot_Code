@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import com.frcteam3255.joystick.SN_XboxController;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -289,7 +291,7 @@ public class RobotContainer {
   }
 
   private void configureAutoSelector() {
-    double preloadDelay = SmartDashboard.getNumber("Preload Only Auto", 0);
+    DoubleSupplier preloadDelay = () -> SmartDashboard.getNumber("Preload Only Auto", 0);
 
     // -- Preload Sub --
     autoChooser.addOption("Preload Only Amp-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
