@@ -88,7 +88,7 @@ public class Drivetrain extends SN_SuperSwerve {
         new PIDConstants(prefDrivetrain.autoSteerP.getValue(),
             prefDrivetrain.autoSteerI.getValue(),
             prefDrivetrain.autoSteerD.getValue()),
-        new ReplanningConfig(false, true),
+        new ReplanningConfig(true, true),
         () -> constField.isRedAlliance(),
         Robot.isSimulation());
 

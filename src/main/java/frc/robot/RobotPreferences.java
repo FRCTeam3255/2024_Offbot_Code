@@ -69,7 +69,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference autoDriveI = new SN_DoublePreference("autoDriveI", 0);
     public static final SN_DoublePreference autoDriveD = new SN_DoublePreference("autoDriveD", 0);
 
-    public static final SN_DoublePreference autoSteerP = new SN_DoublePreference("autoSteerP", 2.5);
+    public static final SN_DoublePreference autoSteerP = new SN_DoublePreference("autoSteerP", 3.255);
     public static final SN_DoublePreference autoSteerI = new SN_DoublePreference("autoSteerI", 0.0);
     public static final SN_DoublePreference autoSteerD = new SN_DoublePreference("autoSteerD", 0.0);
 
