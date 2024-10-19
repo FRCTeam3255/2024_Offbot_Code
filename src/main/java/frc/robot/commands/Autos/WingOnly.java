@@ -43,7 +43,7 @@ public class WingOnly extends SequentialCommandGroup {
 
   BooleanSupplier readyToShoot = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
-      && subTransfer.getGamePieceCollected());
+      && subTransfer.getGamePieceStored());
 
   // TODO: Move this into its own command so we can use it everywhere :)
   SequentialCommandGroup shootSequence = new SequentialCommandGroup(
@@ -67,7 +67,7 @@ public class WingOnly extends SequentialCommandGroup {
           .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
               subTransfer,
               subShooter)
-          .until(() -> !subTransfer.getGamePieceCollected())),
+          .until(() -> !subTransfer.getGamePieceStored())),
 
       // Reset subsystems to chill
       Commands.deferredProxy(() -> subStateMachine
@@ -97,31 +97,31 @@ public class WingOnly extends SequentialCommandGroup {
         // -- PRELOAD --
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
-            .until(() -> subTransfer.getGamePieceCollected()).withTimeout(1),
+            .until(() -> subTransfer.getGamePieceStored()).withTimeout(1),
 
-        Commands.waitUntil(() -> subTransfer.getGamePieceCollected()).withTimeout(2),
-        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceCollected()),
+        Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
+        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceStored()),
 
         // -- W1 / W3 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".1"),
 
-        Commands.waitUntil(() -> subTransfer.getGamePieceCollected()).withTimeout(2),
-        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceCollected()),
+        Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
+        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceStored()),
 
         // -- W2 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".2"),
 
-        Commands.waitUntil(() -> subTransfer.getGamePieceCollected()).withTimeout(2),
-        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceCollected()),
+        Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
+        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceStored()),
 
         // -- W3 / W1 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".3"),
 
-        Commands.waitUntil(() -> subTransfer.getGamePieceCollected()).withTimeout(2),
-        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceCollected()),
+        Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
+        Commands.deferredProxy(() -> shootSequence).unless(() -> !subTransfer.getGamePieceStored()),
 
         // Reset subsystems to chill
         Commands.deferredProxy(() -> subStateMachine

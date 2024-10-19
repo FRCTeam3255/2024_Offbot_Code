@@ -69,10 +69,10 @@ public class RobotContainer {
   private final static Transfer subTransfer = new Transfer();
   private final static Limelight subLimelight = new Limelight();
 
-  private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceCollected());
+  private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceStored());
   private final Trigger readyToShoot = new Trigger(() -> subDrivetrain.isDrivetrainFacingSpeaker()
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
-      && subTransfer.getGamePieceCollected());
+      && subTransfer.getGamePieceStored());
   private final IntakeSource comIntakeSource = new IntakeSource(subStateMachine, subShooter, subTransfer);
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();

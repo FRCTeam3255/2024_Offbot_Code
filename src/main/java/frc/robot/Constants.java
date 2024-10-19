@@ -528,6 +528,7 @@ public final class Constants {
     public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
     public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+    public static final boolean NOTE_SENSOR_INVERT = true;
 
     // -- Current Limiting --
     public static final boolean ENABLE_CURRENT_LIMITING = true;
