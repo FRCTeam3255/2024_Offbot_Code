@@ -130,21 +130,6 @@ public class RobotContainer {
     controller.btn_North.onTrue(
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
 
-    // Climb up
-    controller.btn_RightTrigger.onTrue(
-        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP)))
-        .onTrue(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.CLIMBING, subStateMachine,
-                subClimber, subDrivetrain, subElevator,
-                subIntake, subTransfer, subShooter)))
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(controller.getRightTriggerAxis())))
-        .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
-
-    // Climb down
-    controller.btn_LeftTrigger
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(-controller.getLeftTriggerAxis())))
-        .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
-
     // Intake from source
     controller.btn_East.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKE_SOURCE,
         subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer, subShooter)))
@@ -257,8 +242,7 @@ public class RobotContainer {
     controller.btn_Start.whileTrue(new ManualElevator(subElevator, controller.axis_LeftY));
 
     // Zero Elevator and Climber
-    controller.btn_LeftStick.onTrue(new ZeroElevator(subElevator))
-        .onTrue(new ZeroClimber(subClimber));
+    controller.btn_LeftStick.onTrue(new ZeroElevator(subElevator));
 
     // Zero Shooter
     controller.btn_RightStick.onTrue(new ZeroShooterPivot(subShooter));
@@ -331,7 +315,6 @@ public class RobotContainer {
    */
   public static Command zeroSubsystems() {
     Command returnedCommand = new ParallelCommandGroup(
-        new ZeroClimber(subClimber).withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
         new ZeroElevator(subElevator).withTimeout(constElevator.ZEROING_TIMEOUT.in(Units.Seconds)),
         new ZeroShooterPivot(subShooter).withTimeout(constShooter.ZEROING_TIMEOUT.in(Units.Seconds)))
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);
