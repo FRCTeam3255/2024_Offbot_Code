@@ -592,9 +592,9 @@ public final class Constants {
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue FEEDER_NEUTRAL_MODE = NeutralModeValue.Brake;
 
-    public static final double INTAKING_SPEED = 0.3;
+    public static final double INTAKING_SPEED = 0.4;
     public static final double INTAKE_SOURCE_SPEED = -0.2;
-    public static final double EJECTING_SPEED = -0.3;
+    public static final double EJECTING_SPEED = -0.4;
 
     public static final double PREP_TO_AMP_SPEED = 0.2;
 
