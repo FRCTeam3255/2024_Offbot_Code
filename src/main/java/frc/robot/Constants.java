@@ -253,42 +253,42 @@ public final class Constants {
     public static final GravityTypeValue PIVOT_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
     // - PID -
-    public static Slot0Configs LEFT_PID_SLOT_0 = new Slot0Configs();
-    public static Slot1Configs LEFT_PID_SLOT_1 = new Slot1Configs();
-    public static Slot0Configs RIGHT_PID_SLOT_0 = new Slot0Configs();
-    public static Slot1Configs RIGHT_PID_SLOT_1 = new Slot1Configs();
+    public static Slot0Configs LEFT_PID_SLOT_0_FAST = new Slot0Configs();
+    public static Slot1Configs LEFT_PID_SLOT_1_SLOW = new Slot1Configs();
+    public static Slot0Configs RIGHT_PID_SLOT_0_FAST = new Slot0Configs();
+    public static Slot1Configs RIGHT_PID_SLOT_1_SLOW = new Slot1Configs();
     public static Slot0Configs PIVOT_PID = new Slot0Configs();
     static {
       // Left 0
-      LEFT_PID_SLOT_0.kS = 0.28;
-      LEFT_PID_SLOT_0.kV = 0.13;
-      LEFT_PID_SLOT_0.kA = 0;
-      LEFT_PID_SLOT_0.kP = 0.5;
-      LEFT_PID_SLOT_0.kI = 0;
-      LEFT_PID_SLOT_0.kD = 0;
+      LEFT_PID_SLOT_0_FAST.kS = 0.28;
+      LEFT_PID_SLOT_0_FAST.kV = 0.13;
+      LEFT_PID_SLOT_0_FAST.kA = 0;
+      LEFT_PID_SLOT_0_FAST.kP = 0.7;
+      LEFT_PID_SLOT_0_FAST.kI = 0;
+      LEFT_PID_SLOT_0_FAST.kD = 0;
 
       // Left 1
-      LEFT_PID_SLOT_1.kS = 0.28;
-      LEFT_PID_SLOT_1.kV = 0.13;
-      LEFT_PID_SLOT_1.kA = 0;
-      LEFT_PID_SLOT_1.kP = 0.5;
-      LEFT_PID_SLOT_1.kI = 0;
-      LEFT_PID_SLOT_1.kD = 0;
+      LEFT_PID_SLOT_1_SLOW.kS = 0.28;
+      LEFT_PID_SLOT_1_SLOW.kV = 0.13;
+      LEFT_PID_SLOT_1_SLOW.kA = 0;
+      LEFT_PID_SLOT_1_SLOW.kP = 0.5;
+      LEFT_PID_SLOT_1_SLOW.kI = 0;
+      LEFT_PID_SLOT_1_SLOW.kD = 0;
 
-      // Right 0 -- Tuned!
-      RIGHT_PID_SLOT_0.kS = 0.36;
-      RIGHT_PID_SLOT_0.kV = 0.115;
-      RIGHT_PID_SLOT_0.kA = 0;
-      RIGHT_PID_SLOT_0.kP = 0.7;
-      RIGHT_PID_SLOT_0.kI = 0;
-      RIGHT_PID_SLOT_0.kD = 0;
+      // Right 0
+      RIGHT_PID_SLOT_0_FAST.kS = 0.36;
+      RIGHT_PID_SLOT_0_FAST.kV = 0.115;
+      RIGHT_PID_SLOT_0_FAST.kA = 0;
+      RIGHT_PID_SLOT_0_FAST.kP = 0.7;
+      RIGHT_PID_SLOT_0_FAST.kI = 0;
+      RIGHT_PID_SLOT_0_FAST.kD = 0;
       // Right 1
-      RIGHT_PID_SLOT_1.kS = 0.36;
-      RIGHT_PID_SLOT_1.kV = 0.115;
-      RIGHT_PID_SLOT_1.kA = 0;
-      RIGHT_PID_SLOT_1.kP = 0.7;
-      RIGHT_PID_SLOT_1.kI = 0;
-      RIGHT_PID_SLOT_1.kD = 0;
+      RIGHT_PID_SLOT_1_SLOW.kS = 0.36;
+      RIGHT_PID_SLOT_1_SLOW.kV = 0.112;
+      RIGHT_PID_SLOT_1_SLOW.kA = 0;
+      RIGHT_PID_SLOT_1_SLOW.kP = 0.5;
+      RIGHT_PID_SLOT_1_SLOW.kI = 0;
+      RIGHT_PID_SLOT_1_SLOW.kD = 0;
       // Pivot
       PIVOT_PID.kS = 0.4;
       PIVOT_PID.kV = 0;
@@ -297,6 +297,8 @@ public final class Constants {
       PIVOT_PID.kP = 90;
       PIVOT_PID.kD = 0;
     }
+    public static final Measure<Velocity<Angle>> RIGHT_SLOT_1_THRESH = Units.RotationsPerSecond.of(30);
+    public static final Measure<Velocity<Angle>> LEFT_SLOT_1_THRESH = Units.RotationsPerSecond.of(30);
 
     // - Angles -
     public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(155);

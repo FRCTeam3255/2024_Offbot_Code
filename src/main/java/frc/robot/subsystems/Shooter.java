@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constShooter;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.RobotMap.mapShooter;
-import frc.robot.RobotPreferences.prefShooter;
 
 public class Shooter extends SubsystemBase {
   TalonFX leftMotor, rightMotor, pivotMotor;
@@ -64,20 +63,22 @@ public class Shooter extends SubsystemBase {
   public void configure() {
     // -- Left Motor --
     leftConfig.MotorOutput.Inverted = constShooter.LEFT_INVERT;
-    leftConfig.Slot0 = constShooter.LEFT_PID_SLOT_0;
-    leftConfig.Slot1 = constShooter.LEFT_PID_SLOT_1;
+    leftConfig.Slot0 = constShooter.LEFT_PID_SLOT_0_FAST;
+    leftConfig.Slot1 = constShooter.LEFT_PID_SLOT_1_SLOW;
 
-    leftConfig.MotionMagic.MotionMagicAcceleration = 400;
-    leftConfig.MotionMagic.MotionMagicJerk = 4000;
+    leftConfig.MotionMagic.MotionMagicCruiseVelocity = 60;
+    leftConfig.MotionMagic.MotionMagicAcceleration = 600;
+    leftConfig.MotionMagic.MotionMagicJerk = 6000;
     leftMotor.getConfigurator().apply(leftConfig);
 
     // -- Right Motor --
     rightConfig.MotorOutput.Inverted = constShooter.RIGHT_INVERT;
-    rightConfig.Slot0 = constShooter.RIGHT_PID_SLOT_0;
-    rightConfig.Slot1 = constShooter.RIGHT_PID_SLOT_1;
+    rightConfig.Slot0 = constShooter.RIGHT_PID_SLOT_0_FAST;
+    rightConfig.Slot1 = constShooter.RIGHT_PID_SLOT_1_SLOW;
 
-    rightConfig.MotionMagic.MotionMagicAcceleration = 400;
-    rightConfig.MotionMagic.MotionMagicJerk = 4000;
+    rightConfig.MotionMagic.MotionMagicCruiseVelocity = 60;
+    rightConfig.MotionMagic.MotionMagicAcceleration = 600;
+    rightConfig.MotionMagic.MotionMagicJerk = 6000;
     rightMotor.getConfigurator().apply(rightConfig);
 
     // -- Pivot Motor --
@@ -117,10 +118,14 @@ public class Shooter extends SubsystemBase {
         && desiredRightVelocity.in(Units.RotationsPerSecond) == 0) {
       setShootingNeutralOutput();
     } else {
+      currentLeftSlot = (desiredLeftVelocity.lte(constShooter.LEFT_SLOT_1_THRESH)) ? 1 : 0;
+      currentRightSlot = (desiredRightVelocity.lte(constShooter.RIGHT_SLOT_1_THRESH)) ? 1 : 0;
 
-      leftMotor.setControl(motionMagicRequest.withVelocity(desiredLeftVelocity.in(Units.RotationsPerSecond)));
+      leftMotor.setControl(
+          motionMagicRequest.withVelocity(desiredLeftVelocity.in(Units.RotationsPerSecond)).withSlot(currentLeftSlot));
       rightMotor
-          .setControl(motionMagicRequest.withVelocity(desiredRightVelocity.in(Units.RotationsPerSecond)).withSlot(0));
+          .setControl(motionMagicRequest.withVelocity(desiredRightVelocity.in(Units.RotationsPerSecond))
+              .withSlot(currentRightSlot));
     }
   }
 
@@ -316,10 +321,12 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Left/Velocity RPS", getLeftShooterVelocity().in(Units.RotationsPerSecond));
     SmartDashboard.putNumber("Shooter/Left/Desired Velocity RPS", desiredLeftVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Left/Up to Speed", isLeftShooterUpToSpeed());
+    SmartDashboard.putNumber("Shooter/Left/PID Slot", currentLeftSlot);
 
     SmartDashboard.putNumber("Shooter/Right/Velocity RPS", getRightShooterVelocity().in(Units.RotationsPerSecond));
     SmartDashboard.putNumber("Shooter/Right/Desired Velocity RPS", desiredRightVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
+    SmartDashboard.putNumber("Shooter/Right/PID Slot", currentRightSlot);
 
     SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
     SmartDashboard.putNumber("Shooter/Pivot Velocity", pivotMotor.getVelocity().getValueAsDouble());
