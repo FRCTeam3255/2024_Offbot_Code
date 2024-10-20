@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -39,6 +40,7 @@ public class Shooter extends SubsystemBase {
 
   MotionMagicVelocityVoltage motionMagicRequest;
   PositionVoltage positionRequest;
+  MotionMagicVoltage motionMagicPivotRequest;
 
   VelocityVoltage velocityRequest;
   VoltageOut voltageRequest;
@@ -62,6 +64,7 @@ public class Shooter extends SubsystemBase {
     voltageRequest = new VoltageOut(0);
     velocityRequest = new VelocityVoltage(0).withSlot(0);
     motionMagicRequest = new MotionMagicVelocityVoltage(0);
+    motionMagicPivotRequest = new MotionMagicVoltage(0);
     positionRequest = new PositionVoltage(0).withSlot(0);
 
     configure();
@@ -100,6 +103,10 @@ public class Shooter extends SubsystemBase {
 
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_BACKWARD_LIMIT.in(Units.Rotations);
+
+    pivotConfig.MotionMagic.MotionMagicCruiseVelocity = 80;
+    pivotConfig.MotionMagic.MotionMagicAcceleration = 160;
+    pivotConfig.MotionMagic.MotionMagicJerk = 1600;
 
     // - Current Limits -
     pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = constShooter.PIVOT_ENABLE_CURRENT_LIMITING;
@@ -280,7 +287,7 @@ public class Shooter extends SubsystemBase {
 
   public void setPivotPosition(Measure<Angle> position) {
     lastDesiredPivotAngle = position;
-    pivotMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
+    pivotMotor.setControl(motionMagicPivotRequest.withPosition(position.in(Units.Rotations)));
   }
 
   /**

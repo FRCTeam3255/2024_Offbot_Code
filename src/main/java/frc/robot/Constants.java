@@ -523,7 +523,7 @@ public final class Constants {
     public static final double MOTOR_ROTATION_TO_METERS = 1 / 0.0456842368;
 
     public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0.38);
-    public static final Measure<Distance> SHOOTER_ABLE_TO_MOVE_LIMIT = Units.Meters.of(0.37);
+    public static final Measure<Distance> SHOOTER_ABLE_TO_MOVE_LIMIT = Units.Meters.of(0.35);
 
     public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0.05);
 
