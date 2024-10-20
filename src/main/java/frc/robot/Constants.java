@@ -260,17 +260,17 @@ public final class Constants {
     public static Slot0Configs PIVOT_PID = new Slot0Configs();
     static {
       // Left 0
-      LEFT_PID_SLOT_0_FAST.kS = 0.28;
-      LEFT_PID_SLOT_0_FAST.kV = 0.13;
-      LEFT_PID_SLOT_0_FAST.kA = 0;
-      LEFT_PID_SLOT_0_FAST.kP = 0.7;
+      LEFT_PID_SLOT_0_FAST.kS = 0.13419;
+      LEFT_PID_SLOT_0_FAST.kV = 0.12443;
+      LEFT_PID_SLOT_0_FAST.kA = 0.035067;
+      LEFT_PID_SLOT_0_FAST.kP = 1;
       LEFT_PID_SLOT_0_FAST.kI = 0;
       LEFT_PID_SLOT_0_FAST.kD = 0;
 
       // Left 1
-      LEFT_PID_SLOT_1_SLOW.kS = 0.28;
-      LEFT_PID_SLOT_1_SLOW.kV = 0.13;
-      LEFT_PID_SLOT_1_SLOW.kA = 0;
+      LEFT_PID_SLOT_1_SLOW.kS = 0.13419;
+      LEFT_PID_SLOT_1_SLOW.kV = 0.12443;
+      LEFT_PID_SLOT_1_SLOW.kA = 0.035067;
       LEFT_PID_SLOT_1_SLOW.kP = 0.5;
       LEFT_PID_SLOT_1_SLOW.kI = 0;
       LEFT_PID_SLOT_1_SLOW.kD = 0;
@@ -297,8 +297,8 @@ public final class Constants {
       PIVOT_PID.kP = 90;
       PIVOT_PID.kD = 0;
     }
-    public static final Measure<Velocity<Angle>> RIGHT_SLOT_1_THRESH = Units.RotationsPerSecond.of(30);
-    public static final Measure<Velocity<Angle>> LEFT_SLOT_1_THRESH = Units.RotationsPerSecond.of(30);
+    public static final Measure<Velocity<Angle>> RIGHT_SLOT_1_THRESH = Units.RotationsPerSecond.of(40);
+    public static final Measure<Velocity<Angle>> LEFT_SLOT_1_THRESH = Units.RotationsPerSecond.of(40);
 
     // - Angles -
     public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(155);

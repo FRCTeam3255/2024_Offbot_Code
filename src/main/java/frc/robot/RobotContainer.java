@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.frcteam3255.joystick.SN_XboxController;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.constClimber;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constElevator;
@@ -249,29 +251,20 @@ public class RobotContainer {
   }
 
   private void configureTestBindings(SN_XboxController controller) {
-    controller.btn_LeftTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.INTAKING)))
-        .whileTrue(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
-        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake,
-            subShooter, subTransfer));
 
-    controller.btn_RightTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.SHOOTING)))
-        .whileTrue(new Shooting(subStateMachine, subElevator, subShooter,
-            subTransfer))
-        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake,
-            subShooter, subTransfer));
+    controller.btn_LeftBumper.onTrue(Commands.runOnce(SignalLogger::start));
+    controller.btn_RightBumper.onTrue(Commands.runOnce(SignalLogger::stop));
 
-    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SHUFFLE)))
-        .onTrue(new PrepTargetState(subElevator, subStateMachine, subShooter,
-            TargetState.PREP_SHUFFLE));
-
-    controller.btn_A.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION)));
-    controller.btn_Y.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT)));
-
-    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
-        .whileTrue(new Ejecting(subStateMachine, subIntake, subElevator,
-            subTransfer))
-        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake,
-            subShooter, subTransfer));
+    /*
+     * Joystick Y = quasistatic forward
+     * Joystick A = quasistatic reverse
+     * Joystick B = dynamic forward
+     * Joystick X = dyanmic reverse
+     */
+    controller.btn_Y.whileTrue(subShooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    controller.btn_A.whileTrue(subShooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    controller.btn_B.whileTrue(subShooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    controller.btn_X.whileTrue(subShooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
   private void configureAutoSelector() {
