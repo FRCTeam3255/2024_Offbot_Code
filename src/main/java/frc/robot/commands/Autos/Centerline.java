@@ -39,11 +39,11 @@ public class Centerline extends SequentialCommandGroup {
 
   BooleanSupplier readyToShoot = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
-      && subTransfer.getGamePieceCollected());
+      && subTransfer.getGamePieceStored());
 
   // TODO: Move this into its own command so we can use it everywhere :)
   SequentialCommandGroup shootSequence = new SequentialCommandGroup(
-      Commands.waitUntil(() -> subTransfer.getGamePieceCollected()),
+      Commands.waitUntil(() -> subTransfer.getGamePieceStored()),
       Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
       Commands.parallel(
@@ -64,7 +64,7 @@ public class Centerline extends SequentialCommandGroup {
           .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
               subTransfer,
               subShooter)
-          .until(() -> !subTransfer.getGamePieceCollected())),
+          .until(() -> !subTransfer.getGamePieceStored())),
 
       // Reset subsystems to chill
       Commands.deferredProxy(() -> subStateMachine
@@ -89,7 +89,7 @@ public class Centerline extends SequentialCommandGroup {
         // -- PRELOAD --
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
-            .until(() -> subTransfer.getGamePieceCollected()),
+            .until(() -> subTransfer.getGamePieceStored()),
 
         Commands.deferredProxy(() -> shootSequence),
 
@@ -109,7 +109,7 @@ public class Centerline extends SequentialCommandGroup {
 
             // It wasnt there :<
             new PathPlannerAuto(determineHopPathName() + ".1"),
-            () -> subTransfer.getGamePieceCollected()),
+            () -> subTransfer.getGamePieceStored()),
 
         // -- CURRENTLY AT C4 --
         Commands.waitSeconds(0.5),
@@ -125,7 +125,7 @@ public class Centerline extends SequentialCommandGroup {
 
             // It wasnt there :<
             new PathPlannerAuto(determineHopPathName() + ".2"),
-            () -> subTransfer.getGamePieceCollected()),
+            () -> subTransfer.getGamePieceStored()),
 
         // -- CURRENTLY AT C3
         Commands.waitSeconds(0.5),
@@ -141,7 +141,7 @@ public class Centerline extends SequentialCommandGroup {
 
             // It wasnt there :<
             new PathPlannerAuto(determineHopPathName() + ".3"),
-            () -> subTransfer.getGamePieceCollected()),
+            () -> subTransfer.getGamePieceStored()),
 
         // -- CURRENTLY AT C2
         Commands.waitSeconds(0.5),
@@ -157,7 +157,7 @@ public class Centerline extends SequentialCommandGroup {
 
             // It wasnt there :<
             new PathPlannerAuto(determineHopPathName() + ".4"),
-            () -> subTransfer.getGamePieceCollected()),
+            () -> subTransfer.getGamePieceStored()),
 
         // -- CURRENTLY AT C1
         Commands.waitSeconds(0.5),

@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.frcteam3255.preferences.SN_DoublePreference;
 
 import edu.wpi.first.units.Angle;
@@ -77,31 +79,6 @@ public class RobotPreferences {
     public static final double yawSnapP = 4;
     public static final double yawSnapI = 0;
     public static final double yawSnapD = 0;
-  }
-
-  public static final class prefShooter {
-    // - PID -
-    public static final double leftShooterS = 0.28;
-    public static final double leftShooterV = 0.13;
-    public static final double leftShooterA = 0.0;
-    public static final double leftShooterP = 0.5; // 0.75 ?
-    public static final double leftShooterI = 0;
-    public static final double leftShooterD = 0.0;
-
-    public static final double rightShooterS = 0.4;
-    public static final double rightShooterV = 0.11;
-    public static final double rightShooterA = 0;
-    public static final double rightShooterP = 0.4; // 0.6 ?
-    public static final double rightShooterI = 0;
-    public static final double rightShooterD = 0;
-
-    public static final double pivotShooterS = 0.4;
-    public static final double pivotShooterV = 0.0;
-    public static final double pivotShooterG = 0.53;
-    public static final double pivotShooterA = 0.0;
-    public static final double pivotShooterP = 90;
-    public static final double pivotShooterI = 0;
-    public static final double pivotShooterD = 0;
   }
 
   public static final class prefElevator {
