@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -249,6 +251,52 @@ public final class Constants {
     public static final double PIVOT_GEAR_RATIO = 58.5;
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
     public static final GravityTypeValue PIVOT_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
+
+    // - PID -
+    public static Slot0Configs LEFT_PID_SLOT_0 = new Slot0Configs();
+    public static Slot1Configs LEFT_PID_SLOT_1 = new Slot1Configs();
+    public static Slot0Configs RIGHT_PID_SLOT_0 = new Slot0Configs();
+    public static Slot1Configs RIGHT_PID_SLOT_1 = new Slot1Configs();
+    public static Slot0Configs PIVOT_PID = new Slot0Configs();
+    static {
+      // Left 0
+      LEFT_PID_SLOT_0.kS = 0.28;
+      LEFT_PID_SLOT_0.kV = 0.13;
+      LEFT_PID_SLOT_0.kA = 0;
+      LEFT_PID_SLOT_0.kP = 0.5;
+      LEFT_PID_SLOT_0.kI = 0;
+      LEFT_PID_SLOT_0.kD = 0;
+
+      // Left 1
+      LEFT_PID_SLOT_1.kS = 0.28;
+      LEFT_PID_SLOT_1.kV = 0.13;
+      LEFT_PID_SLOT_1.kA = 0;
+      LEFT_PID_SLOT_1.kP = 0.5;
+      LEFT_PID_SLOT_1.kI = 0;
+      LEFT_PID_SLOT_1.kD = 0;
+
+      // Right 0 -- Tuned!
+      RIGHT_PID_SLOT_0.kS = 0.36;
+      RIGHT_PID_SLOT_0.kV = 0.115;
+      RIGHT_PID_SLOT_0.kA = 0;
+      RIGHT_PID_SLOT_0.kP = 0.7;
+      RIGHT_PID_SLOT_0.kI = 0;
+      RIGHT_PID_SLOT_0.kD = 0;
+      // Right 1
+      RIGHT_PID_SLOT_1.kS = 0.36;
+      RIGHT_PID_SLOT_1.kV = 0.115;
+      RIGHT_PID_SLOT_1.kA = 0;
+      RIGHT_PID_SLOT_1.kP = 0.7;
+      RIGHT_PID_SLOT_1.kI = 0;
+      RIGHT_PID_SLOT_1.kD = 0;
+      // Pivot
+      PIVOT_PID.kS = 0.4;
+      PIVOT_PID.kV = 0;
+      PIVOT_PID.kG = 0.53;
+      PIVOT_PID.kA = 0;
+      PIVOT_PID.kP = 90;
+      PIVOT_PID.kD = 0;
+    }
 
     // - Angles -
     public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(155);

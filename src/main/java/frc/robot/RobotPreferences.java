@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.frcteam3255.preferences.SN_DoublePreference;
 
 import edu.wpi.first.units.Angle;
@@ -81,6 +83,7 @@ public class RobotPreferences {
 
   public static final class prefShooter {
     // - PID -
+
     public static final double leftShooterS = 0.28;
     public static final double leftShooterV = 0.13;
     public static final double leftShooterA = 0.0;
@@ -88,20 +91,53 @@ public class RobotPreferences {
     public static final double leftShooterI = 0;
     public static final double leftShooterD = 0.0;
 
-    public static final double rightShooterS = 0.4;
-    public static final double rightShooterV = 0.11;
-    public static final double rightShooterA = 0;
-    public static final double rightShooterP = 0.4; // 0.6 ?
-    public static final double rightShooterI = 0;
-    public static final double rightShooterD = 0;
+    public static Slot0Configs leftPIDSlot0 = new Slot0Configs();
+    public static Slot1Configs leftPIDSlot1 = new Slot1Configs();
 
-    public static final double pivotShooterS = 0.4;
-    public static final double pivotShooterV = 0.0;
-    public static final double pivotShooterG = 0.53;
-    public static final double pivotShooterA = 0.0;
-    public static final double pivotShooterP = 90;
-    public static final double pivotShooterI = 0;
-    public static final double pivotShooterD = 0;
+    public static Slot0Configs rightPIDSlot0 = new Slot0Configs();
+    public static Slot1Configs rightPIDSlot1 = new Slot1Configs();
+
+    public static Slot0Configs pivotPID = new Slot0Configs();
+
+    static {
+      // Left 0
+      leftPIDSlot0.kS = 0.28;
+      leftPIDSlot0.kV = 0.13;
+      leftPIDSlot0.kA = 0;
+      leftPIDSlot0.kP = 0.5;
+      leftPIDSlot0.kI = 0;
+      leftPIDSlot0.kD = 0;
+
+      // Left 1
+      leftPIDSlot1.kS = 0.28;
+      leftPIDSlot1.kV = 0.13;
+      leftPIDSlot1.kA = 0;
+      leftPIDSlot1.kP = 0.5;
+      leftPIDSlot1.kI = 0;
+      leftPIDSlot1.kD = 0;
+
+      // Right 0 -- Tuned!
+      rightPIDSlot0.kS = 0.36;
+      rightPIDSlot0.kV = 0.115;
+      rightPIDSlot0.kA = 0;
+      rightPIDSlot0.kP = 0.7;
+      rightPIDSlot0.kI = 0;
+      rightPIDSlot0.kD = 0;
+      // Right 1
+      rightPIDSlot1.kS = 0.36;
+      rightPIDSlot1.kV = 0.115;
+      rightPIDSlot1.kA = 0;
+      rightPIDSlot1.kP = 0.7;
+      rightPIDSlot1.kI = 0;
+      rightPIDSlot1.kD = 0;
+      // Pivot
+      pivotPID.kS = 0.4;
+      pivotPID.kV = 0;
+      pivotPID.kG = 0.53;
+      pivotPID.kA = 0;
+      pivotPID.kP = 90;
+      pivotPID.kD = 0;
+    }
   }
 
   public static final class prefElevator {
