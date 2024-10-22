@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix.led.Animation;
+import com.ctre.phoenix.led.ColorFlowAnimation;
+import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -579,5 +582,19 @@ public final class Constants {
     public static final Measure<Angle> LL_ROLL = Units.Degrees.of(0);
     public static final Measure<Angle> LL_PITCH = Units.Degrees.of(20);
     public static final Measure<Angle> LL_YAW = Units.Degrees.of(0);
+  }
+
+  public static class constLEDs {
+    public static final double LED_BRIGHTNESS = 1;
+
+    public static final int[] CLEAR_LEDS = { 0, 0, 0 };
+    public static final int[] INTAKING_COLOR = { 0, 0, 0 };
+    public static final int[] STORE_FEEDER_COLOR = { 0, 0, 255 };
+
+    public static final ColorFlowAnimation PREP_AMP_COLOR = new ColorFlowAnimation(200, 0, 255);
+    public static final StrobeAnimation PREP_SUB_BACKWARDS_COLOR = new StrobeAnimation(255, 255, 0);
+    public static final StrobeAnimation PREP_SPEAKER_COLOR = new StrobeAnimation(255, 130, 0);
+    public static final StrobeAnimation PREP_VISION_COLOR = new StrobeAnimation(0, 255, 0);
+
   }
 }

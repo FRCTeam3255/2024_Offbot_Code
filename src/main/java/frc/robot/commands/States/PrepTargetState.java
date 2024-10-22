@@ -8,9 +8,11 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.constLEDs;
 import frc.robot.Constants.constStateMachine;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.StateMachine.RobotState;
@@ -20,6 +22,7 @@ public class PrepTargetState extends Command {
   StateMachine subStateMachine;
   Shooter subShooter;
   Elevator subElevator;
+  LEDs subLEDs;
   TargetState desiredTargetState;
 
   Measure<Angle> desiredPivotAngle;
@@ -28,11 +31,12 @@ public class PrepTargetState extends Command {
   boolean elevatorWasUp;
 
   /** Creates a new PrepTargetState. */
-  public PrepTargetState(Elevator subElevator, StateMachine subStateMachine, Shooter subShooter,
+  public PrepTargetState(Elevator subElevator, StateMachine subStateMachine, Shooter subShooter, LEDs subLEDs,
       TargetState desiredTargetState) {
     this.subStateMachine = subStateMachine;
     this.subShooter = subShooter;
     this.subElevator = subElevator;
+    this.subLEDs = subLEDs;
     this.desiredTargetState = desiredTargetState;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -47,6 +51,20 @@ public class PrepTargetState extends Command {
 
     if (currentRobotState.equals(RobotState.STORE_FEEDER) || subStateMachine.isCurrentStateTargetState()) {
       subStateMachine.setRobotState(desiredRobotState);
+      switch (desiredTargetState) {
+        case PREP_AMP:
+          subLEDs.setLEDAnimation(constLEDs.PREP_AMP_COLOR);
+          break;
+        case PREP_SUB_BACKWARDS:
+          subLEDs.setLEDAnimation(constLEDs.PREP_SUB_BACKWARDS_COLOR);
+          break;
+        case PREP_SPEAKER:
+          subLEDs.setLEDAnimation(constLEDs.PREP_SPEAKER_COLOR);
+          break;
+        case PREP_VISION:
+          subLEDs.setLEDAnimation(constLEDs.PREP_VISION_COLOR);
+          break;
+      }
     }
 
     desiredShooterPosition = constStateMachine.TARGET_TO_PRESET_GROUP.get(desiredTargetState);
