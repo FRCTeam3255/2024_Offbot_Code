@@ -126,7 +126,7 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new Climbing(subClimber, subElevator, subStateMachine, subShooter, subTransfer);
+            return new Climbing(subClimber, subElevator, subLEDs, subStateMachine, subShooter, subTransfer);
         }
 
         break;

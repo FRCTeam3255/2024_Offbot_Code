@@ -281,22 +281,24 @@ public class RobotContainer {
 
     // -- Preload Sub --
     autoChooser.addOption("Preload Only Amp-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
-        subElevator, subIntake, subShooter, subTransfer, 0, preloadDelay));
+        subElevator, subIntake, subLEDs, subShooter, subTransfer, 0, preloadDelay));
     autoChooser.setDefaultOption("Preload Only Center",
-        new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer,
+        new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subLEDs, subShooter,
+            subTransfer,
             1, preloadDelay));
     autoChooser.addOption("Preload Only Source-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
-        subElevator, subIntake, subShooter, subTransfer, 2, preloadDelay));
+        subElevator, subIntake, subLEDs, subShooter, subTransfer, 2, preloadDelay));
 
     autoChooser.addOption("Preload Taxi",
-        new PreloadTaxi(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subShooter, subTransfer));
+        new PreloadTaxi(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subLEDs, subShooter,
+            subTransfer));
     autoChooser.addOption("Wing Only Down", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
-        subIntake, subTransfer, subShooter, true));
+        subIntake, subLEDs, subTransfer, subShooter, true));
     autoChooser.addOption("Wing Only Up", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
-        subIntake, subTransfer, subShooter, false));
+        subIntake, subLEDs, subTransfer, subShooter, false));
 
     autoChooser.addOption("Centerline :3", new Centerline(subStateMachine, subClimber, subDrivetrain, subElevator,
-        subIntake, subTransfer, subShooter, false));
+        subIntake, subLEDs, subTransfer, subShooter, false));
 
     SmartDashboard.putData(autoChooser);
   }
