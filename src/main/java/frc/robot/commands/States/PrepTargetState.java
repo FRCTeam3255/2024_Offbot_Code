@@ -15,6 +15,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
+import frc.robot.subsystems.Transfer;
 import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine.TargetState;
 
@@ -23,6 +24,7 @@ public class PrepTargetState extends Command {
   Shooter subShooter;
   Elevator subElevator;
   LEDs subLEDs;
+  Transfer subTransfer;
   TargetState desiredTargetState;
 
   Measure<Angle> desiredPivotAngle;
@@ -31,11 +33,13 @@ public class PrepTargetState extends Command {
   boolean elevatorWasUp;
 
   /** Creates a new PrepTargetState. */
-  public PrepTargetState(Elevator subElevator, StateMachine subStateMachine, Shooter subShooter, LEDs subLEDs,
+  public PrepTargetState(Elevator subElevator, StateMachine subStateMachine, Shooter subShooter, Transfer subTransfer,
+      LEDs subLEDs,
       TargetState desiredTargetState) {
     this.subStateMachine = subStateMachine;
     this.subShooter = subShooter;
     this.subElevator = subElevator;
+    this.subTransfer = subTransfer;
     this.subLEDs = subLEDs;
     this.desiredTargetState = desiredTargetState;
 
@@ -51,20 +55,6 @@ public class PrepTargetState extends Command {
 
     if (currentRobotState.equals(RobotState.STORE_FEEDER) || subStateMachine.isCurrentStateTargetState()) {
       subStateMachine.setRobotState(desiredRobotState);
-      switch (desiredTargetState) {
-        case PREP_AMP:
-          subLEDs.setLEDAnimation(constLEDs.PREP_AMP_COLOR);
-          break;
-        case PREP_SUB_BACKWARDS:
-          subLEDs.setLEDAnimation(constLEDs.PREP_SUB_BACKWARDS_COLOR);
-          break;
-        case PREP_SPEAKER:
-          subLEDs.setLEDAnimation(constLEDs.PREP_SPEAKER_COLOR);
-          break;
-        case PREP_VISION:
-          subLEDs.setLEDAnimation(constLEDs.PREP_VISION_COLOR);
-          break;
-      }
     }
 
     desiredShooterPosition = constStateMachine.TARGET_TO_PRESET_GROUP.get(desiredTargetState);
@@ -75,6 +65,30 @@ public class PrepTargetState extends Command {
       subShooter.setDesiredPosition(desiredShooterPosition);
     } else {
       subElevator.setElevatorPosition(desiredShooterPosition.elevatorPosition);
+    }
+
+    subLEDs.clearAnimation();
+
+    switch (desiredTargetState) {
+      case PREP_AMP:
+        subLEDs.setLEDs(constLEDs.PREP_AMP_COLOR);
+        break;
+      case PREP_SUB_BACKWARDS:
+        subLEDs.setLEDs(constLEDs.PREP_SUB_BACKWARDS_COLOR);
+        break;
+      case PREP_SPEAKER:
+        subLEDs.setLEDs(constLEDs.PREP_SPEAKER_COLOR);
+        break;
+      case PREP_VISION:
+        subLEDs.setLEDs(constLEDs.PREP_VISION_COLOR);
+        break;
+      case PREP_NONE:
+        if (!subTransfer.getGamePieceCollected()) {
+          subLEDs.setLEDs(constLEDs.CLEAR_LEDS);
+        } else {
+          subLEDs.setLEDAnimation(constLEDs.STORE_FEEDER_COLOR);
+        }
+        break;
     }
   }
 

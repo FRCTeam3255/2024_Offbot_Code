@@ -37,7 +37,7 @@ public class Climbing extends SequentialCommandGroup {
         // Check if we have a gp: if we do, put it in the drainpipe using prep amp
         Commands.either(
             Commands.sequence(
-                new PrepTargetState(subElevator, subStateMachine, subShooter, subLEDs,
+                new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
                     TargetState.PREP_AMP),
                 // Spin feeder and drainpipe motors
                 Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
