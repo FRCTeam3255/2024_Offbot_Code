@@ -66,7 +66,7 @@ public class RobotPreferences {
     public static final double autoDriveI = 0;
     public static final double autoDriveD = 0;
 
-    public static final double autoSteerP = 0;
+    public static final double autoSteerP = 2.5;
     public static final double autoSteerI = 0;
     public static final double autoSteerD = 0;
 
