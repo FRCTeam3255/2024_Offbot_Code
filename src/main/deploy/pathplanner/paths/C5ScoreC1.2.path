@@ -3,57 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4,
-        "y": 3.48
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 2.3298422193087567,
-        "y": 3.5378130487437285
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 5.774318436997921,
-        "y": 1.7549564790340981
-      },
-      "prevControl": {
-        "x": 5.268770079877292,
-        "y": 1.815970935927967
-      },
-      "nextControl": {
-        "x": 6.339804413575574,
-        "y": 1.6867081715161056
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.376,
-        "y": 2.432
-      },
-      "prevControl": {
-        "x": 7.46690909015711,
-        "y": 2.4320000020679515
-      },
-      "nextControl": {
-        "x": 7.285090909842892,
-        "y": 2.4319999979320492
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
         "x": 8.05,
         "y": 2.43
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.959090911497253,
+        "y": 2.4299999933825545
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.796,
+        "y": 1.865
+      },
       "prevControl": {
-        "x": 8.140909088502749,
-        "y": 2.430000006617445
+        "x": 5.886909083208792,
+        "y": 1.865000021175824
+      },
+      "nextControl": {
+        "x": 5.7050909167912085,
+        "y": 1.8649999788241765
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.4,
+        "y": 3.48
+      },
+      "prevControl": {
+        "x": 2.4909090662681592,
+        "y": 3.4800000677626355
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,25 +46,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "C4",
-      "waypointRelativePos": 1.85,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intaking"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -89,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": -43.19999999999999,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Centerline",
   "previewStartingState": {
-    "rotation": -44.370000000000005,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

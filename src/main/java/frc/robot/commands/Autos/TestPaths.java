@@ -19,13 +19,13 @@ import frc.robot.subsystems.Drivetrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TestL extends SequentialCommandGroup {
+public class TestPaths extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
 
   String pathName = "testSpin";
 
   /** Creates a new PreloadTaxi. */
-  public TestL(Drivetrain subDrivetrain) {
+  public TestPaths(Drivetrain subDrivetrain) {
     this.subDrivetrain = subDrivetrain;
 
     addCommands(

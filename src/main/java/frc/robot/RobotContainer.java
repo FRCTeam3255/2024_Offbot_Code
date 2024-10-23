@@ -4,14 +4,13 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.frcteam3255.joystick.SN_XboxController;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.Units;
@@ -21,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants.constClimber;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constField;
@@ -34,18 +32,11 @@ import frc.robot.commands.ManualElevator;
 import frc.robot.commands.Autos.Centerline;
 import frc.robot.commands.Autos.PreloadOnly;
 import frc.robot.commands.Autos.PreloadTaxi;
-import frc.robot.commands.Autos.TestL;
 import frc.robot.commands.Autos.WingOnly;
 import frc.robot.commands.ManualPivot;
-import frc.robot.commands.Zeroing.ZeroClimber;
 import frc.robot.commands.Zeroing.ZeroElevator;
 import frc.robot.commands.Zeroing.ZeroShooterPivot;
-import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.IntakeSource;
-import frc.robot.commands.States.Intaking;
-import frc.robot.commands.States.NoneState;
-import frc.robot.commands.States.PrepTargetState;
-import frc.robot.commands.States.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
@@ -73,9 +64,11 @@ public class RobotContainer {
   private final static Limelight subLimelight = new Limelight();
 
   private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceStored());
-  private final Trigger readyToShoot = new Trigger(() -> subDrivetrain.isDrivetrainFacingSpeaker()
+
+  private final BooleanSupplier readyToShoot = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
       && subTransfer.getGamePieceStored());
+
   private final IntakeSource comIntakeSource = new IntakeSource(subStateMachine, subShooter, subTransfer);
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -101,7 +94,7 @@ public class RobotContainer {
                     subElevator, subDrivetrain))))
         .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy());
 
-    readyToShoot.onTrue(
+    new Trigger(readyToShoot).onTrue(
         Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
             constControllers.DRIVER_RUMBLE)).alongWith(
                 Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
@@ -287,14 +280,14 @@ public class RobotContainer {
             subIntake, subShooter, subTransfer));
     autoChooser.addOption("Wing Only Down", new WingOnly(subStateMachine,
         subClimber, subDrivetrain, subElevator,
-        subIntake, subTransfer, subShooter, true));
+        subIntake, subTransfer, subShooter, readyToShoot, true));
     autoChooser.addOption("Wing Only Up", new WingOnly(subStateMachine,
         subClimber, subDrivetrain, subElevator,
-        subIntake, subTransfer, subShooter, false));
+        subIntake, subTransfer, subShooter, readyToShoot, false));
 
     autoChooser.addOption("Centerline :3", new Centerline(subStateMachine,
         subClimber, subDrivetrain, subElevator,
-        subIntake, subTransfer, subShooter, false));
+        subIntake, subTransfer, subShooter, readyToShoot, false));
 
     SmartDashboard.putData(autoChooser);
   }
