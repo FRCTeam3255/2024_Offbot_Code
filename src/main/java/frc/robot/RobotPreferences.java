@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.frcteam3255.preferences.SN_DoublePreference;
 
 import edu.wpi.first.units.Angle;
@@ -27,11 +29,6 @@ public class RobotPreferences {
      * <b>Units:</b> Percentage from 0 to 1
      */
     public static final SN_DoublePreference slowModeMultiplier = new SN_DoublePreference("slowModeMultiplier", .5);
-
-    public static final SN_DoublePreference autoMaxSpeedFeet = new SN_DoublePreference(
-        "autoMaxSpeedFeet", 6);
-    public static final SN_DoublePreference autoMaxAccelFeet = new SN_DoublePreference(
-        "autoMaxAccelFeet", 4);
 
     /**
      * <p>
@@ -65,43 +62,18 @@ public class RobotPreferences {
     public static final SN_DoublePreference driveKv = new SN_DoublePreference("driveKv", (1 / driveSpeed.getValue()));
 
     // This PID is implemented on the Drivetrain subsystem
-    public static final SN_DoublePreference autoDriveP = new SN_DoublePreference("autoDriveP", 4);
-    public static final SN_DoublePreference autoDriveI = new SN_DoublePreference("autoDriveI", 0);
-    public static final SN_DoublePreference autoDriveD = new SN_DoublePreference("autoDriveD", 0);
+    public static final double autoDriveP = 5;
+    public static final double autoDriveI = 0;
+    public static final double autoDriveD = 0;
 
-    public static final SN_DoublePreference autoSteerP = new SN_DoublePreference("autoSteerP", 3.255);
-    public static final SN_DoublePreference autoSteerI = new SN_DoublePreference("autoSteerI", 0.0);
-    public static final SN_DoublePreference autoSteerD = new SN_DoublePreference("autoSteerD", 0.0);
+    public static final double autoSteerP = 2.5;
+    public static final double autoSteerI = 0;
+    public static final double autoSteerD = 0;
 
     // Teleop Snapping to Rotation (Yaw)
     public static final double yawSnapP = 4;
     public static final double yawSnapI = 0;
     public static final double yawSnapD = 0;
-  }
-
-  public static final class prefShooter {
-    // - PID -
-    public static final double leftShooterS = 0.28;
-    public static final double leftShooterV = 0.13;
-    public static final double leftShooterA = 0.0;
-    public static final double leftShooterP = 0.5; // 0.75 ?
-    public static final double leftShooterI = 0;
-    public static final double leftShooterD = 0.0;
-
-    public static final double rightShooterS = 0.4;
-    public static final double rightShooterV = 0.11;
-    public static final double rightShooterA = 0;
-    public static final double rightShooterP = 0.4; // 0.6 ?
-    public static final double rightShooterI = 0;
-    public static final double rightShooterD = 0;
-
-    public static final double pivotShooterS = 0.4;
-    public static final double pivotShooterV = 0.0;
-    public static final double pivotShooterG = 0.53;
-    public static final double pivotShooterA = 0.0;
-    public static final double pivotShooterP = 90;
-    public static final double pivotShooterI = 0;
-    public static final double pivotShooterD = 0;
   }
 
   public static final class prefElevator {

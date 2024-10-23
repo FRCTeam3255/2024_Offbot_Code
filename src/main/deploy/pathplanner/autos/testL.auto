@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 2.39,
+      "y": 7.27
+    },
+    "rotation": -90.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "PsC5"
+            "pathName": "testL"
           }
         }
       ]
     }
   },
-  "folder": "Centerline Up",
+  "folder": null,
   "choreoAuto": false
 }

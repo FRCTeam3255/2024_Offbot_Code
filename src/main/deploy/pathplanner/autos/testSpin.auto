@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 2.0,
+      "y": 4.0
+    },
+    "rotation": -90.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C5ScoreC1.8"
+            "pathName": "testSpin"
           }
         }
       ]
     }
   },
-  "folder": "Centerline Up",
+  "folder": null,
   "choreoAuto": false
 }

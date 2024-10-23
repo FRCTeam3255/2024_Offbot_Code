@@ -76,7 +76,7 @@ public class PreloadOnly extends SequentialCommandGroup {
 
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
-            .until(() -> subTransfer.getGamePieceCollected()),
+            .until(() -> subTransfer.getGamePieceStored()),
 
         Commands.waitUntil(() -> subShooter.readyToShoot()),
 
@@ -85,7 +85,7 @@ public class PreloadOnly extends SequentialCommandGroup {
             .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
                 subTransfer,
                 subShooter)
-            .until(() -> !subTransfer.getGamePieceCollected())),
+            .until(() -> !subTransfer.getGamePieceStored())),
 
         // Reset subsystems to chill
         Commands.deferredProxy(() -> subStateMachine
