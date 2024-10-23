@@ -91,13 +91,8 @@ public class WingOnly extends SequentialCommandGroup {
         new PathPlannerAuto(determinePathName() + ".3"),
 
         Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
-        Commands.deferredProxy(shootSequence),
+        Commands.deferredProxy(shootSequence));
 
-        // Reset subsystems to chill
-        Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain,
-                subElevator, subIntake, subTransfer,
-                subShooter)));
   }
 
   public String determinePathName() {
