@@ -22,7 +22,7 @@ import frc.robot.subsystems.Drivetrain;
 public class TestL extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
 
-  String pathName = "testL";
+  String pathName = "testSpin";
 
   /** Creates a new PreloadTaxi. */
   public TestL(Drivetrain subDrivetrain) {
