@@ -205,7 +205,8 @@ public class RobotContainer {
     controller.btn_A.onTrue(
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_NONE,
             subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
-            .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))));
+            .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))))
+        .onFalse(Commands.runOnce(() -> subShooter.setShootingNeutralOutput()));
 
     // Prep subwoofer
     controller.btn_South.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))

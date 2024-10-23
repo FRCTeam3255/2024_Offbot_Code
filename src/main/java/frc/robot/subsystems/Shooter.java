@@ -147,6 +147,7 @@ public class Shooter extends SubsystemBase {
    * Sets all of the flywheel motors to neutral.
    */
   public void setShootingNeutralOutput() {
+    setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
     leftMotor.setControl(new NeutralOut());
     rightMotor.setControl(new NeutralOut());
   }
