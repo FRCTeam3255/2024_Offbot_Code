@@ -85,8 +85,9 @@ public class RobotContainer {
     subDrivetrain
         .setDefaultCommand(
             new Drive(subDrivetrain, subStateMachine, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
-                conDriver.btn_LeftBumper, conDriver.btn_RightBumper,
-                conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X));
+                conDriver.btn_LeftBumper, conDriver.btn_RightBumper, conDriver.btn_RightTrigger,
+                conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A,
+                new Trigger(() -> conDriver.btn_X.getAsBoolean() || conDriver.btn_LeftTrigger.getAsBoolean())));
 
     // - Manual Triggers -
     gamePieceTrigger

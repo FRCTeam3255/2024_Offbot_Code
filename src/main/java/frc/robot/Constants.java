@@ -85,6 +85,7 @@ public final class Constants {
      * <p>
      * Observed maximum translational speed while manually driving on the
      * Competition Robot.
+     * S
      * </p>
      */
     public static final Measure<Velocity<Distance>> DRIVE_SPEED = Units.FeetPerSecond.of(15.1);
@@ -188,7 +189,7 @@ public final class Constants {
       // 0.457m = The height of the AMP opening
       // 0.660m = The height between the floor and the bottom of the opening
 
-      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(120)));
+      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(300)));
       private static final Pose3d LEFT_STAGE = new Pose3d(
           new Pose2d(4.541771411895752, 4.736017227172852, Rotation2d.fromDegrees(300)));
       private static final Pose3d CENTER_STAGE = new Pose3d(
@@ -215,7 +216,7 @@ public final class Constants {
        */
       private static final Pose3d AMP = new Pose3d(14.706, 8.2112312, (0.457 / 2) + 0.660, new Rotation3d(0, 0, 0));
 
-      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(60)));
+      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(240)));
       private static final Pose3d LEFT_STAGE = new Pose3d(
           new Pose2d(12.0610990524292, 3.4952545166015625, Rotation2d.fromDegrees(120)));
       private static final Pose3d CENTER_STAGE = new Pose3d(
