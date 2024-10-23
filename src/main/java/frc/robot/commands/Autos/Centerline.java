@@ -20,6 +20,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
@@ -32,6 +33,7 @@ public class Centerline extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Elevator subElevator;
   Intake subIntake;
+  LEDs subLEDs;
   Transfer subTransfer;
   Shooter subShooter;
 
@@ -49,8 +51,7 @@ public class Centerline extends SequentialCommandGroup {
       Commands.parallel(
           Commands.deferredProxy(() -> subStateMachine
               .tryState(RobotState.PREP_VISION, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-                  subTransfer,
-                  subShooter)
+                  subLEDs, subTransfer, subShooter)
               .repeatedly()),
 
           Commands.runOnce(() -> subDrivetrain.drive(
@@ -62,24 +63,24 @@ public class Centerline extends SequentialCommandGroup {
       // Shoot! (Ends when we don't have a game piece anymore)
       Commands.deferredProxy(() -> subStateMachine
           .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-              subTransfer,
-              subShooter)
+              subLEDs, subTransfer, subShooter)
           .until(() -> !subTransfer.getGamePieceCollected())),
 
       // Reset subsystems to chill
       Commands.deferredProxy(() -> subStateMachine
-          .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer,
-              subShooter)),
+          .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subLEDs,
+              subTransfer, subShooter)),
 
       Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)));
 
   public Centerline(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,
-      Intake subIntake, Transfer subTransfer, Shooter subShooter, boolean goesDown) {
+      Intake subIntake, LEDs subLEDs, Transfer subTransfer, Shooter subShooter, boolean goesDown) {
     this.subStateMachine = subStateMachine;
     this.subClimber = subClimber;
     this.subDrivetrain = subDrivetrain;
     this.subElevator = subElevator;
     this.subIntake = subIntake;
+    this.subLEDs = subLEDs;
     this.subTransfer = subTransfer;
     this.subShooter = subShooter;
     addCommands(
@@ -88,7 +89,7 @@ public class Centerline extends SequentialCommandGroup {
 
         // -- PRELOAD --
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
-            subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
+            subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
             .until(() -> subTransfer.getGamePieceCollected()),
 
         Commands.deferredProxy(() -> shootSequence),

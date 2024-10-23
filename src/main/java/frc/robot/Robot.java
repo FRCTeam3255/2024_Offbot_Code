@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_robotContainer.subStateMachine.setRobotState(RobotState.NONE);
     m_robotContainer.subStateMachine.setTargetState(TargetState.PREP_NONE);
+    m_robotContainer.setDisabledLEDs();
   }
 
   @Override
@@ -63,6 +64,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledExit() {
+    m_robotContainer.clearLEDs();
   }
 
   @Override
