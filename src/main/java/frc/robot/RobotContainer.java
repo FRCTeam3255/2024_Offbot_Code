@@ -333,4 +333,14 @@ public class RobotContainer {
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).ignoringDisable(true);
   }
 
+  public void setDisabledLEDs() {
+    subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_1);
+    subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_2);
+  }
+
+  public void clearLEDs() {
+    subLEDs.clearAnimation();
+    subLEDs.setLEDs(constLEDs.CLEAR_LEDS);
+  }
+
 }

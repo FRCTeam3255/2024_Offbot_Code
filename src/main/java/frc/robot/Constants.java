@@ -15,7 +15,9 @@ import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.ColorFlowAnimation;
 import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
+import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
+import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -601,5 +603,9 @@ public final class Constants {
         Direction.Forward);
     public static final FireAnimation READY_TO_SHOOT_COLOR = new FireAnimation(1, 1, LED_NUMBER, 1, 1);
 
+    public static final TwinkleAnimation DISABLED_COLOR_1 = new TwinkleAnimation(0, 255, 255, 0, 1, LED_NUMBER / 2,
+        TwinklePercent.Percent100);
+    public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 100, 0, 0, 1, LED_NUMBER / 2,
+        TwinklePercent.Percent100, LED_NUMBER / 2);
   }
 }
