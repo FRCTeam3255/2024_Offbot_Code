@@ -36,7 +36,7 @@ public class ManualZeroShooterPivot extends Command {
       if (!attemptingZeroing) {
         attemptingZeroing = true;
         zeroingTimestamp = Units.Seconds.of(Timer.getFPGATimestamp());
-        Commands.deferredProxy(() -> subShooter.playZeroingStartSound());
+        Commands.deferredProxy(() -> subShooter.playZeroingStart());
       }
 
       // Check if time elapsed since previous zeroing is too high - if true, then exit

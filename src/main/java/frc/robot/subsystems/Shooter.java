@@ -8,6 +8,7 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.MusicTone;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -26,6 +27,8 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -41,6 +44,7 @@ public class Shooter extends SubsystemBase {
   MotionMagicVelocityVoltage motionMagicRequest;
   PositionVoltage positionRequest;
   MotionMagicVoltage motionMagicPivotRequest;
+  MusicTone musicRequest;
 
   VelocityVoltage velocityRequest;
   VoltageOut voltageRequest;
@@ -51,6 +55,8 @@ public class Shooter extends SubsystemBase {
 
   int currentRightSlot = 0;
   int currentLeftSlot = 0;
+
+  public static boolean hasZeroed = false;
 
   public Shooter() {
     leftMotor = new TalonFX(mapShooter.SHOOTER_LEFT_MOTOR_CAN, "rio");
@@ -66,6 +72,7 @@ public class Shooter extends SubsystemBase {
     motionMagicRequest = new MotionMagicVelocityVoltage(0);
     motionMagicPivotRequest = new MotionMagicVoltage(0);
     positionRequest = new PositionVoltage(0).withSlot(0);
+    musicRequest = new MusicTone(0);
 
     configure();
   }
@@ -96,6 +103,7 @@ public class Shooter extends SubsystemBase {
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
     pivotConfig.Slot0 = constShooter.PIVOT_PID;
+    pivotConfig.Audio.AllowMusicDurDisable = constShooter.PIVOT_SINGS_IN_DISABLE;
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
@@ -329,6 +337,37 @@ public class Shooter extends SubsystemBase {
     return isLeftShooterUpToSpeed() && isRightShooterUpToSpeed() && isShooterAtPosition(lastDesiredPivotAngle);
   }
 
+  // -- Orchestra/Music --
+  public SequentialCommandGroup playZeroingStart() {
+    // TODO: add tones
+    return new SequentialCommandGroup(
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(20))),
+        Commands.waitSeconds(0.2),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(30))),
+        Commands.waitSeconds(0.2),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(0))));
+  }
+
+  public SequentialCommandGroup playZeroingFailed() {
+    return new SequentialCommandGroup(
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(20))),
+        Commands.waitSeconds(0.2),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(30))),
+        Commands.waitSeconds(0.2),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(0))));
+
+  }
+
+  public SequentialCommandGroup playZeroingSuccess() {
+    return new SequentialCommandGroup(
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(20))),
+        Commands.waitSeconds(0.2),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(30))),
+        Commands.waitSeconds(0.2),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(0))));
+  }
+
+  // -- SysID
   final SysIdRoutine leftFlywheelSysIdRoutine = new SysIdRoutine(
       new SysIdRoutine.Config(
           null, // Use default ramp rate (1 V/s)
