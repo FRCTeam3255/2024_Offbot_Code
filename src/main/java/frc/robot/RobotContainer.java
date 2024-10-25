@@ -247,20 +247,6 @@ public class RobotContainer {
   }
 
   private void configureTestBindings(SN_XboxController controller) {
-
-    controller.btn_LeftBumper.onTrue(Commands.runOnce(SignalLogger::start));
-    controller.btn_RightBumper.onTrue(Commands.runOnce(SignalLogger::stop));
-
-    /*
-     * Joystick Y = quasistatic forward
-     * Joystick A = quasistatic reverse
-     * Joystick B = dynamic forward
-     * Joystick X = dyanmic reverse
-     */
-    controller.btn_Y.whileTrue(subShooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    controller.btn_A.whileTrue(subShooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    controller.btn_B.whileTrue(subShooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    controller.btn_X.whileTrue(subShooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
   private void configureAutoSelector() {

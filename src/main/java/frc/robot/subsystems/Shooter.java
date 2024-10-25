@@ -329,7 +329,7 @@ public class Shooter extends SubsystemBase {
     return isLeftShooterUpToSpeed() && isRightShooterUpToSpeed() && isShooterAtPosition(lastDesiredPivotAngle);
   }
 
-  final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
+  final SysIdRoutine leftFlywheelSysIdRoutine = new SysIdRoutine(
       new SysIdRoutine.Config(
           null, // Use default ramp rate (1 V/s)
           Units.Volts.of(7), // Reduce dynamic step voltage to 4 to prevent brownout
@@ -342,11 +342,11 @@ public class Shooter extends SubsystemBase {
           this));
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return m_sysIdRoutine.quasistatic(direction);
+    return leftFlywheelSysIdRoutine.quasistatic(direction);
   }
 
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-    return m_sysIdRoutine.dynamic(direction);
+    return leftFlywheelSysIdRoutine.dynamic(direction);
   }
 
   @Override
