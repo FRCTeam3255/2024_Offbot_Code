@@ -44,10 +44,10 @@ public class PreloadTaxi extends SequentialCommandGroup {
 
   BooleanSupplier readyToShoot = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
-      && subTransfer.getGamePieceCollected());
+      && subTransfer.getGamePieceStored());
 
   SequentialCommandGroup shootSequence = new SequentialCommandGroup(
-      Commands.waitUntil(() -> subTransfer.getGamePieceCollected()),
+      Commands.waitUntil(() -> subTransfer.getGamePieceStored()),
       Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
       Commands.deferredProxy(() -> subStateMachine
@@ -64,7 +64,7 @@ public class PreloadTaxi extends SequentialCommandGroup {
       Commands.deferredProxy(() -> subStateMachine
           .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
               subLEDs, subTransfer, subShooter)
-          .until(() -> !subTransfer.getGamePieceCollected())),
+          .until(() -> !subTransfer.getGamePieceStored())),
 
       // Reset subsystems to chill
       Commands.deferredProxy(() -> subStateMachine
@@ -93,7 +93,7 @@ public class PreloadTaxi extends SequentialCommandGroup {
         // -- PRELOAD --
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
-            .until(() -> subTransfer.getGamePieceCollected()),
+            .until(() -> subTransfer.getGamePieceStored()),
 
         Commands.deferredProxy(() -> shootSequence),
 

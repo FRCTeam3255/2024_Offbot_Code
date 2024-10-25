@@ -4,13 +4,13 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.frcteam3255.joystick.SN_XboxController;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.Units;
@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.constClimber;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constField;
@@ -35,15 +35,9 @@ import frc.robot.commands.Autos.PreloadOnly;
 import frc.robot.commands.Autos.PreloadTaxi;
 import frc.robot.commands.Autos.WingOnly;
 import frc.robot.commands.ManualPivot;
-import frc.robot.commands.Zeroing.ZeroClimber;
 import frc.robot.commands.Zeroing.ZeroElevator;
 import frc.robot.commands.Zeroing.ZeroShooterPivot;
-import frc.robot.commands.States.Ejecting;
 import frc.robot.commands.States.IntakeSource;
-import frc.robot.commands.States.Intaking;
-import frc.robot.commands.States.NoneState;
-import frc.robot.commands.States.PrepTargetState;
-import frc.robot.commands.States.Shooting;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
@@ -72,10 +66,12 @@ public class RobotContainer {
   private final static Transfer subTransfer = new Transfer();
   private final static Limelight subLimelight = new Limelight();
 
-  private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceCollected());
-  private final Trigger readyToShoot = new Trigger(() -> subDrivetrain.isDrivetrainFacingSpeaker()
+  private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceStored());
+
+  private final BooleanSupplier readyToShoot = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
-      && subTransfer.getGamePieceCollected());
+      && subTransfer.getGamePieceStored());
+
   private final IntakeSource comIntakeSource = new IntakeSource(subStateMachine, subShooter, subTransfer);
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -86,8 +82,9 @@ public class RobotContainer {
     subDrivetrain
         .setDefaultCommand(
             new Drive(subDrivetrain, subStateMachine, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
-                conDriver.btn_LeftBumper, conDriver.btn_RightBumper,
-                conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A, conDriver.btn_X));
+                conDriver.btn_LeftBumper, conDriver.btn_RightBumper, conDriver.btn_RightTrigger,
+                conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A,
+                new Trigger(() -> conDriver.btn_X.getAsBoolean() || conDriver.btn_LeftTrigger.getAsBoolean())));
 
     // - Manual Triggers -
     gamePieceTrigger
@@ -100,7 +97,7 @@ public class RobotContainer {
                     subElevator, subDrivetrain))))
         .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy());
 
-    readyToShoot.onTrue(
+    new Trigger(readyToShoot).onTrue(
         Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
             constControllers.DRIVER_RUMBLE)).alongWith(
                 Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
@@ -132,21 +129,6 @@ public class RobotContainer {
     // Reset Pose
     controller.btn_North.onTrue(
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
-
-    // Climb up
-    controller.btn_RightTrigger.onTrue(
-        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP)))
-        .onTrue(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.CLIMBING, subStateMachine,
-                subClimber, subDrivetrain, subElevator,
-                subIntake, subLEDs, subTransfer, subShooter)))
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(controller.getRightTriggerAxis())))
-        .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
-
-    // Climb down
-    controller.btn_LeftTrigger
-        .whileTrue(Commands.runOnce(() -> subClimber.setClimberSpeed(-controller.getLeftTriggerAxis())))
-        .onFalse(Commands.runOnce(() -> subClimber.setClimberSpeed(0)));
 
     // Intake from source
     controller.btn_East.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKE_SOURCE,
@@ -213,7 +195,8 @@ public class RobotContainer {
     controller.btn_A.onTrue(
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_NONE,
             subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
-            .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))));
+            .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))))
+        .onFalse(Commands.runOnce(() -> subShooter.setShootingNeutralOutput()));
 
     // Prep subwoofer
     controller.btn_South.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
@@ -244,37 +227,13 @@ public class RobotContainer {
     controller.btn_Start.whileTrue(new ManualElevator(subElevator, controller.axis_LeftY));
 
     // Zero Elevator and Climber
-    controller.btn_LeftStick.onTrue(new ZeroElevator(subElevator))
-        .onTrue(new ZeroClimber(subClimber));
+    controller.btn_LeftStick.onTrue(new ZeroElevator(subElevator));
 
     // Zero Shooter
     controller.btn_RightStick.onTrue(new ZeroShooterPivot(subShooter));
   }
 
   private void configureTestBindings(SN_XboxController controller) {
-    controller.btn_LeftTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.INTAKING)))
-        .whileTrue(new Intaking(subStateMachine, subIntake, subShooter, subTransfer))
-        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake, subLEDs,
-            subShooter, subTransfer));
-
-    controller.btn_RightTrigger.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.SHOOTING)))
-        .whileTrue(new Shooting(subStateMachine, subElevator, subShooter,
-            subTransfer))
-        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake, subLEDs,
-            subShooter, subTransfer));
-
-    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.PREP_SHUFFLE)))
-        .onTrue(new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
-            TargetState.PREP_SHUFFLE));
-
-    controller.btn_A.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.AMP_POSITION)));
-    controller.btn_Y.onTrue(Commands.runOnce(() -> subElevator.setElevatorPosition(constElevator.BACKWARD_LIMIT)));
-
-    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.EJECTING)))
-        .whileTrue(new Ejecting(subStateMachine, subIntake, subElevator,
-            subTransfer))
-        .onFalse(new NoneState(subStateMachine, subClimber, subElevator, subIntake, subLEDs,
-            subShooter, subTransfer));
   }
 
   private void configureAutoSelector() {
@@ -284,22 +243,25 @@ public class RobotContainer {
     autoChooser.addOption("Preload Only Amp-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
         subElevator, subIntake, subLEDs, subShooter, subTransfer, 0, preloadDelay));
     autoChooser.setDefaultOption("Preload Only Center",
-        new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subLEDs, subShooter,
-            subTransfer,
+        new PreloadOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
+            subIntake, subLEDs, subShooter, subTransfer,
             1, preloadDelay));
     autoChooser.addOption("Preload Only Source-Side", new PreloadOnly(subStateMachine, subClimber, subDrivetrain,
         subElevator, subIntake, subLEDs, subShooter, subTransfer, 2, preloadDelay));
 
     autoChooser.addOption("Preload Taxi",
-        new PreloadTaxi(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subLEDs, subShooter,
-            subTransfer));
-    autoChooser.addOption("Wing Only Down", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
-        subIntake, subLEDs, subTransfer, subShooter, true));
-    autoChooser.addOption("Wing Only Up", new WingOnly(subStateMachine, subClimber, subDrivetrain, subElevator,
-        subIntake, subLEDs, subTransfer, subShooter, false));
+        new PreloadTaxi(subStateMachine, subClimber, subDrivetrain, subElevator,
+            subIntake, subLEDs, subShooter, subTransfer));
+    autoChooser.addOption("Wing Only Down", new WingOnly(subStateMachine,
+        subClimber, subDrivetrain, subElevator,
+        subIntake, subLEDs, subTransfer, subShooter, readyToShoot, true));
+    autoChooser.addOption("Wing Only Up", new WingOnly(subStateMachine,
+        subClimber, subDrivetrain, subElevator,
+        subIntake, subLEDs, subTransfer, subShooter, readyToShoot, false));
 
-    autoChooser.addOption("Centerline :3", new Centerline(subStateMachine, subClimber, subDrivetrain, subElevator,
-        subIntake, subLEDs, subTransfer, subShooter, false));
+    autoChooser.addOption("Centerline :3", new Centerline(subStateMachine,
+        subClimber, subDrivetrain, subElevator,
+        subIntake, subLEDs, subTransfer, subShooter, readyToShoot, false));
 
     SmartDashboard.putData(autoChooser);
   }
@@ -320,7 +282,6 @@ public class RobotContainer {
    */
   public static Command zeroSubsystems() {
     Command returnedCommand = new ParallelCommandGroup(
-        new ZeroClimber(subClimber).withTimeout(constClimber.ZEROING_TIMEOUT.in(Units.Seconds)),
         new ZeroElevator(subElevator).withTimeout(constElevator.ZEROING_TIMEOUT.in(Units.Seconds)),
         new ZeroShooterPivot(subShooter).withTimeout(constShooter.ZEROING_TIMEOUT.in(Units.Seconds)))
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming);

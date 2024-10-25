@@ -14,7 +14,19 @@
         {
           "type": "path",
           "data": {
+            "pathName": "C5ScoreC1R.1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "C5ScoreC1.2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5ScoreC1R.2"
           }
         },
         {
@@ -26,37 +38,25 @@
         {
           "type": "path",
           "data": {
+            "pathName": "C5ScoreC1R.3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "C5ScoreC1.4"
           }
         },
         {
           "type": "path",
           "data": {
+            "pathName": "C5ScoreC1R.4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "C5ScoreC1.5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C5ScoreC1.6"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C5ScoreC1.7"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C5ScoreC1.8"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C5ScoreC1.9"
           }
         }
       ]

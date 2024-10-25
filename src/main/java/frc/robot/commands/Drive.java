@@ -24,13 +24,14 @@ public class Drive extends Command {
   StateMachine subStateMachine;
   DoubleSupplier xAxis, yAxis, rotationAxis;
   boolean isOpenLoop;
-  Trigger slowMode, north, south, east, west, chain;
-  Measure<Angle> northYaw;
+  Trigger slowMode, north, south, east, west, chain, source;
+  Measure<Angle> northYaw, sourceYaw;
   double redAllianceMultiplier = 1;
   double slowMultiplier = 0;
 
   public Drive(Drivetrain subDrivetrain, StateMachine subStateMachine, DoubleSupplier xAxis, DoubleSupplier yAxis,
-      DoubleSupplier rotationAxis, Trigger slowMode, Trigger chain, Trigger north, Trigger east, Trigger south,
+      DoubleSupplier rotationAxis, Trigger slowMode, Trigger chain, Trigger source, Trigger north, Trigger east,
+      Trigger south,
       Trigger west) {
     this.subDrivetrain = subDrivetrain;
     this.subStateMachine = subStateMachine;
@@ -38,6 +39,7 @@ public class Drive extends Command {
     this.yAxis = yAxis;
     this.rotationAxis = rotationAxis;
     this.slowMode = slowMode;
+    this.source = source;
     this.north = north;
     this.east = east;
     this.south = south;
@@ -52,6 +54,7 @@ public class Drive extends Command {
   @Override
   public void initialize() {
     northYaw = constField.isRedAlliance() ? Units.Degrees.of(180) : Units.Degrees.of(0);
+    sourceYaw = Units.Radians.of(constField.getFieldPositions().get()[2].getRotation().getZ());
     redAllianceMultiplier = constField.isRedAlliance() ? -1 : 1;
   }
 
@@ -85,6 +88,8 @@ public class Drive extends Command {
       rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(90)));
     } else if (chain.getAsBoolean()) {
       rVelocity = subDrivetrain.getVelocityToChain();
+    } else if (source.getAsBoolean()) {
+      rVelocity = subDrivetrain.getVelocityToSnap(sourceYaw);
     }
 
     // Ignore calculated rotation if a driver rotation is given

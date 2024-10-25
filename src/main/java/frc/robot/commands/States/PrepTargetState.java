@@ -83,7 +83,7 @@ public class PrepTargetState extends Command {
         subLEDs.setLEDs(constLEDs.PREP_VISION_COLOR);
         break;
       case PREP_NONE:
-        if (!subTransfer.getGamePieceCollected()) {
+        if (!subTransfer.getGamePieceStored()) {
           subLEDs.setLEDs(constLEDs.CLEAR_LEDS);
         } else {
           subLEDs.setLEDAnimation(constLEDs.STORE_FEEDER_COLOR);

@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constLEDs;
 import frc.robot.Constants.constShooter;
+import frc.robot.Constants.constStateMachine;
+import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine.TargetState;
 import frc.robot.subsystems.Climber;
@@ -46,6 +48,8 @@ public class NoneState extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    ShooterPositionGroup desiredShooterPosition = constStateMachine.TARGET_TO_PRESET_GROUP.get(TargetState.PREP_NONE);
+
     subStateMachine.setTargetState(TargetState.PREP_NONE);
     subStateMachine.setRobotState(RobotState.NONE);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
@@ -53,10 +57,10 @@ public class NoneState extends Command {
     subClimber.setSafeToMoveClimber(false);
     subElevator.setDrainpipeSpeed(0);
     subTransfer.setFeederSpeed(0);
-    subShooter.setShootingNeutralOutput();
-    subShooter.setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
     subLEDs.clearAnimation();
     subLEDs.setLEDs(constLEDs.CLEAR_LEDS);
+    subShooter.setDesiredVelocities(desiredShooterPosition.leftVelocity, desiredShooterPosition.rightVelocity);
+    subShooter.getUpToSpeed();
 
     if (subShooter.isSafeToMoveElevator()) {
       subShooter.setPivotNeutralOutput();

@@ -114,22 +114,10 @@ public class StateMachine extends SubsystemBase {
         }
         break;
 
+      // No more climber :(
       case CLIMBING:
-        switch (currentState) {
-          case NONE:
-          case STORE_FEEDER:
-          case PREP_SPEAKER:
-          case PREP_VISION:
-          case PREP_AMP_SHOOTER:
-          case PREP_SPIKE:
-          case PREP_WING:
-          case PREP_AMP:
-          case PREP_NONE:
-          case PREP_SUB_BACKWARDS:
-            return new Climbing(subClimber, subElevator, subLEDs, subStateMachine, subShooter, subTransfer);
-        }
-
         break;
+
       case EJECTING:
         switch (currentState) {
           case NONE:
@@ -326,16 +314,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_SUB_BACKWARDS:
             return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
                 TargetState.PREP_NONE);
-          case CLIMBING:
-            if (subClimber.isClimberAtPosition(constClimber.BACKWARD_LIMIT)) {
-              return new NoneState(subStateMachine, subClimber, subElevator, subIntake, subLEDs, subShooter,
-                  subTransfer);
-            } else {
-              return Commands
-                  .print("Attempted to cancel CLIMBING, but the CLIMBER is UP! Please move the climber first :p");
-            }
-
         }
+        break;
     }
     return Commands.print("ITS SO OVER D: Invalid State Provided :3");
   }

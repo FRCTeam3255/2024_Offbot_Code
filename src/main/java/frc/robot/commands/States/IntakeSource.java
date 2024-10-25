@@ -42,7 +42,7 @@ public class IntakeSource extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (subTransfer.getGamePieceCollected()) {
+    if (subTransfer.getGamePieceStored()) {
       hasGamePiece = true;
     }
   }
@@ -61,7 +61,7 @@ public class IntakeSource extends Command {
     // Since the sensor senses the back of the note, command will end when we know
     // we have a game piece but when the sensor doesn't sense the note anymore (it's
     // far back enough to not touch the flywheels)
-    return (hasGamePiece && !subTransfer.getGamePieceCollected());
+    return (hasGamePiece && !subTransfer.getGamePieceStored());
   }
 
   public boolean getIntakeSourceGamePiece() {

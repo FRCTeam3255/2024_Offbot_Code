@@ -11,13 +11,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.ColorFlowAnimation;
 import com.ctre.phoenix.led.FireAnimation;
-import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -193,7 +193,7 @@ public final class Constants {
       // 0.457m = The height of the AMP opening
       // 0.660m = The height between the floor and the bottom of the opening
 
-      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(120)));
+      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(300)));
       private static final Pose3d LEFT_STAGE = new Pose3d(
           new Pose2d(4.541771411895752, 4.736017227172852, Rotation2d.fromDegrees(300)));
       private static final Pose3d CENTER_STAGE = new Pose3d(
@@ -220,7 +220,7 @@ public final class Constants {
        */
       private static final Pose3d AMP = new Pose3d(14.706, 8.2112312, (0.457 / 2) + 0.660, new Rotation3d(0, 0, 0));
 
-      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(60)));
+      private static final Pose3d SOURCE = new Pose3d(new Pose2d(0, 0, Rotation2d.fromDegrees(240)));
       private static final Pose3d LEFT_STAGE = new Pose3d(
           new Pose2d(12.0610990524292, 3.4952545166015625, Rotation2d.fromDegrees(120)));
       private static final Pose3d CENTER_STAGE = new Pose3d(
@@ -255,7 +255,55 @@ public final class Constants {
 
     public static final double PIVOT_GEAR_RATIO = 58.5;
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
-    public static final GravityTypeValue PIVOT_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
+
+    // - PID -
+    public static Slot0Configs LEFT_PID_SLOT_0_FAST = new Slot0Configs();
+    public static Slot1Configs LEFT_PID_SLOT_1_SLOW = new Slot1Configs();
+    public static Slot0Configs RIGHT_PID_SLOT_0_FAST = new Slot0Configs();
+    public static Slot1Configs RIGHT_PID_SLOT_1_SLOW = new Slot1Configs();
+    public static Slot0Configs PIVOT_PID = new Slot0Configs();
+    static {
+      // Left 0
+      LEFT_PID_SLOT_0_FAST.kS = 0.13419;
+      LEFT_PID_SLOT_0_FAST.kV = 0.12443;
+      LEFT_PID_SLOT_0_FAST.kA = 0.035067;
+      LEFT_PID_SLOT_0_FAST.kP = 1;
+      LEFT_PID_SLOT_0_FAST.kI = 0;
+      LEFT_PID_SLOT_0_FAST.kD = 0;
+
+      // Left 1
+      LEFT_PID_SLOT_1_SLOW.kS = 0.13419;
+      LEFT_PID_SLOT_1_SLOW.kV = 0.12443;
+      LEFT_PID_SLOT_1_SLOW.kA = 0.035067;
+      LEFT_PID_SLOT_1_SLOW.kP = 0.5;
+      LEFT_PID_SLOT_1_SLOW.kI = 0;
+      LEFT_PID_SLOT_1_SLOW.kD = 0;
+
+      // Right 0
+      RIGHT_PID_SLOT_0_FAST.kS = 0.36;
+      RIGHT_PID_SLOT_0_FAST.kV = 0.115;
+      RIGHT_PID_SLOT_0_FAST.kA = 0;
+      RIGHT_PID_SLOT_0_FAST.kP = 0.7;
+      RIGHT_PID_SLOT_0_FAST.kI = 0;
+      RIGHT_PID_SLOT_0_FAST.kD = 0;
+      // Right 1
+      RIGHT_PID_SLOT_1_SLOW.kS = 0.36;
+      RIGHT_PID_SLOT_1_SLOW.kV = 0.112;
+      RIGHT_PID_SLOT_1_SLOW.kA = 0;
+      RIGHT_PID_SLOT_1_SLOW.kP = 0.5;
+      RIGHT_PID_SLOT_1_SLOW.kI = 0;
+      RIGHT_PID_SLOT_1_SLOW.kD = 0;
+      // Pivot
+      PIVOT_PID.kS = 0.4;
+      PIVOT_PID.kV = 0;
+      PIVOT_PID.kG = 0.53;
+      PIVOT_PID.kA = 0;
+      PIVOT_PID.kP = 90;
+      PIVOT_PID.kD = 0;
+      PIVOT_PID.GravityType = GravityTypeValue.Arm_Cosine;
+    }
+    public static final Measure<Velocity<Angle>> RIGHT_SLOT_1_THRESH = Units.RotationsPerSecond.of(40);
+    public static final Measure<Velocity<Angle>> LEFT_SLOT_1_THRESH = Units.RotationsPerSecond.of(40);
 
     // - Angles -
     public static final Measure<Angle> PIVOT_FORWARD_LIMIT = Units.Degrees.of(155);
@@ -327,7 +375,7 @@ public final class Constants {
     }
 
     public static final ShooterPositionGroup PREP_NONE = new ShooterPositionGroup(NONE_STATE_ANGLE,
-        Units.RotationsPerSecond.of(0), Units.RotationsPerSecond.of(0), Units.Meters.of(0));
+        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
@@ -480,7 +528,7 @@ public final class Constants {
     public static final double MOTOR_ROTATION_TO_METERS = 1 / 0.0456842368;
 
     public static final Measure<Distance> AMP_POSITION = Units.Meters.of(0.38);
-    public static final Measure<Distance> SHOOTER_ABLE_TO_MOVE_LIMIT = Units.Meters.of(0.37);
+    public static final Measure<Distance> SHOOTER_ABLE_TO_MOVE_LIMIT = Units.Meters.of(0.35);
 
     public static final Measure<Distance> AT_POSITION_TOLERANCE = Units.Meters.of(0.05);
 
@@ -535,6 +583,7 @@ public final class Constants {
     public static final Measure<Dimensionless> INTAKING_SPEED = Units.Percent.of(1);
     public static final Measure<Dimensionless> EJECTING_SPEED = Units.Percent.of(-1);
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
+    public static final boolean NOTE_SENSOR_INVERT = true;
 
     // -- Current Limiting --
     public static final boolean ENABLE_CURRENT_LIMITING = true;
@@ -548,9 +597,9 @@ public final class Constants {
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue FEEDER_NEUTRAL_MODE = NeutralModeValue.Brake;
 
-    public static final double INTAKING_SPEED = 0.3;
+    public static final double INTAKING_SPEED = 0.4;
     public static final double INTAKE_SOURCE_SPEED = -0.2;
-    public static final double EJECTING_SPEED = -0.3;
+    public static final double EJECTING_SPEED = -0.4;
 
     public static final double PREP_TO_AMP_SPEED = 0.2;
 

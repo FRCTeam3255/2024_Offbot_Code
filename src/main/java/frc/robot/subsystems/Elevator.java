@@ -143,6 +143,7 @@ public class Elevator extends SubsystemBase {
     // This method will be called once per scheduler run
 
     SmartDashboard.putNumber("Elevator/Position", getElevatorPosition().in(Units.Meters));
+    SmartDashboard.putBoolean("Elevator/Safe To Move Shooter", isSafeToMoveShooterAboveLimit());
 
   }
 }

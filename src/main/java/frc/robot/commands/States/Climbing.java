@@ -49,7 +49,7 @@ public class Climbing extends SequentialCommandGroup {
                 Commands.runOnce(() -> subElevator.setDrainpipeSpeed(0))),
 
             Commands.print("Climb was initiated, but no Game Piece was found!"),
-            () -> subTransfer.getGamePieceCollected()),
+            () -> subTransfer.getGamePieceStored()),
 
         // Move the elevator and shooter to a point where we can safely climb
         Commands.runOnce(() -> subElevator.setElevatorPosition(desiredShooterPosition.elevatorPosition)),
