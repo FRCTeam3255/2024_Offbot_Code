@@ -44,6 +44,7 @@ public class RobotMap {
   // MOTORS: 20 -> 29
   public static class mapIntake {
     public static final int ROLLER_CAN = 20;
+    public static final int NOTE_SENSOR_DIO = 2;
   }
 
   // MOTORS: 30 -> 39

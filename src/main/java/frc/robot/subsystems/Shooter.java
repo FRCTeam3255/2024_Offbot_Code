@@ -4,13 +4,16 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.SysIdSwerveRotation;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -21,11 +24,15 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Constants.constShooter;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.RobotMap.mapShooter;
-import frc.robot.RobotPreferences.prefShooter;
 
 public class Shooter extends SubsystemBase {
   TalonFX leftMotor, rightMotor, pivotMotor;
@@ -33,6 +40,7 @@ public class Shooter extends SubsystemBase {
 
   MotionMagicVelocityVoltage motionMagicRequest;
   PositionVoltage positionRequest;
+  MotionMagicVoltage motionMagicPivotRequest;
 
   VelocityVoltage velocityRequest;
   VoltageOut voltageRequest;
@@ -40,6 +48,9 @@ public class Shooter extends SubsystemBase {
   private Measure<Velocity<Angle>> desiredLeftVelocity = Units.RotationsPerSecond.of(0);
   private Measure<Velocity<Angle>> desiredRightVelocity = Units.RotationsPerSecond.of(0);
   private Measure<Angle> lastDesiredPivotAngle = Units.Degrees.of(-3255);
+
+  int currentRightSlot = 0;
+  int currentLeftSlot = 0;
 
   public Shooter() {
     leftMotor = new TalonFX(mapShooter.SHOOTER_LEFT_MOTOR_CAN, "rio");
@@ -53,6 +64,7 @@ public class Shooter extends SubsystemBase {
     voltageRequest = new VoltageOut(0);
     velocityRequest = new VelocityVoltage(0).withSlot(0);
     motionMagicRequest = new MotionMagicVelocityVoltage(0);
+    motionMagicPivotRequest = new MotionMagicVoltage(0);
     positionRequest = new PositionVoltage(0).withSlot(0);
 
     configure();
@@ -61,48 +73,39 @@ public class Shooter extends SubsystemBase {
   public void configure() {
     // -- Left Motor --
     leftConfig.MotorOutput.Inverted = constShooter.LEFT_INVERT;
-    leftConfig.Slot0.kV = prefShooter.leftShooterV;
-    leftConfig.Slot0.kS = prefShooter.leftShooterS;
-    leftConfig.Slot0.kA = prefShooter.leftShooterA;
-    leftConfig.Slot0.kP = prefShooter.leftShooterP;
-    leftConfig.Slot0.kI = prefShooter.leftShooterI;
-    leftConfig.Slot0.kD = prefShooter.leftShooterD;
+    leftConfig.Slot0 = constShooter.LEFT_PID_SLOT_0_FAST;
+    leftConfig.Slot1 = constShooter.LEFT_PID_SLOT_1_SLOW;
 
-    leftConfig.MotionMagic.MotionMagicAcceleration = 400;
-    leftConfig.MotionMagic.MotionMagicJerk = 4000;
+    leftConfig.MotionMagic.MotionMagicCruiseVelocity = 60;
+    leftConfig.MotionMagic.MotionMagicAcceleration = 600;
+    leftConfig.MotionMagic.MotionMagicJerk = 6000;
     leftMotor.getConfigurator().apply(leftConfig);
 
     // -- Right Motor --
     rightConfig.MotorOutput.Inverted = constShooter.RIGHT_INVERT;
-    rightConfig.Slot0.kV = prefShooter.rightShooterV;
-    rightConfig.Slot0.kS = prefShooter.rightShooterS;
-    rightConfig.Slot0.kA = prefShooter.rightShooterA;
-    rightConfig.Slot0.kP = prefShooter.rightShooterP;
-    rightConfig.Slot0.kI = prefShooter.rightShooterI;
-    rightConfig.Slot0.kD = prefShooter.rightShooterD;
+    rightConfig.Slot0 = constShooter.RIGHT_PID_SLOT_0_FAST;
+    rightConfig.Slot1 = constShooter.RIGHT_PID_SLOT_1_SLOW;
 
-    rightConfig.MotionMagic.MotionMagicAcceleration = 400;
-    rightConfig.MotionMagic.MotionMagicJerk = 4000;
+    rightConfig.MotionMagic.MotionMagicCruiseVelocity = 60;
+    rightConfig.MotionMagic.MotionMagicAcceleration = 600;
+    rightConfig.MotionMagic.MotionMagicJerk = 6000;
     rightMotor.getConfigurator().apply(rightConfig);
 
     // -- Pivot Motor --
     pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
-    pivotConfig.Slot0.kS = prefShooter.pivotShooterS;
-    pivotConfig.Slot0.kV = prefShooter.pivotShooterV;
-    pivotConfig.Slot0.kG = prefShooter.pivotShooterG;
-    pivotConfig.Slot0.kA = prefShooter.pivotShooterA;
-    pivotConfig.Slot0.kP = prefShooter.pivotShooterP;
-    pivotConfig.Slot0.kI = prefShooter.pivotShooterI;
-    pivotConfig.Slot0.kD = prefShooter.pivotShooterD;
-    pivotConfig.Slot0.GravityType = constShooter.PIVOT_GRAVITY_TYPE;
+    pivotConfig.Slot0 = constShooter.PIVOT_PID;
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
 
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constShooter.PIVOT_BACKWARD_LIMIT.in(Units.Rotations);
+
+    pivotConfig.MotionMagic.MotionMagicCruiseVelocity = 80;
+    pivotConfig.MotionMagic.MotionMagicAcceleration = 160;
+    pivotConfig.MotionMagic.MotionMagicJerk = 1600;
 
     // - Current Limits -
     pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = constShooter.PIVOT_ENABLE_CURRENT_LIMITING;
@@ -128,8 +131,14 @@ public class Shooter extends SubsystemBase {
         && desiredRightVelocity.in(Units.RotationsPerSecond) == 0) {
       setShootingNeutralOutput();
     } else {
-      leftMotor.setControl(motionMagicRequest.withVelocity(desiredLeftVelocity.in(Units.RotationsPerSecond)));
-      rightMotor.setControl(motionMagicRequest.withVelocity(desiredRightVelocity.in(Units.RotationsPerSecond)));
+      currentLeftSlot = (desiredLeftVelocity.lte(constShooter.LEFT_SLOT_1_THRESH)) ? 1 : 0;
+      currentRightSlot = (desiredRightVelocity.lte(constShooter.RIGHT_SLOT_1_THRESH)) ? 1 : 0;
+
+      leftMotor.setControl(
+          motionMagicRequest.withVelocity(desiredLeftVelocity.in(Units.RotationsPerSecond)).withSlot(currentLeftSlot));
+      rightMotor
+          .setControl(motionMagicRequest.withVelocity(desiredRightVelocity.in(Units.RotationsPerSecond))
+              .withSlot(currentRightSlot));
     }
   }
 
@@ -137,6 +146,7 @@ public class Shooter extends SubsystemBase {
    * Sets all of the flywheel motors to neutral.
    */
   public void setShootingNeutralOutput() {
+    setDesiredVelocities(Units.RotationsPerSecond.zero(), Units.RotationsPerSecond.zero());
     leftMotor.setControl(new NeutralOut());
     rightMotor.setControl(new NeutralOut());
   }
@@ -277,7 +287,7 @@ public class Shooter extends SubsystemBase {
 
   public void setPivotPosition(Measure<Angle> position) {
     lastDesiredPivotAngle = position;
-    pivotMotor.setControl(positionRequest.withPosition(position.in(Units.Rotations)));
+    pivotMotor.setControl(motionMagicPivotRequest.withPosition(position.in(Units.Rotations)));
   }
 
   /**
@@ -319,16 +329,38 @@ public class Shooter extends SubsystemBase {
     return isLeftShooterUpToSpeed() && isRightShooterUpToSpeed() && isShooterAtPosition(lastDesiredPivotAngle);
   }
 
+  final SysIdRoutine leftFlywheelSysIdRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(
+          null, // Use default ramp rate (1 V/s)
+          Units.Volts.of(7), // Reduce dynamic step voltage to 4 to prevent brownout
+          null, // Use default timeout (10 s)
+                // Log state with Phoenix SignalLogger class
+          (state) -> SignalLogger.writeString("state", state.toString())),
+      new SysIdRoutine.Mechanism(
+          (volts) -> leftMotor.setControl(voltageRequest.withOutput(volts.in(Units.Volts))),
+          null,
+          this));
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return leftFlywheelSysIdRoutine.quasistatic(direction);
+  }
+
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return leftFlywheelSysIdRoutine.dynamic(direction);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter/Left/Velocity RPS", getLeftShooterVelocity().in(Units.RotationsPerSecond));
     SmartDashboard.putNumber("Shooter/Left/Desired Velocity RPS", desiredLeftVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Left/Up to Speed", isLeftShooterUpToSpeed());
+    SmartDashboard.putNumber("Shooter/Left/PID Slot", currentLeftSlot);
 
     SmartDashboard.putNumber("Shooter/Right/Velocity RPS", getRightShooterVelocity().in(Units.RotationsPerSecond));
     SmartDashboard.putNumber("Shooter/Right/Desired Velocity RPS", desiredRightVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
+    SmartDashboard.putNumber("Shooter/Right/PID Slot", currentRightSlot);
 
     SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
     SmartDashboard.putNumber("Shooter/Pivot Velocity", pivotMotor.getVelocity().getValueAsDouble());

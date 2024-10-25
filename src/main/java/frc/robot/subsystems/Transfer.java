@@ -50,7 +50,7 @@ public class Transfer extends SubsystemBase {
     feederMotor.setControl(new NeutralOut());
   }
 
-  public boolean getGamePieceCollected() {
+  public boolean getGamePieceStored() {
     boolean noteSensorValue = (constTransfer.NOTE_SENSOR_INVERT) ? !noteSensor.get() : noteSensor.get();
     return (noteSensorValue || hasGamePiece);
   }
@@ -62,6 +62,6 @@ public class Transfer extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Game Piece Detected", getGamePieceCollected());
+    SmartDashboard.putBoolean("Game Piece Stored", getGamePieceStored());
   }
 }
