@@ -95,7 +95,6 @@ public class Shooter extends SubsystemBase {
     pivotConfig.Feedback.SensorToMechanismRatio = constShooter.PIVOT_GEAR_RATIO;
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
-    pivotConfig.Slot0.GravityType = constShooter.PIVOT_GRAVITY_TYPE;
     pivotConfig.Slot0 = constShooter.PIVOT_PID;
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;

@@ -85,7 +85,6 @@ public final class Constants {
      * <p>
      * Observed maximum translational speed while manually driving on the
      * Competition Robot.
-     * S
      * </p>
      */
     public static final Measure<Velocity<Distance>> DRIVE_SPEED = Units.FeetPerSecond.of(15.1);
@@ -251,7 +250,6 @@ public final class Constants {
 
     public static final double PIVOT_GEAR_RATIO = 58.5;
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
-    public static final GravityTypeValue PIVOT_GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
     // - PID -
     public static Slot0Configs LEFT_PID_SLOT_0_FAST = new Slot0Configs();
@@ -297,6 +295,7 @@ public final class Constants {
       PIVOT_PID.kA = 0;
       PIVOT_PID.kP = 90;
       PIVOT_PID.kD = 0;
+      PIVOT_PID.GravityType = GravityTypeValue.Arm_Cosine;
     }
     public static final Measure<Velocity<Angle>> RIGHT_SLOT_1_THRESH = Units.RotationsPerSecond.of(40);
     public static final Measure<Velocity<Angle>> LEFT_SLOT_1_THRESH = Units.RotationsPerSecond.of(40);
