@@ -250,6 +250,7 @@ public final class Constants {
 
     public static final double PIVOT_GEAR_RATIO = 58.5;
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
+    public static final boolean PIVOT_SINGS_IN_DISABLE = true;
 
     // - PID -
     public static Slot0Configs LEFT_PID_SLOT_0_FAST = new Slot0Configs();
@@ -348,6 +349,8 @@ public final class Constants {
     public static final Measure<Angle> ZEROED_ANGLE = Units.Degrees.of(0);
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+
+    public static final Measure<Angle> MANUAL_ZEROING_START_ANGLE = Units.Degrees.of(45);
 
     // -- Current Limiting --
     public static final boolean PIVOT_ENABLE_CURRENT_LIMITING = true;
