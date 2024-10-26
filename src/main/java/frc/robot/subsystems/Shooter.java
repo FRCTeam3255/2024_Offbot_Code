@@ -385,9 +385,9 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putBoolean("Shooter/Safe to Move Elevator", isSafeToMoveElevator());
     SmartDashboard.putBoolean("Shooter/Ready to Shoot", readyToShoot());
+    SmartDashboard.putNumber("Shooter/Last Desired Pivot Angle", lastDesiredPivotAngle.in(Units.Degrees));
 
     SmartDashboard.putBoolean("Zeroing/Pivot/Attempting Zeroing", attemptingZeroing);
     SmartDashboard.putBoolean("Zeroing/Pivot/Has Zeroed", hasZeroed);
-
   }
 }

@@ -66,9 +66,11 @@ public class RobotContainer {
   private final static Transfer subTransfer = new Transfer();
   private final static Limelight subLimelight = new Limelight();
 
-  private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceStored());
+  private final Trigger gamePieceStoredTrigger = new Trigger(() -> subTransfer.getGamePieceStored());
+  private final Trigger gamePieceCollectedTrigger = new Trigger(() -> subIntake.getGamePieceCollected());
 
-  private final BooleanSupplier readyToShootOperator = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
+  private final BooleanSupplier readyToShootOperator = (() -> (subDrivetrain.isDrivetrainFacingSpeaker()
+      || subDrivetrain.isDrivetrainFacingShuffle())
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
       && subTransfer.getGamePieceStored());
 
@@ -94,7 +96,7 @@ public class RobotContainer {
                 new Trigger(() -> conDriver.btn_X.getAsBoolean() || conDriver.btn_LeftTrigger.getAsBoolean())));
 
     // - Manual Triggers -
-    gamePieceTrigger
+    gamePieceStoredTrigger
         .onTrue(Commands
             .deferredProxy(
                 () -> subStateMachine.tryState(RobotState.STORE_FEEDER, subStateMachine, subClimber, subDrivetrain,
@@ -104,15 +106,12 @@ public class RobotContainer {
                     subElevator, subDrivetrain))))
         .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy());
 
-    // new Trigger(readyToShootOperator).onTrue(
-    // Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
-    // constControllers.DRIVER_RUMBLE)).alongWith(
-    // Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
-    // constControllers.OPERATOR_RUMBLE))))
-    // .onFalse(
-    // Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
-    // 0)).alongWith(
-    // Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
+    gamePieceCollectedTrigger
+        .onTrue(Commands
+            .runOnce(() -> conDriver.setRumble(RumbleType.kLeftRumble, constControllers.DRIVER_GP_COLLECTED_RUMBLE)))
+        .onTrue(Commands.runOnce(
+            () -> conOperator.setRumble(RumbleType.kLeftRumble, constControllers.OPERATOR_GP_COLLECTED_RUMBLE)))
+        .onTrue(Commands.runOnce(() -> subLEDs.setLEDs(constLEDs.GAME_PIECE_COLLECTED_COLOR)));
 
     new Trigger(readyToShootOperator).onTrue(
         Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
@@ -138,7 +137,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intaking", Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber, subDrivetrain, subElevator,
             subIntake, subLEDs, subTransfer, subShooter))
-        .until(gamePieceTrigger));
+        .until(gamePieceStoredTrigger));
 
     SmartDashboard.putNumber("Preload Only Delay", 0);
 
@@ -172,7 +171,7 @@ public class RobotContainer {
         .onFalse(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator,
                 subIntake, subLEDs, subTransfer, subShooter))
-            .unless(gamePieceTrigger));
+            .unless(gamePieceStoredTrigger));
 
     // Shoot
     controller.btn_RightTrigger.whileTrue(
@@ -181,7 +180,7 @@ public class RobotContainer {
         .onFalse(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator,
                 subIntake, subLEDs, subTransfer, subShooter))
-            .unless(gamePieceTrigger));
+            .unless(gamePieceStoredTrigger));
 
     // Prep with vision
     controller.btn_RightBumper.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
