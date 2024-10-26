@@ -16,11 +16,11 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.constField;
-import frc.robot.commands.States.StoreFeeder;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
@@ -36,6 +36,7 @@ public class PreloadTaxi extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Elevator subElevator;
   Intake subIntake;
+  LEDs subLEDs;
   Shooter subShooter;
   Transfer subTransfer;
 
@@ -50,9 +51,8 @@ public class PreloadTaxi extends SequentialCommandGroup {
       Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
       Commands.deferredProxy(() -> subStateMachine
-          .tryState(RobotState.PREP_VISION, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-              subTransfer,
-              subShooter)
+          .tryState(RobotState.PREP_VISION, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subLEDs,
+              subTransfer, subShooter)
           .repeatedly().until(() -> subShooter.readyToShoot())),
 
       Commands.runOnce(() -> subDrivetrain.drive(
@@ -63,27 +63,25 @@ public class PreloadTaxi extends SequentialCommandGroup {
       // Shoot! (Ends when we don't have a game piece anymore)
       Commands.deferredProxy(() -> subStateMachine
           .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-              subTransfer,
-              subShooter)
+              subLEDs, subTransfer, subShooter)
           .until(() -> !subTransfer.getGamePieceStored())),
 
       // Reset subsystems to chill
       Commands.deferredProxy(() -> subStateMachine
-          .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer,
-              subShooter)),
+          .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subLEDs,
+              subTransfer, subShooter)),
 
       Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)));
 
   /** Creates a new PreloadTaxi. */
   public PreloadTaxi(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,
-      Intake subIntake,
-      Shooter subShooter,
-      Transfer subTransfer) {
+      Intake subIntake, LEDs subLEDs, Shooter subShooter, Transfer subTransfer) {
     this.subStateMachine = subStateMachine;
     this.subClimber = subClimber;
     this.subDrivetrain = subDrivetrain;
     this.subElevator = subElevator;
     this.subIntake = subIntake;
+    this.subLEDs = subLEDs;
     this.subShooter = subShooter;
     this.subTransfer = subTransfer;
 
@@ -94,7 +92,7 @@ public class PreloadTaxi extends SequentialCommandGroup {
 
         // -- PRELOAD --
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
-            subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
+            subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
             .until(() -> subTransfer.getGamePieceStored()),
 
         Commands.deferredProxy(() -> shootSequence),

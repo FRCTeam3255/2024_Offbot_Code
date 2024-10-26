@@ -7,6 +7,7 @@ package frc.robot.commands.States;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constElevator;
+import frc.robot.Constants.constLEDs;
 import frc.robot.Constants.constShooter;
 import frc.robot.Constants.constStateMachine;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.StateMachine.TargetState;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
@@ -24,16 +26,18 @@ public class NoneState extends Command {
   Climber subClimber;
   Elevator subElevator;
   Intake subIntake;
+  LEDs subLEDs;
   Shooter subShooter;
   Transfer subTransfer;
 
   /** Creates a new NoneState. */
   public NoneState(StateMachine subStateMachine, Climber subClimber, Elevator subElevator, Intake subIntake,
-      Shooter subShooter, Transfer subTransfer) {
+      LEDs subLEDs, Shooter subShooter, Transfer subTransfer) {
     this.subStateMachine = subStateMachine;
     this.subClimber = subClimber;
     this.subElevator = subElevator;
     this.subIntake = subIntake;
+    this.subLEDs = subLEDs;
     this.subShooter = subShooter;
     this.subTransfer = subTransfer;
 
@@ -53,6 +57,8 @@ public class NoneState extends Command {
     subClimber.setSafeToMoveClimber(false);
     subElevator.setDrainpipeSpeed(0);
     subTransfer.setFeederSpeed(0);
+    subLEDs.clearAnimation();
+    subLEDs.setLEDs(constLEDs.CLEAR_LEDS);
     subShooter.setDesiredVelocities(desiredShooterPosition.leftVelocity, desiredShooterPosition.rightVelocity);
     subShooter.getUpToSpeed();
 

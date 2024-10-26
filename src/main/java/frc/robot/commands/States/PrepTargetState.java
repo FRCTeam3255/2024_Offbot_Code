@@ -8,11 +8,14 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.constLEDs;
 import frc.robot.Constants.constStateMachine;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
+import frc.robot.subsystems.Transfer;
 import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine.TargetState;
 
@@ -20,6 +23,8 @@ public class PrepTargetState extends Command {
   StateMachine subStateMachine;
   Shooter subShooter;
   Elevator subElevator;
+  LEDs subLEDs;
+  Transfer subTransfer;
   TargetState desiredTargetState;
 
   Measure<Angle> desiredPivotAngle;
@@ -28,11 +33,14 @@ public class PrepTargetState extends Command {
   boolean elevatorWasUp;
 
   /** Creates a new PrepTargetState. */
-  public PrepTargetState(Elevator subElevator, StateMachine subStateMachine, Shooter subShooter,
+  public PrepTargetState(Elevator subElevator, StateMachine subStateMachine, Shooter subShooter, Transfer subTransfer,
+      LEDs subLEDs,
       TargetState desiredTargetState) {
     this.subStateMachine = subStateMachine;
     this.subShooter = subShooter;
     this.subElevator = subElevator;
+    this.subTransfer = subTransfer;
+    this.subLEDs = subLEDs;
     this.desiredTargetState = desiredTargetState;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -57,6 +65,27 @@ public class PrepTargetState extends Command {
       subShooter.setDesiredPosition(desiredShooterPosition);
     } else {
       subElevator.setElevatorPosition(desiredShooterPosition.elevatorPosition);
+    }
+
+    subLEDs.clearAnimation();
+
+    switch (desiredTargetState) {
+      case PREP_AMP:
+        subLEDs.setLEDs(constLEDs.PREP_AMP_COLOR);
+        break;
+      case PREP_SUB_BACKWARDS:
+        subLEDs.setLEDs(constLEDs.PREP_SUB_BACKWARDS_COLOR);
+        break;
+      case PREP_SPEAKER:
+        subLEDs.setLEDs(constLEDs.PREP_SPEAKER_COLOR);
+        break;
+      case PREP_NONE:
+        if (!subTransfer.getGamePieceStored()) {
+          subLEDs.setLEDs(constLEDs.CLEAR_LEDS);
+        } else {
+          subLEDs.setLEDAnimation(constLEDs.STORE_FEEDER_COLOR, 0);
+        }
+        break;
     }
   }
 

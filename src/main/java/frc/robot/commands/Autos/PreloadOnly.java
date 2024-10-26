@@ -17,6 +17,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
@@ -32,6 +33,7 @@ public class PreloadOnly extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Elevator subElevator;
   Intake subIntake;
+  LEDs subLEDs;
   Shooter subShooter;
   Transfer subTransfer;
   int position = 0;
@@ -54,12 +56,14 @@ public class PreloadOnly extends SequentialCommandGroup {
 
   /** Creates a new PreloadOnly. */
   public PreloadOnly(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,
-      Intake subIntake, Shooter subShooter, Transfer subTransfer, int position, DoubleSupplier secondSupplier) {
+      Intake subIntake, LEDs subLEDs, Shooter subShooter, Transfer subTransfer, int position,
+      DoubleSupplier secondSupplier) {
     this.subStateMachine = subStateMachine;
     this.subClimber = subClimber;
     this.subDrivetrain = subDrivetrain;
     this.subElevator = subElevator;
     this.subIntake = subIntake;
+    this.subLEDs = subLEDs;
     this.subShooter = subShooter;
     this.subTransfer = subTransfer;
     this.position = position;
@@ -75,22 +79,21 @@ public class PreloadOnly extends SequentialCommandGroup {
         Commands.waitSeconds(secondSupplier.getAsDouble()),
 
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
-            subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
+            subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
             .until(() -> subTransfer.getGamePieceStored()),
 
         Commands.waitUntil(() -> subShooter.readyToShoot()),
 
         // Shoot! (Ends when we don't have a game piece anymore)
         Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-                subTransfer,
-                subShooter)
+            .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subLEDs,
+                subTransfer, subShooter)
             .until(() -> !subTransfer.getGamePieceStored())),
 
         // Reset subsystems to chill
         Commands.deferredProxy(() -> subStateMachine
-            .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subTransfer,
-                subShooter)));
+            .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake, subLEDs,
+                subTransfer, subShooter)));
   }
 
   public Supplier<Pose2d> getInitialPose() {

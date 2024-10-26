@@ -60,9 +60,8 @@ public class StateMachine extends SubsystemBase {
    * @return The Command to run for that desired state
    */
   public Command tryState(RobotState desiredState, StateMachine subStateMachine, Climber subClimber,
-      Drivetrain subDrivetrain,
-      Elevator subElevator, Intake subIntake,
-      Transfer subTransfer, Shooter subShooter) {
+      Drivetrain subDrivetrain, Elevator subElevator, Intake subIntake, LEDs subLEDs, Transfer subTransfer,
+      Shooter subShooter) {
 
     // TODO: Write this functionality in a later pr
     if (isGivenStateTargetState(desiredState)) {
@@ -77,7 +76,7 @@ public class StateMachine extends SubsystemBase {
           case EJECTING:
           case SHOOTING:
           case NONE:
-            return new NoneState(subStateMachine, subClimber, subElevator, subIntake, subShooter, subTransfer);
+            return new NoneState(subStateMachine, subClimber, subElevator, subIntake, subLEDs, subShooter, subTransfer);
         }
         break;
 
@@ -111,7 +110,7 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new StoreFeeder(subStateMachine, subIntake, subTransfer, subShooter);
+            return new StoreFeeder(subStateMachine, subIntake, subLEDs, subTransfer, subShooter);
         }
         break;
 
@@ -168,7 +167,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_SHUFFLE);
+            return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
+                TargetState.PREP_SHUFFLE);
         }
         break;
 
@@ -185,7 +185,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_SPEAKER);
+            return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
+                TargetState.PREP_SPEAKER);
         }
         break;
 
@@ -201,7 +202,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_WING:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_AMP);
+            return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
+                TargetState.PREP_AMP);
         }
         break;
 
@@ -218,7 +220,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_AMP_SHOOTER);
+            return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
+                TargetState.PREP_AMP_SHOOTER);
         }
         break;
 
@@ -235,7 +238,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_SPIKE);
+            return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
+                TargetState.PREP_SPIKE);
         }
         break;
 
@@ -252,7 +256,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_WING);
+            return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
+                TargetState.PREP_WING);
 
         }
         break;
@@ -270,7 +275,8 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_SUB_BACKWARDS);
+            return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
+                TargetState.PREP_SUB_BACKWARDS);
 
         }
         break;
@@ -306,19 +312,20 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new PrepTargetState(subElevator, subStateMachine, subShooter, TargetState.PREP_NONE);
+            return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
+                TargetState.PREP_NONE);
         }
         break;
     }
     return Commands.print("ITS SO OVER D: Invalid State Provided :3");
   }
 
-  public Command tryTargetState(StateMachine subStateMachine, Intake subIntake,
+  public Command tryTargetState(StateMachine subStateMachine, Intake subIntake, LEDs subLEDs,
       Shooter subShooter, Transfer subTransfer, Elevator subElevator, Drivetrain subDrivetrain) {
     if (currentTargetState.equals(TargetState.PREP_VISION)) {
       return new PrepVision(subStateMachine, subDrivetrain, subShooter);
     }
-    return new PrepTargetState(subElevator, subStateMachine, subShooter, currentTargetState);
+    return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs, currentTargetState);
   }
 
   /**
