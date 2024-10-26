@@ -71,7 +71,7 @@ public class RobotPreferences {
     public static final double autoSteerD = 0;
 
     // Teleop Snapping to Rotation (Yaw)
-    public static final double yawSnapP = 4;
+    public static final double yawSnapP = 3.5;
     public static final double yawSnapI = 0;
     public static final double yawSnapD = 0;
   }

@@ -104,7 +104,7 @@ public class WingOnly extends SequentialCommandGroup {
 
   public Supplier<Pose2d> getInitialPose() {
     return () -> (!constField.isRedAlliance())
-        ? PathPlannerAuto.getStaringPoseFromAutoFile(determinePathName())
+        ? PathPlannerPath.fromPathFile(determinePathName()).getPreviewStartingHolonomicPose()
         : PathPlannerPath.fromPathFile(determinePathName()).flipPath().getPreviewStartingHolonomicPose();
   }
 }
