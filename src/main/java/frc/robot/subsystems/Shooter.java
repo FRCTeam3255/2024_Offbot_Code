@@ -368,6 +368,5 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Shooter/Ready to Shoot", readyToShoot());
     SmartDashboard.putBoolean("Shooter/Pivot at Desired Position", isShooterAtPosition(lastDesiredPivotAngle));
     SmartDashboard.putNumber("Shooter/Last Desired Pivot Angle", lastDesiredPivotAngle.in(Units.Degrees));
-
   }
 }

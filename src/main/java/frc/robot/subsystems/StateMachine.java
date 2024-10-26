@@ -382,6 +382,5 @@ public class StateMachine extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putString("CURRENT ROBOT STATE", getRobotState().toString());
     SmartDashboard.putString("CURRENT TARGET STATE", getTargetState().toString());
-
   }
 }

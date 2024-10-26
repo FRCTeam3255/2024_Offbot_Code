@@ -168,6 +168,10 @@ public class Drivetrain extends SN_SuperSwerve {
     return isDrivetrainAtAngle(getAngleToSpeaker());
   }
 
+  public boolean isDrivetrainFacingShuffle() {
+    return isDrivetrainAtAngle(getAngleToShuffle());
+  }
+
   /**
    * Calculates the angle necessary for the shooter to face a given coordinate.
    * 
@@ -278,5 +282,6 @@ public class Drivetrain extends SN_SuperSwerve {
 
     SmartDashboard.putNumber("Drivetrain Rotation", getRotation().getDegrees());
     SmartDashboard.putBoolean("Drivetrain Facing Speaker", isDrivetrainFacingSpeaker());
+    SmartDashboard.putBoolean("Drivetrain Facing Shuffle", isDrivetrainFacingShuffle());
   }
 }

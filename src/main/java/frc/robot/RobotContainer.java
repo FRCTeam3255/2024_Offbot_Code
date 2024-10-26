@@ -69,7 +69,8 @@ public class RobotContainer {
   private final Trigger gamePieceStoredTrigger = new Trigger(() -> subTransfer.getGamePieceStored());
   private final Trigger gamePieceCollectedTrigger = new Trigger(() -> subIntake.getGamePieceCollected());
 
-  private final BooleanSupplier readyToShootOperator = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
+  private final BooleanSupplier readyToShootOperator = (() -> (subDrivetrain.isDrivetrainFacingSpeaker()
+      || subDrivetrain.isDrivetrainFacingShuffle())
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
       && subTransfer.getGamePieceStored());
 
