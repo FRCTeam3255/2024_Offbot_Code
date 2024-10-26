@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
@@ -29,7 +30,9 @@ public class Elevator extends SubsystemBase {
   PositionVoltage positionRequest;
   VoltageOut voltageRequest;
 
-  /** Creates a new Elevator. */
+  public static boolean attemptingZeroing = false;
+  public static boolean hasZeroed = false;
+
   public Elevator() {
     elevatorMotor = new TalonFX(mapElevator.ELEVATOR_MOTOR_CAN, "rio");
     drainpipeMotor = new TalonFX(mapElevator.DRAINPIPE_MOTOR_CAN, "rio");
@@ -118,6 +121,14 @@ public class Elevator extends SubsystemBase {
     return Units.MetersPerSecond.of(elevatorMotor.getVelocity().getValueAsDouble());
   }
 
+  public Measure<Velocity<Angle>> getRotorVelocity() {
+    return Units.RotationsPerSecond.of(elevatorMotor.getRotorVelocity().getValueAsDouble());
+  }
+
+  public Measure<Voltage> getCurrent() {
+    return Units.Volts.of(elevatorMotor.getStatorCurrent().getValueAsDouble());
+  }
+
   /**
    * @return If the elevator position is within tolerance of desired position
    */
@@ -144,6 +155,11 @@ public class Elevator extends SubsystemBase {
 
     SmartDashboard.putNumber("Elevator/Position", getElevatorPosition().in(Units.Meters));
     SmartDashboard.putBoolean("Elevator/Safe To Move Shooter", isSafeToMoveShooterAboveLimit());
+    SmartDashboard.putNumber("Elevator/Stator Current", elevatorMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Elevator/Rotor Velocity", elevatorMotor.getRotorVelocity().getValueAsDouble());
+
+    SmartDashboard.putBoolean("Zeroing/Elevator/Attempting Zeroing", attemptingZeroing);
+    SmartDashboard.putBoolean("Zeroing/Elevator/Has Zeroed", hasZeroed);
 
   }
 }

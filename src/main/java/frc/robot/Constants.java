@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import java.lang.annotation.Target;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix.led.ColorFlowAnimation;
 import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
@@ -22,7 +22,6 @@ import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.RobotEnableValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.frcteam3255.components.swerve.SN_SwerveConstants;
@@ -108,7 +107,7 @@ public final class Constants {
 
     public static final Measure<Angle> AUTO_PRELOAD_TAXI_ROTATION = Units.Degrees.of(119.62);
 
-    public static final Measure<Angle> AT_ROTATION_TOLERANCE = Units.Degrees.of(20);
+    public static final Measure<Angle> AT_ROTATION_TOLERANCE = Units.Degrees.of(5);
 
     public static final boolean DRIVE_ENABLE_CURRENT_LIMITING = true;
     public static final double DRIVE_CURRENT_THRESH = 40;
@@ -256,6 +255,7 @@ public final class Constants {
 
     public static final double PIVOT_GEAR_RATIO = 58.5;
     public static final NeutralModeValue PIVOT_NEUTRAL_MODE = NeutralModeValue.Brake;
+    public static final boolean PIVOT_SINGS_IN_DISABLE = true;
 
     // - PID -
     public static Slot0Configs LEFT_PID_SLOT_0_FAST = new Slot0Configs();
@@ -354,6 +354,9 @@ public final class Constants {
     public static final Measure<Angle> ZEROED_ANGLE = Units.Degrees.of(0);
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+
+    public static final Measure<Velocity<Angle>> MANUAL_ZEROING_START_VELOCITY = Units.RotationsPerSecond.of(7);
+    public static final Measure<Velocity<Angle>> MANUAL_ZEROING_DELTA_VELOCITY = Units.RotationsPerSecond.of(7);
 
     // -- Current Limiting --
     public static final boolean PIVOT_ENABLE_CURRENT_LIMITING = true;
@@ -568,6 +571,9 @@ public final class Constants {
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
 
+    public static final Measure<Velocity<Angle>> MANUAL_ZEROING_START_VELOCITY = Units.RotationsPerSecond.of(7);
+    public static final Measure<Velocity<Angle>> MANUAL_ZEROING_DELTA_VELOCITY = Units.RotationsPerSecond.of(7);
+
     // -- Current Limiting --
     public static final boolean ELEVATOR_ENABLE_CURRENT_LIMITING = true;
     public static final double ELEVATOR_CURRENT_LIMIT = 30;
@@ -640,7 +646,8 @@ public final class Constants {
 
   public static class constLEDs {
     public static final double LED_BRIGHTNESS = 1;
-    public static final int LED_NUMBER = 200;
+    public static final int LED_NUMBER = 192;
+    public static final int LED_STRIP_START_INDEX = 8;
 
     public static final int[] CLEAR_LEDS = { 0, 0, 0 };
     public static final int[] INTAKING_COLOR = { 0, 0, 0 };
@@ -648,13 +655,30 @@ public final class Constants {
     public static final int[] PREP_SUB_BACKWARDS_COLOR = { 255, 255, 0 };
     public static final int[] PREP_SPEAKER_COLOR = { 255, 130, 0 };
 
-    public static final ColorFlowAnimation STORE_FEEDER_COLOR = new ColorFlowAnimation(0, 255, 0, 0, 1, LED_NUMBER,
-        Direction.Forward);
+    // public static final ColorFlowAnimation STORE_FEEDER_COLOR = new
+    // ColorFlowAnimation(0, 255, 0, 0, 1, LED_NUMBER,
+    // Direction.Forward);
+
+    public static final StrobeAnimation STORE_FEEDER_COLOR = new StrobeAnimation(0, 255, 0,
+        0, 0.05, LED_NUMBER, LED_STRIP_START_INDEX);
+
     public static final RainbowAnimation READY_TO_SHOOT_COLOR = new RainbowAnimation();
 
-    public static final TwinkleAnimation DISABLED_COLOR_1 = new TwinkleAnimation(0, 255, 255, 0, 0.5, LED_NUMBER / 2,
-        TwinklePercent.Percent100);
-    public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 100, 0, 0, 0.5, LED_NUMBER / 2,
-        TwinklePercent.Percent100, LED_NUMBER / 2);
+    public static final TwinkleAnimation DISABLED_COLOR_1 = new TwinkleAnimation(0, 255, 255, 0, 0.5,
+        (LED_NUMBER / 2) - 5,
+        TwinklePercent.Percent100,
+        8);
+    public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 100, 0, 0, 0.5,
+        (LED_NUMBER / 2),
+        TwinklePercent.Percent100, (LED_NUMBER / 2) + 3);
+
+    public static final int[] ELEVATOR_NOT_ZEROED = { 255, 0, 0 };
+    public static final int[] ELEVATOR_ATTEMPTING_ZERO = { 0, 0, 255 };
+    public static final int[] ELEVATOR_ZEROED = { 0, 255, 0 };
+
+    public static final int[] SHOOTER_NOT_ZEROED = { 255, 0, 0 };
+    public static final int[] SHOOTER_ATTEMPTING_ZERO = { 0, 0, 255 };
+    public static final int[] SHOOTER_ZEROED = { 0, 255, 0 };
+
   }
 }

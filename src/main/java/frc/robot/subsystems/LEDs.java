@@ -48,6 +48,18 @@ public class LEDs extends SubsystemBase {
     CANdle.animate(animation, animationSlot);
   }
 
+  /**
+   * Sets a certain LED to a desired color
+   * 
+   * @param rgb           How much red, green, and blue the color has
+   * @param LEDStartIndex The index number of the specific LED to control,
+   *                      starting at 0
+   * @param LEDLength     How many LEDs to light up following that number
+   */
+  public void setLEDMatrix(int[] rgb, int LEDStartIndex, int LEDLength) {
+    CANdle.setLEDs(rgb[0], rgb[1], rgb[2], 0, LEDStartIndex, LEDLength);
+  }
+
   public void clearAnimation() {
     CANdle.clearAnimation(0);
     CANdle.clearAnimation(1);
