@@ -302,7 +302,7 @@ public class RobotContainer {
   }
 
   public static Command checkForManualZeroing() {
-    return new ManualZeroShooterPivot(subShooter);
+    return new ManualZeroShooterPivot(subShooter).ignoringDisable(true);
   }
 
   public static Command AddVisionMeasurement() {

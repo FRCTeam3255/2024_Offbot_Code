@@ -350,7 +350,8 @@ public final class Constants {
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
 
-    public static final Measure<Angle> MANUAL_ZEROING_START_ANGLE = Units.Degrees.of(45);
+    public static final Measure<Voltage> MANUAL_ZEROING_START_CURRENT = Units.Volts.of(-20);
+    public static final Measure<Voltage> MANUAL_ZEROING_DELTA_CURRENT = Units.Volts.of(-40);
 
     // -- Current Limiting --
     public static final boolean PIVOT_ENABLE_CURRENT_LIMITING = true;

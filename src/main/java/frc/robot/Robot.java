@@ -53,14 +53,13 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_robotContainer.subStateMachine.setRobotState(RobotState.NONE);
     m_robotContainer.subStateMachine.setTargetState(TargetState.PREP_NONE);
+    RobotContainer.checkForManualZeroing().schedule();
   }
 
   @Override
   public void disabledPeriodic() {
     constField.ALLIANCE = DriverStation.getAlliance();
     SmartDashboard.putString("ALLIANCE", constField.ALLIANCE.toString());
-
-    RobotContainer.checkForManualZeroing().schedule();
   }
 
   @Override

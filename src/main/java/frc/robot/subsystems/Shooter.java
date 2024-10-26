@@ -181,6 +181,10 @@ public class Shooter extends SubsystemBase {
     return Units.RotationsPerSecond.of(pivotMotor.getVelocity().getValueAsDouble());
   }
 
+  public Measure<Voltage> getPivotCurrent() {
+    return Units.Volts.of(pivotMotor.getStatorCurrent().getValueAsDouble());
+  }
+
   /**
    * @return If the left shooter motor is at its desired velocity
    */
@@ -341,18 +345,18 @@ public class Shooter extends SubsystemBase {
   public SequentialCommandGroup playZeroingStart() {
     // TODO: add tones
     return new SequentialCommandGroup(
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(20))),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(1000))),
         Commands.waitSeconds(0.2),
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(30))),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(1323))),
         Commands.waitSeconds(0.2),
         Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(0))));
   }
 
   public SequentialCommandGroup playZeroingFailed() {
     return new SequentialCommandGroup(
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(20))),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(1266))),
         Commands.waitSeconds(0.2),
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(30))),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(500))),
         Commands.waitSeconds(0.2),
         Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(0))));
 
@@ -360,9 +364,9 @@ public class Shooter extends SubsystemBase {
 
   public SequentialCommandGroup playZeroingSuccess() {
     return new SequentialCommandGroup(
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(20))),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(1323))),
         Commands.waitSeconds(0.2),
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(30))),
+        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(1538))),
         Commands.waitSeconds(0.2),
         Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(0))));
   }
@@ -401,12 +405,17 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
     SmartDashboard.putNumber("Shooter/Right/PID Slot", currentRightSlot);
 
-    SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
-    SmartDashboard.putNumber("Shooter/Pivot Velocity", pivotMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Pivot/Position", getShooterPosition().in(Units.Degrees));
+    SmartDashboard.putNumber("Shooter/Pivot/Last Desired Angle", lastDesiredPivotAngle.in(Units.Degrees));
+    SmartDashboard.putBoolean("Shooter/Pivot/At Desired Position", isShooterAtPosition(lastDesiredPivotAngle));
+    SmartDashboard.putNumber("Shooter/Pivot/Velocity", pivotMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Pivot/Acceleration", pivotMotor.getAcceleration().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Pivot/Current", pivotMotor.getStatorCurrent().getValueAsDouble());
+
+    SmartDashboard.putBoolean("Shooter/Pivot/Has Zeroed", hasZeroed);
+
     SmartDashboard.putBoolean("Shooter/Safe to Move Elevator", isSafeToMoveElevator());
     SmartDashboard.putBoolean("Shooter/Ready to Shoot", readyToShoot());
-    SmartDashboard.putBoolean("Shooter/Pivot at Desired Position", isShooterAtPosition(lastDesiredPivotAngle));
-    SmartDashboard.putNumber("Shooter/Last Desired Pivot Angle", lastDesiredPivotAngle.in(Units.Degrees));
 
   }
 }
