@@ -16,6 +16,7 @@ public class ZeroElevator extends Command {
   Elevator subElevator;
 
   Measure<Time> zeroingTimestamp;
+  boolean hasZeroed = false;
 
   public ZeroElevator(Elevator subElevator) {
     this.subElevator = subElevator;
@@ -30,6 +31,7 @@ public class ZeroElevator extends Command {
 
     subElevator.setVoltage(Units.Volts.zero());
     zeroingTimestamp = Units.Seconds.zero();
+    hasZeroed = Elevator.hasZeroed;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -49,12 +51,17 @@ public class ZeroElevator extends Command {
     // Reset to the current position if this command was not interrupted
     if (!interrupted) {
       subElevator.setElevatorSensorPosition(constElevator.ZEROED_POS);
+      Elevator.hasZeroed = true;
     }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (hasZeroed) {
+      return true;
+    }
+
     // If the current velocity is low enough to be considered as zeroed
     if (subElevator.getVelocity().lte(constElevator.ZEROED_VELOCITY)) {
       // And this is the first loop it has happened, begin the timer

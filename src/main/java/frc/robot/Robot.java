@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.constField;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine.TargetState;
 
@@ -23,6 +25,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
 
   private boolean hasAutonomousRun = false;
+  private boolean bothSubsystemsZeroed = false;
 
   @Override
   public void robotInit() {
@@ -53,6 +56,11 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_robotContainer.subStateMachine.setRobotState(RobotState.NONE);
     m_robotContainer.subStateMachine.setTargetState(TargetState.PREP_NONE);
+
+    Shooter.hasZeroed = false;
+    Elevator.hasZeroed = false;
+
+    RobotContainer.checkForManualZeroing().schedule();
     m_robotContainer.setDisabledLEDs();
   }
 
@@ -60,6 +68,7 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     constField.ALLIANCE = DriverStation.getAlliance();
     SmartDashboard.putString("ALLIANCE", constField.ALLIANCE.toString());
+    m_robotContainer.setZeroedLEDs();
   }
 
   @Override
@@ -70,8 +79,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    bothSubsystemsZeroed = Shooter.hasZeroed && Elevator.hasZeroed;
 
-    if (m_autonomousCommand != null) {
+    if (bothSubsystemsZeroed && m_autonomousCommand != null) {
+      Commands.deferredProxy(() -> m_autonomousCommand).schedule();
+    } else if (m_autonomousCommand != null) {
       RobotContainer.zeroSubsystems().andThen(Commands.deferredProxy(() -> m_autonomousCommand)).schedule();
     } else {
       RobotContainer.zeroSubsystems().schedule();
@@ -90,6 +102,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    bothSubsystemsZeroed = Shooter.hasZeroed && Elevator.hasZeroed;
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

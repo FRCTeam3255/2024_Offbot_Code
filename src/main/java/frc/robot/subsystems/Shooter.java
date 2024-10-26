@@ -8,6 +8,7 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.MusicTone;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -24,12 +25,11 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Constants.constShooter;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.RobotMap.mapShooter;
@@ -41,6 +41,7 @@ public class Shooter extends SubsystemBase {
   MotionMagicVelocityVoltage motionMagicRequest;
   PositionVoltage positionRequest;
   MotionMagicVoltage motionMagicPivotRequest;
+  MusicTone musicRequest;
 
   VelocityVoltage velocityRequest;
   VoltageOut voltageRequest;
@@ -51,6 +52,9 @@ public class Shooter extends SubsystemBase {
 
   int currentRightSlot = 0;
   int currentLeftSlot = 0;
+
+  public static boolean attemptingZeroing = false;
+  public static boolean hasZeroed = false;
 
   public Shooter() {
     leftMotor = new TalonFX(mapShooter.SHOOTER_LEFT_MOTOR_CAN, "rio");
@@ -66,6 +70,7 @@ public class Shooter extends SubsystemBase {
     motionMagicRequest = new MotionMagicVelocityVoltage(0);
     motionMagicPivotRequest = new MotionMagicVoltage(0);
     positionRequest = new PositionVoltage(0).withSlot(0);
+    musicRequest = new MusicTone(0);
 
     configure();
   }
@@ -96,6 +101,7 @@ public class Shooter extends SubsystemBase {
     pivotConfig.MotorOutput.Inverted = constShooter.PIVOT_INVERT;
     pivotConfig.MotorOutput.NeutralMode = constShooter.PIVOT_NEUTRAL_MODE;
     pivotConfig.Slot0 = constShooter.PIVOT_PID;
+    pivotConfig.Audio.AllowMusicDurDisable = constShooter.PIVOT_SINGS_IN_DISABLE;
 
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     pivotConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = constShooter.PIVOT_FORWARD_LIMIT.in(Units.Rotations);
@@ -171,6 +177,14 @@ public class Shooter extends SubsystemBase {
 
   public Measure<Velocity<Angle>> getPivotVelocity() {
     return Units.RotationsPerSecond.of(pivotMotor.getVelocity().getValueAsDouble());
+  }
+
+  public Measure<Velocity<Angle>> getPivotRotorVelocity() {
+    return Units.RotationsPerSecond.of(pivotMotor.getRotorVelocity().getValueAsDouble());
+  }
+
+  public Measure<Voltage> getPivotCurrent() {
+    return Units.Volts.of(pivotMotor.getStatorCurrent().getValueAsDouble());
   }
 
   /**
@@ -329,6 +343,7 @@ public class Shooter extends SubsystemBase {
     return isLeftShooterUpToSpeed() && isRightShooterUpToSpeed() && isShooterAtPosition(lastDesiredPivotAngle);
   }
 
+  // -- SysID
   final SysIdRoutine leftFlywheelSysIdRoutine = new SysIdRoutine(
       new SysIdRoutine.Config(
           null, // Use default ramp rate (1 V/s)
@@ -362,11 +377,17 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
     SmartDashboard.putNumber("Shooter/Right/PID Slot", currentRightSlot);
 
-    SmartDashboard.putNumber("Shooter/Pivot", getShooterPosition().in(Units.Degrees));
-    SmartDashboard.putNumber("Shooter/Pivot Velocity", pivotMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Pivot/Position", getShooterPosition().in(Units.Degrees));
+    SmartDashboard.putNumber("Shooter/Pivot/Last Desired Angle", lastDesiredPivotAngle.in(Units.Degrees));
+    SmartDashboard.putBoolean("Shooter/Pivot/At Desired Position", isShooterAtPosition(lastDesiredPivotAngle));
+    SmartDashboard.putNumber("Shooter/Pivot/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Pivot/Rotor Velocity", pivotMotor.getRotorVelocity().getValueAsDouble());
+
     SmartDashboard.putBoolean("Shooter/Safe to Move Elevator", isSafeToMoveElevator());
     SmartDashboard.putBoolean("Shooter/Ready to Shoot", readyToShoot());
-    SmartDashboard.putBoolean("Shooter/Pivot at Desired Position", isShooterAtPosition(lastDesiredPivotAngle));
     SmartDashboard.putNumber("Shooter/Last Desired Pivot Angle", lastDesiredPivotAngle.in(Units.Degrees));
+
+    SmartDashboard.putBoolean("Zeroing/Pivot/Attempting Zeroing", attemptingZeroing);
+    SmartDashboard.putBoolean("Zeroing/Pivot/Has Zeroed", hasZeroed);
   }
 }

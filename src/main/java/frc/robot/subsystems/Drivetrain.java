@@ -132,6 +132,7 @@ public class Drivetrain extends SN_SuperSwerve {
         prefDrivetrain.yawSnapI,
         prefDrivetrain.yawSnapD);
     yawSnappingController.enableContinuousInput(0, 360);
+    yawSnappingController.setTolerance(constDrivetrain.AT_ROTATION_TOLERANCE.in(Units.Degrees));
 
     super.configure();
   }

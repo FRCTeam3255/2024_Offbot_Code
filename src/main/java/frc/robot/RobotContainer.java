@@ -7,7 +7,6 @@ package frc.robot;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix6.SignalLogger;
 import com.frcteam3255.joystick.SN_XboxController;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.constControllers;
 import frc.robot.Constants.constElevator;
 import frc.robot.Constants.constField;
@@ -35,6 +33,8 @@ import frc.robot.commands.Autos.PreloadOnly;
 import frc.robot.commands.Autos.PreloadTaxi;
 import frc.robot.commands.Autos.WingOnly;
 import frc.robot.commands.ManualPivot;
+import frc.robot.commands.Zeroing.ManualZeroElevator;
+import frc.robot.commands.Zeroing.ManualZeroShooterPivot;
 import frc.robot.commands.Zeroing.ZeroElevator;
 import frc.robot.commands.Zeroing.ZeroShooterPivot;
 import frc.robot.commands.States.IntakeSource;
@@ -312,6 +312,10 @@ public class RobotContainer {
     return returnedCommand;
   }
 
+  public static Command checkForManualZeroing() {
+    return new ManualZeroShooterPivot(subShooter).alongWith(new ManualZeroElevator(subElevator)).ignoringDisable(true);
+  }
+
   public static Command AddVisionMeasurement() {
     return new AddVisionMeasurement(subDrivetrain, subLimelight)
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).ignoringDisable(true);
@@ -320,6 +324,31 @@ public class RobotContainer {
   public void setDisabledLEDs() {
     subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_1, 0);
     subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_2, 1);
+  }
+
+  public void setZeroedLEDs() {
+    int[] elevatorRGB = new int[3];
+    int[] shooterRGB = new int[3];
+
+    if (Elevator.hasZeroed) {
+      elevatorRGB = constLEDs.ELEVATOR_ZEROED;
+    } else if (Elevator.attemptingZeroing) {
+      elevatorRGB = constLEDs.ELEVATOR_ATTEMPTING_ZERO;
+    } else {
+      elevatorRGB = constLEDs.ELEVATOR_NOT_ZEROED;
+    }
+
+    if (Shooter.hasZeroed) {
+      shooterRGB = constLEDs.SHOOTER_ZEROED;
+    } else if (Shooter.attemptingZeroing) {
+      shooterRGB = constLEDs.SHOOTER_ATTEMPTING_ZERO;
+    } else {
+      shooterRGB = constLEDs.SHOOTER_NOT_ZEROED;
+    }
+
+    subLEDs.setLEDMatrix(elevatorRGB, 0, 2);
+    subLEDs.setLEDMatrix(elevatorRGB, 6, 2);
+    subLEDs.setLEDMatrix(shooterRGB, 2, 4);
   }
 
   public void clearLEDs() {

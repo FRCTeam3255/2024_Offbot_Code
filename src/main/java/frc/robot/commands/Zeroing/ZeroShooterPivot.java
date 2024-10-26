@@ -16,6 +16,7 @@ public class ZeroShooterPivot extends Command {
   Shooter subShooter;
 
   Measure<Time> zeroingTimestamp;
+  boolean hasZeroed = false;
 
   public ZeroShooterPivot(Shooter subShooter) {
     this.subShooter = subShooter;
@@ -28,6 +29,7 @@ public class ZeroShooterPivot extends Command {
 
     subShooter.setPivotVoltage(Units.Volts.zero());
     zeroingTimestamp = Units.Seconds.zero();
+    hasZeroed = Shooter.hasZeroed;
   }
 
   @Override
@@ -46,12 +48,17 @@ public class ZeroShooterPivot extends Command {
     // Reset to the current position if this command was not interrupted
     if (!interrupted) {
       subShooter.setPivotSensorAngle(constShooter.ZEROED_ANGLE);
+      Shooter.hasZeroed = true;
     }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (hasZeroed) {
+      return true;
+    }
+
     // If the current velocity is low enough to be considered as zeroed
     if (subShooter.getPivotVelocity().gte(constShooter.ZEROED_VELOCITY)) {
       // And this is the first loop it has happened, begin the timer
