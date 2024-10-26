@@ -645,7 +645,7 @@ public final class Constants {
 
   public static class constLEDs {
     public static final double LED_BRIGHTNESS = 1;
-    public static final int LED_NUMBER = 200;
+    public static final int LED_NUMBER = 192;
 
     public static final int[] CLEAR_LEDS = { 0, 0, 0 };
     public static final int[] INTAKING_COLOR = { 0, 0, 0 };
@@ -657,9 +657,20 @@ public final class Constants {
         Direction.Forward);
     public static final RainbowAnimation READY_TO_SHOOT_COLOR = new RainbowAnimation();
 
-    public static final TwinkleAnimation DISABLED_COLOR_1 = new TwinkleAnimation(0, 255, 255, 0, 0.5, LED_NUMBER / 2,
+    public static final TwinkleAnimation DISABLED_COLOR_1 = new TwinkleAnimation(0, 255, 255, 0, 0.5,
+        (LED_NUMBER / 2) + 8,
         TwinklePercent.Percent100);
-    public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 100, 0, 0, 0.5, LED_NUMBER / 2,
+    public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 100, 0, 0, 0.5,
+        (LED_NUMBER / 2) + 8,
         TwinklePercent.Percent100, LED_NUMBER / 2);
+
+    public static final int[] ELEVATOR_NOT_ZEROED = { 255, 0, 0 };
+    public static final int[] ELEVATOR_ATTEMPTING_ZERO = { 0, 0, 255 };
+    public static final int[] ELEVATOR_ZEROED = { 0, 255, 0 };
+
+    public static final int[] SHOOTER_NOT_ZEROED = { 255, 0, 0 };
+    public static final int[] SHOOTER_ATTEMPTING_ZERO = { 0, 0, 255 };
+    public static final int[] SHOOTER_ZEROED = { 0, 255, 0 };
+
   }
 }

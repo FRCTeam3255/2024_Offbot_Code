@@ -327,6 +327,31 @@ public class RobotContainer {
     subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_2, 1);
   }
 
+  public void setZeroedLEDs() {
+    int[] elevatorRGB = new int[3];
+    int[] shooterRGB = new int[3];
+
+    if (Elevator.hasZeroed) {
+      elevatorRGB = constLEDs.ELEVATOR_ZEROED;
+    } else if (Elevator.attemptingZeroing) {
+      elevatorRGB = constLEDs.ELEVATOR_ATTEMPTING_ZERO;
+    } else {
+      elevatorRGB = constLEDs.ELEVATOR_NOT_ZEROED;
+    }
+
+    if (Shooter.hasZeroed) {
+      shooterRGB = constLEDs.SHOOTER_ZEROED;
+    } else if (Shooter.attemptingZeroing) {
+      shooterRGB = constLEDs.SHOOTER_ATTEMPTING_ZERO;
+    } else {
+      shooterRGB = constLEDs.SHOOTER_NOT_ZEROED;
+    }
+
+    subLEDs.setLEDMatrix(elevatorRGB, 0, 2);
+    subLEDs.setLEDMatrix(elevatorRGB, 6, 2);
+    subLEDs.setLEDMatrix(shooterRGB, 2, 4);
+  }
+
   public void clearLEDs() {
     subLEDs.clearAnimation();
     subLEDs.setLEDs(constLEDs.CLEAR_LEDS);

@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     constField.ALLIANCE = DriverStation.getAlliance();
     SmartDashboard.putString("ALLIANCE", constField.ALLIANCE.toString());
+    m_robotContainer.setZeroedLEDs();
   }
 
   @Override
@@ -103,7 +104,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    if (!hasAutonomousRun || !bothSubsystemsZeroed) {
+    if (!hasAutonomousRun) {
       RobotContainer.zeroSubsystems().schedule();
     }
   }
