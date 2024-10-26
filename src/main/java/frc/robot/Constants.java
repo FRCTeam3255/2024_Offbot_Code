@@ -10,6 +10,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix.led.ColorFlowAnimation;
+import com.ctre.phoenix.led.FireAnimation;
+import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.TwinkleAnimation;
+import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
+import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -382,7 +388,7 @@ public final class Constants {
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0.46));
     public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(42),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
-    public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(42),
+    public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(45),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
@@ -635,5 +641,25 @@ public final class Constants {
     public static final Measure<Angle> LL_ROLL = Units.Degrees.of(0);
     public static final Measure<Angle> LL_PITCH = Units.Degrees.of(20);
     public static final Measure<Angle> LL_YAW = Units.Degrees.of(0);
+  }
+
+  public static class constLEDs {
+    public static final double LED_BRIGHTNESS = 1;
+    public static final int LED_NUMBER = 200;
+
+    public static final int[] CLEAR_LEDS = { 0, 0, 0 };
+    public static final int[] INTAKING_COLOR = { 0, 0, 0 };
+    public static final int[] PREP_AMP_COLOR = { 200, 0, 255 };
+    public static final int[] PREP_SUB_BACKWARDS_COLOR = { 255, 255, 0 };
+    public static final int[] PREP_SPEAKER_COLOR = { 255, 130, 0 };
+
+    public static final ColorFlowAnimation STORE_FEEDER_COLOR = new ColorFlowAnimation(0, 255, 0, 0, 1, LED_NUMBER,
+        Direction.Forward);
+    public static final RainbowAnimation READY_TO_SHOOT_COLOR = new RainbowAnimation();
+
+    public static final TwinkleAnimation DISABLED_COLOR_1 = new TwinkleAnimation(0, 255, 255, 0, 0.5, LED_NUMBER / 2,
+        TwinklePercent.Percent100);
+    public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 100, 0, 0, 0.5, LED_NUMBER / 2,
+        TwinklePercent.Percent100, LED_NUMBER / 2);
   }
 }

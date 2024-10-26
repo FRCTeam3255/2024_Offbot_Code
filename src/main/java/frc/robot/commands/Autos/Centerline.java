@@ -22,6 +22,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
@@ -34,6 +35,7 @@ public class Centerline extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Elevator subElevator;
   Intake subIntake;
+  LEDs subLEDs;
   Transfer subTransfer;
   Shooter subShooter;
 
@@ -63,19 +65,21 @@ public class Centerline extends SequentialCommandGroup {
   }
 
   public Centerline(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,
-      Intake subIntake, Transfer subTransfer, Shooter subShooter, BooleanSupplier readyToShoot, boolean goesDown) {
+      Intake subIntake, LEDs subLEDs, Transfer subTransfer, Shooter subShooter, BooleanSupplier readyToShoot,
+      boolean goesDown) {
     this.subStateMachine = subStateMachine;
     this.subClimber = subClimber;
     this.subDrivetrain = subDrivetrain;
     this.subElevator = subElevator;
     this.subIntake = subIntake;
+    this.subLEDs = subLEDs;
     this.subTransfer = subTransfer;
     this.readyToShoot = readyToShoot;
     this.subShooter = subShooter;
     this.goesDown = goesDown;
 
     shootSequence = () -> new ShootSequence(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-        subTransfer, subShooter, readyToShoot);
+        subLEDs, subTransfer, subShooter, readyToShoot);
 
     addCommands(
         Commands.runOnce(
@@ -83,7 +87,7 @@ public class Centerline extends SequentialCommandGroup {
 
         // -- PRELOAD --
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
-            subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
+            subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
             .until(() -> subTransfer.getGamePieceStored()),
 
         Commands.deferredProxy(shootSequence),

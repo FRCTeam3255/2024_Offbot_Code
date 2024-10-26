@@ -65,4 +65,7 @@ public class RobotMap {
     public static final int NOTE_SENSOR_DIO = 0;
   }
 
+  public static class mapLEDs {
+    public static final int CANDLE_CAN = 60;
+  }
 }
