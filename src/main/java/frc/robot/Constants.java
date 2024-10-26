@@ -56,6 +56,9 @@ public final class Constants {
 
     public static final double DRIVER_RUMBLE = 0.5;
     public static final double OPERATOR_RUMBLE = 0.5;
+
+    public static final double DRIVER_GP_COLLECTED_RUMBLE = 0.3;
+    public static final double OPERATOR_GP_COLLECTED_RUMBLE = 0.3;
   }
 
   public static class constDrivetrain {
@@ -204,7 +207,7 @@ public final class Constants {
       private static final Pose3d SUBWOOFER = new Pose3d(new Pose2d(1.35, 5.50, Rotation2d.fromDegrees(0)));
 
       private static final Pose3d SHUFFLE = new Pose3d(
-          new Pose2d(1.2991523742675781, 7.103456497192383, Rotation2d.fromDegrees(0)));
+          new Pose2d(3.42, 6.08, Rotation2d.fromDegrees(0)));
     }
 
     private static final class redConstants {
@@ -231,7 +234,7 @@ public final class Constants {
       private static final Pose3d SUBWOOFER = new Pose3d(
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(180)));
       private static final Pose3d SHUFFLE = new Pose3d(
-          new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.2991523742675781, 7.103456497192383, Rotation2d.fromDegrees(0)));
+          new Pose2d(FIELD_LENGTH.in(Units.Meters) - 3.42, 6.08, Rotation2d.fromDegrees(0)));
     }
   }
 
@@ -379,7 +382,7 @@ public final class Constants {
     }
 
     public static final ShooterPositionGroup PREP_NONE = new ShooterPositionGroup(NONE_STATE_ANGLE,
-        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
@@ -387,8 +390,8 @@ public final class Constants {
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.46));
     public static final ShooterPositionGroup PREP_SUB_BACKWARDS = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0.46));
-    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(42),
-        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
+    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(34),
+        Units.RotationsPerSecond.of(30), Units.RotationsPerSecond.of(30), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(45),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
@@ -650,7 +653,7 @@ public final class Constants {
     public static final int LED_STRIP_START_INDEX = 8;
 
     public static final int[] CLEAR_LEDS = { 0, 0, 0 };
-    public static final int[] INTAKING_COLOR = { 0, 0, 0 };
+    public static final int[] GAME_PIECE_COLLECTED_COLOR = { 0, 0, 255 };
     public static final int[] PREP_AMP_COLOR = { 200, 0, 255 };
     public static final int[] PREP_SUB_BACKWARDS_COLOR = { 255, 255, 0 };
     public static final int[] PREP_SPEAKER_COLOR = { 255, 130, 0 };
