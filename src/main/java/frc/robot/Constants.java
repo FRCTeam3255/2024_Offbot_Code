@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import java.lang.annotation.Target;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.RobotEnableValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.frcteam3255.components.swerve.SN_SwerveConstants;
@@ -351,8 +349,7 @@ public final class Constants {
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
 
     public static final Measure<Velocity<Angle>> MANUAL_ZEROING_START_VELOCITY = Units.RotationsPerSecond.of(7);
-    public static final Measure<Voltage> MANUAL_ZEROING_DELTA_CURRENT = Units.Volts.of(45);
-    public static final Measure<Velocity<Angle>> MANUAL_ZEROING_DETLA_VELOCITY = Units.RotationsPerSecond.of(7);
+    public static final Measure<Velocity<Angle>> MANUAL_ZEROING_DELTA_VELOCITY = Units.RotationsPerSecond.of(7);
 
     // -- Current Limiting --
     public static final boolean PIVOT_ENABLE_CURRENT_LIMITING = true;
@@ -566,6 +563,9 @@ public final class Constants {
     public static final Measure<Distance> ZEROED_POS = Units.Meters.of(0);
 
     public static final Measure<Time> ZEROING_TIMEOUT = Units.Seconds.of(3);
+
+    public static final Measure<Velocity<Angle>> MANUAL_ZEROING_START_VELOCITY = Units.RotationsPerSecond.of(7);
+    public static final Measure<Velocity<Angle>> MANUAL_ZEROING_DELTA_VELOCITY = Units.RotationsPerSecond.of(7);
 
     // -- Current Limiting --
     public static final boolean ELEVATOR_ENABLE_CURRENT_LIMITING = true;

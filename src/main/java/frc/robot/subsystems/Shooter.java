@@ -25,14 +25,11 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Constants.constShooter;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.RobotMap.mapShooter;
@@ -56,6 +53,7 @@ public class Shooter extends SubsystemBase {
   int currentRightSlot = 0;
   int currentLeftSlot = 0;
 
+  public static boolean attemptingZeroing = false;
   public static boolean hasZeroed = false;
 
   public Shooter() {
@@ -345,36 +343,6 @@ public class Shooter extends SubsystemBase {
     return isLeftShooterUpToSpeed() && isRightShooterUpToSpeed() && isShooterAtPosition(lastDesiredPivotAngle);
   }
 
-  // -- Orchestra/Music --
-  public SequentialCommandGroup playZeroingStart() {
-    // TODO: add tones
-    return new SequentialCommandGroup(
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(1000))),
-        Commands.waitSeconds(0.2),
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(1323))),
-        Commands.waitSeconds(0.2),
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(0))));
-  }
-
-  public SequentialCommandGroup playZeroingFailed() {
-    return new SequentialCommandGroup(
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(1266))),
-        Commands.waitSeconds(0.2),
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(500))),
-        Commands.waitSeconds(0.2),
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(0))));
-
-  }
-
-  public SequentialCommandGroup playZeroingSuccess() {
-    return new SequentialCommandGroup(
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(1323))),
-        Commands.waitSeconds(0.2),
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(1538))),
-        Commands.waitSeconds(0.2),
-        Commands.runOnce(() -> pivotMotor.setControl(musicRequest.withAudioFrequency(0))));
-  }
-
   // -- SysID
   final SysIdRoutine leftFlywheelSysIdRoutine = new SysIdRoutine(
       new SysIdRoutine.Config(
@@ -415,10 +383,11 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Pivot/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());
     SmartDashboard.putNumber("Shooter/Pivot/Rotor Velocity", pivotMotor.getRotorVelocity().getValueAsDouble());
 
-    SmartDashboard.putBoolean("Shooter/Pivot/Has Zeroed", hasZeroed);
-
     SmartDashboard.putBoolean("Shooter/Safe to Move Elevator", isSafeToMoveElevator());
     SmartDashboard.putBoolean("Shooter/Ready to Shoot", readyToShoot());
+
+    SmartDashboard.putBoolean("Zeroing/Pivot/Attempting Zeroing", attemptingZeroing);
+    SmartDashboard.putBoolean("Zeroing/Pivot/Has Zeroed", hasZeroed);
 
   }
 }

@@ -13,21 +13,21 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.constShooter;
-import frc.robot.subsystems.Shooter;
+import frc.robot.Constants.constElevator;
+import frc.robot.subsystems.Elevator;
 
-public class ManualZeroShooterPivot extends Command {
-  Shooter subShooter;
+public class ManualZeroElevator extends Command {
+  Elevator subElevator;
 
   boolean zeroingSuccess = false;
   Measure<Time> zeroingTimestamp = Units.Seconds.zero();
 
   Measure<Velocity<Angle>> lastRotorVelocity = Units.RotationsPerSecond.of(0);
 
-  public ManualZeroShooterPivot(Shooter subShooter) {
-    this.subShooter = subShooter;
+  public ManualZeroElevator(Elevator subElevator) {
+    this.subElevator = subElevator;
 
-    addRequirements(subShooter);
+    addRequirements(subElevator);
   }
 
   @Override
@@ -37,30 +37,30 @@ public class ManualZeroShooterPivot extends Command {
   @Override
   public void execute() {
     // Check if we have raised the shooter above a certain speed
-    if (subShooter.getPivotRotorVelocity().gte(constShooter.MANUAL_ZEROING_START_VELOCITY)
-        || Shooter.attemptingZeroing) {
+    if (subElevator.getRotorVelocity().gte(constElevator.MANUAL_ZEROING_START_VELOCITY)
+        || Elevator.attemptingZeroing) {
       // Enter zeroing mode!
-      if (!Shooter.attemptingZeroing) {
-        Shooter.attemptingZeroing = true;
+      if (!Elevator.attemptingZeroing) {
+        Elevator.attemptingZeroing = true;
         zeroingTimestamp = Units.Seconds.of(Timer.getFPGATimestamp());
 
-        System.out.println("Shooter Zeroing Started!");
+        System.out.println("Elevator Zeroing Started!");
       }
 
       // Check if time elapsed since previous zeroing is too high - if true, then exit
       // zeroing mode :(
-      if (Units.Seconds.of(Timer.getFPGATimestamp()).minus(zeroingTimestamp).gte(constShooter.ZEROING_TIMEOUT)) {
-        Shooter.attemptingZeroing = false;
-        System.out.println("Shooter Zeroing Failed :(");
+      if (Units.Seconds.of(Timer.getFPGATimestamp()).minus(zeroingTimestamp).gte(constElevator.ZEROING_TIMEOUT)) {
+        Elevator.attemptingZeroing = false;
+        System.out.println("Elevator Zeroing Failed :(");
 
       } else {
-        boolean rotorVelocity = subShooter.getPivotRotorVelocity().minus(lastRotorVelocity)
-            .lte(constShooter.MANUAL_ZEROING_DELTA_VELOCITY);
+        boolean rotorVelocity = subElevator.getRotorVelocity().minus(lastRotorVelocity)
+            .lte(constElevator.MANUAL_ZEROING_DELTA_VELOCITY);
 
         if (rotorVelocity && lastRotorVelocity.lte(Units.RotationsPerSecond.of(0))) {
           zeroingSuccess = true;
         } else {
-          lastRotorVelocity = subShooter.getPivotRotorVelocity();
+          lastRotorVelocity = subElevator.getRotorVelocity();
         }
       }
 
@@ -70,15 +70,16 @@ public class ManualZeroShooterPivot extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    Shooter.hasZeroed = true;
-    subShooter.setPivotSensorAngle(constShooter.ZEROED_ANGLE);
-    System.out.println("Shooter Zeroing Successful!!!! Yippee and hooray!!! :3");
+    Elevator.hasZeroed = true;
+    subElevator.setElevatorSensorPosition(constElevator.ZEROED_POS);
+    System.out.println("Elevator Zeroing Successful!!!! Yippee and hooray!!! :3");
   }
 
   @Override
   public boolean isFinished() {
-    boolean rotorVelocityIsZero = subShooter.getPivotRotorVelocity().isNear(Units.RotationsPerSecond.zero(), 0.01);
+    boolean rotorVelocityIsZero = subElevator.getRotorVelocity().isNear(Units.RotationsPerSecond.zero(), 0.01);
     SmartDashboard.putBoolean("Zeroing/Pivot/Is Rotor Velocity Zero", rotorVelocityIsZero);
     return zeroingSuccess && rotorVelocityIsZero;
+
   }
 }

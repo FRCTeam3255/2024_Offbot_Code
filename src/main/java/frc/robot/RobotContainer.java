@@ -32,6 +32,7 @@ import frc.robot.commands.Autos.PreloadOnly;
 import frc.robot.commands.Autos.PreloadTaxi;
 import frc.robot.commands.Autos.WingOnly;
 import frc.robot.commands.ManualPivot;
+import frc.robot.commands.Zeroing.ManualZeroElevator;
 import frc.robot.commands.Zeroing.ManualZeroShooterPivot;
 import frc.robot.commands.Zeroing.ZeroElevator;
 import frc.robot.commands.Zeroing.ZeroShooterPivot;
@@ -302,7 +303,7 @@ public class RobotContainer {
   }
 
   public static Command checkForManualZeroing() {
-    return new ManualZeroShooterPivot(subShooter).ignoringDisable(true);
+    return new ManualZeroShooterPivot(subShooter).alongWith(new ManualZeroElevator(subElevator)).ignoringDisable(true);
   }
 
   public static Command AddVisionMeasurement() {
