@@ -51,6 +51,9 @@ public final class Constants {
 
     public static final double DRIVER_RUMBLE = 0.5;
     public static final double OPERATOR_RUMBLE = 0.5;
+
+    public static final double DRIVER_GP_COLLECTED_RUMBLE = 0.3;
+    public static final double OPERATOR_GP_COLLECTED_RUMBLE = 0.3;
   }
 
   public static class constDrivetrain {
