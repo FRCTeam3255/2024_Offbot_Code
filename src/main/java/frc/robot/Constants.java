@@ -659,17 +659,18 @@ public final class Constants {
     // ColorFlowAnimation(0, 255, 0, 0, 1, LED_NUMBER,
     // Direction.Forward);
 
-    public static final StrobeAnimation STORE_FEEDER_COLOR = new StrobeAnimation(0, 255, 255,
+    public static final StrobeAnimation STORE_FEEDER_COLOR = new StrobeAnimation(0, 255, 0,
         0, 0.05, LED_NUMBER, LED_STRIP_START_INDEX);
 
     public static final RainbowAnimation READY_TO_SHOOT_COLOR = new RainbowAnimation();
 
     public static final TwinkleAnimation DISABLED_COLOR_1 = new TwinkleAnimation(0, 255, 255, 0, 0.5,
-        (LED_NUMBER / 2) + 8,
-        TwinklePercent.Percent100);
+        (LED_NUMBER / 2) - 5,
+        TwinklePercent.Percent100,
+        8);
     public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 100, 0, 0, 0.5,
-        (LED_NUMBER / 2) + 8,
-        TwinklePercent.Percent100, LED_NUMBER / 2);
+        (LED_NUMBER / 2),
+        TwinklePercent.Percent100, (LED_NUMBER / 2) + 3);
 
     public static final int[] ELEVATOR_NOT_ZEROED = { 255, 0, 0 };
     public static final int[] ELEVATOR_ATTEMPTING_ZERO = { 0, 0, 255 };
