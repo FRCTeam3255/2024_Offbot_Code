@@ -106,7 +106,6 @@ public class RobotContainer {
                     subElevator, subDrivetrain))))
         .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy());
 
-    // TODO: Add LEDs
     gamePieceCollectedTrigger
         .onTrue(Commands
             .runOnce(() -> conDriver.setRumble(RumbleType.kLeftRumble, constControllers.DRIVER_GP_COLLECTED_RUMBLE)))
