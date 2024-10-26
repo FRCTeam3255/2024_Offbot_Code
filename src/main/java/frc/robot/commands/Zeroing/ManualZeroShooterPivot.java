@@ -25,6 +25,7 @@ public class ManualZeroShooterPivot extends Command {
   Measure<Time> zeroingTimestamp = Units.Seconds.zero();
 
   Measure<Voltage> lastCurrent = Units.Volts.of(0);
+  Measure<Velocity<Angle>> lastRotorVelocity = Units.RotationsPerSecond.of(0);
 
   public ManualZeroShooterPivot(Shooter subShooter) {
     this.subShooter = subShooter;
@@ -41,32 +42,33 @@ public class ManualZeroShooterPivot extends Command {
     SmartDashboard.putNumber("this is running <3",
         subShooter.getPivotCurrent().baseUnitMagnitude());
 
-    SmartDashboard.putBoolean("boolean",
-        subShooter.getPivotCurrent().lte(constShooter.MANUAL_ZEROING_START_CURRENT));
-
-    // Check if we have raised the shooter above a certain angle
-    if (subShooter.getPivotCurrent().lte(constShooter.MANUAL_ZEROING_START_CURRENT) || attemptingZeroing) {
+    // Check if we have raised the shooter above a certain speed
+    if (subShooter.getPivotRotorVelocity().gte(constShooter.MANUAL_ZEROING_START_VELOCITY) || attemptingZeroing) {
       // Enter zeroing mode!
       if (!attemptingZeroing) {
         attemptingZeroing = true;
         zeroingTimestamp = Units.Seconds.of(Timer.getFPGATimestamp());
 
-        Commands.deferredProxy(() -> Commands.print("Zeroing Start!"));
+        System.out.println("Zeroing Start!");
       }
 
       // Check if time elapsed since previous zeroing is too high - if true, then exit
       // zeroing mode :(
-      if (Units.Seconds.of(Timer.getFPGATimestamp()).minus(zeroingTimestamp).gte(constShooter.ZEROED_TIME)) {
+      if (Units.Seconds.of(Timer.getFPGATimestamp()).minus(zeroingTimestamp).gte(constShooter.ZEROING_TIMEOUT)) {
         attemptingZeroing = false;
-        Commands.deferredProxy(() -> Commands.print("Zeroing Failed :("));
+        System.out.println("Zeroing Failed :(");
 
       } else {
-        // Otherwise, we may be zeroed! Check some mystery numbers
-        SmartDashboard.putNumber("lte thing", subShooter.getPivotCurrent().minus(lastCurrent).baseUnitMagnitude());
-        if (subShooter.getPivotCurrent().minus(lastCurrent).lte(constShooter.MANUAL_ZEROING_DELTA_CURRENT)) {
+        boolean current = subShooter.getPivotCurrent().minus(lastCurrent)
+            .gte(constShooter.MANUAL_ZEROING_DELTA_CURRENT);
+        boolean rotorVelocity = subShooter.getPivotRotorVelocity().minus(lastRotorVelocity)
+            .gte(constShooter.MANUAL_ZEROING_DETLA_VELOCITY);
+
+        if (current && rotorVelocity) {
           zeroingSuccess = true;
         } else {
           lastCurrent = subShooter.getPivotCurrent();
+          lastRotorVelocity = subShooter.getPivotRotorVelocity();
         }
       }
 
@@ -78,7 +80,7 @@ public class ManualZeroShooterPivot extends Command {
   public void end(boolean interrupted) {
     Shooter.hasZeroed = true;
     subShooter.setPivotSensorAngle(constShooter.ZEROED_ANGLE);
-    Commands.deferredProxy(() -> Commands.print("Zeroing Successful!!!!"));
+    System.out.println("Zeroing Successful!!!! Yippee and hooray!!! :3");
   }
 
   @Override

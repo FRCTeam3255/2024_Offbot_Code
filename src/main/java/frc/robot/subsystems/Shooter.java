@@ -181,6 +181,10 @@ public class Shooter extends SubsystemBase {
     return Units.RotationsPerSecond.of(pivotMotor.getVelocity().getValueAsDouble());
   }
 
+  public Measure<Velocity<Angle>> getPivotRotorVelocity() {
+    return Units.RotationsPerSecond.of(pivotMotor.getRotorVelocity().getValueAsDouble());
+  }
+
   public Measure<Voltage> getPivotCurrent() {
     return Units.Volts.of(pivotMotor.getStatorCurrent().getValueAsDouble());
   }
@@ -408,9 +412,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Pivot/Position", getShooterPosition().in(Units.Degrees));
     SmartDashboard.putNumber("Shooter/Pivot/Last Desired Angle", lastDesiredPivotAngle.in(Units.Degrees));
     SmartDashboard.putBoolean("Shooter/Pivot/At Desired Position", isShooterAtPosition(lastDesiredPivotAngle));
-    SmartDashboard.putNumber("Shooter/Pivot/Velocity", pivotMotor.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("Shooter/Pivot/Acceleration", pivotMotor.getAcceleration().getValueAsDouble());
-    SmartDashboard.putNumber("Shooter/Pivot/Current", pivotMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Pivot/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Pivot/Rotor Velocity", pivotMotor.getRotorVelocity().getValueAsDouble());
 
     SmartDashboard.putBoolean("Shooter/Pivot/Has Zeroed", hasZeroed);
 
