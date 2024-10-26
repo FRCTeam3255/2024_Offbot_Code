@@ -16,12 +16,12 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.constField;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
@@ -37,6 +37,7 @@ public class WingOnly extends SequentialCommandGroup {
   Drivetrain subDrivetrain;
   Elevator subElevator;
   Intake subIntake;
+  LEDs subLEDs;
   Transfer subTransfer;
   Shooter subShooter;
 
@@ -46,19 +47,21 @@ public class WingOnly extends SequentialCommandGroup {
 
   /** Creates a new WingDown. */
   public WingOnly(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,
-      Intake subIntake, Transfer subTransfer, Shooter subShooter, BooleanSupplier readyToShoot, boolean goesDown) {
+      Intake subIntake, LEDs subLEDs, Transfer subTransfer, Shooter subShooter, BooleanSupplier readyToShoot,
+      boolean goesDown) {
     this.subStateMachine = subStateMachine;
     this.subClimber = subClimber;
     this.subDrivetrain = subDrivetrain;
     this.subElevator = subElevator;
     this.subIntake = subIntake;
+    this.subLEDs = subLEDs;
     this.subTransfer = subTransfer;
     this.subShooter = subShooter;
     this.readyToShoot = readyToShoot;
     this.goesDown = goesDown;
 
     shootSequence = () -> new ShootSequence(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-        subTransfer, subShooter, readyToShoot);
+        subLEDs, subTransfer, subShooter, readyToShoot);
     addCommands(
         // Resetting pose
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(
@@ -66,7 +69,7 @@ public class WingOnly extends SequentialCommandGroup {
 
         // -- PRELOAD --
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
-            subDrivetrain, subElevator, subIntake, subTransfer, subShooter))
+            subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
             .until(() -> subTransfer.getGamePieceStored()).withTimeout(1),
 
         Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),

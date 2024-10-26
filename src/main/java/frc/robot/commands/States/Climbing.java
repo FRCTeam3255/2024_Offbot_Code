@@ -13,6 +13,7 @@ import frc.robot.Constants.constTransfer;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
@@ -23,8 +24,8 @@ public class Climbing extends SequentialCommandGroup {
 
   ShooterPositionGroup desiredShooterPosition = constShooter.CLIMBING;
 
-  public Climbing(Climber subClimber, Elevator subElevator, StateMachine subStateMachine, Shooter subShooter,
-      Transfer subTransfer) {
+  public Climbing(Climber subClimber, Elevator subElevator, LEDs subLEDs, StateMachine subStateMachine,
+      Shooter subShooter, Transfer subTransfer) {
     addRequirements(subStateMachine);
 
     addCommands(
@@ -36,7 +37,7 @@ public class Climbing extends SequentialCommandGroup {
         // Check if we have a gp: if we do, put it in the drainpipe using prep amp
         Commands.either(
             Commands.sequence(
-                new PrepTargetState(subElevator, subStateMachine, subShooter,
+                new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs,
                     TargetState.PREP_AMP),
                 // Spin feeder and drainpipe motors
                 Commands.runOnce(() -> subTransfer.setFeederSpeed(constTransfer.PREP_TO_AMP_SPEED)),
