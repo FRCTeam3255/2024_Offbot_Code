@@ -650,8 +650,6 @@ public final class Constants {
 
     public static final ColorFlowAnimation STORE_FEEDER_COLOR = new ColorFlowAnimation(0, 255, 0, 0, 1, LED_NUMBER,
         Direction.Forward);
-    // public static final FireAnimation READY_TO_SHOOT_COLOR = new FireAnimation(1,
-    // 1, LED_NUMBER, 1, 0);
     public static final RainbowAnimation READY_TO_SHOOT_COLOR = new RainbowAnimation();
 
     public static final TwinkleAnimation DISABLED_COLOR_1 = new TwinkleAnimation(0, 255, 255, 0, 0.5, LED_NUMBER / 2,
