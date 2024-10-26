@@ -110,7 +110,8 @@ public class RobotContainer {
         .onTrue(Commands
             .runOnce(() -> conDriver.setRumble(RumbleType.kLeftRumble, constControllers.DRIVER_GP_COLLECTED_RUMBLE)))
         .onTrue(Commands.runOnce(
-            () -> conOperator.setRumble(RumbleType.kLeftRumble, constControllers.OPERATOR_GP_COLLECTED_RUMBLE)));
+            () -> conOperator.setRumble(RumbleType.kLeftRumble, constControllers.OPERATOR_GP_COLLECTED_RUMBLE)))
+        .onTrue(Commands.runOnce(() -> subLEDs.setLEDs(constLEDs.GAME_PIECE_COLLECTED_COLOR)));
 
     new Trigger(readyToShootOperator).onTrue(
         Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,

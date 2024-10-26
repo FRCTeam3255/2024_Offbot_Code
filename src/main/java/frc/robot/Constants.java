@@ -379,7 +379,7 @@ public final class Constants {
     }
 
     public static final ShooterPositionGroup PREP_NONE = new ShooterPositionGroup(NONE_STATE_ANGLE,
-        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
@@ -387,8 +387,8 @@ public final class Constants {
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.46));
     public static final ShooterPositionGroup PREP_SUB_BACKWARDS = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0.46));
-    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(42),
-        Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
+    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(34),
+        Units.RotationsPerSecond.of(30), Units.RotationsPerSecond.of(30), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(45),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
@@ -646,7 +646,7 @@ public final class Constants {
     public static final int LED_NUMBER = 200;
 
     public static final int[] CLEAR_LEDS = { 0, 0, 0 };
-    public static final int[] INTAKING_COLOR = { 0, 0, 0 };
+    public static final int[] GAME_PIECE_COLLECTED_COLOR = { 0, 0, 255 };
     public static final int[] PREP_AMP_COLOR = { 200, 0, 255 };
     public static final int[] PREP_SUB_BACKWARDS_COLOR = { 255, 255, 0 };
     public static final int[] PREP_SPEAKER_COLOR = { 255, 130, 0 };
