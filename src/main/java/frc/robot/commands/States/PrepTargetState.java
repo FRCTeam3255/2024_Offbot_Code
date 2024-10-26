@@ -79,14 +79,11 @@ public class PrepTargetState extends Command {
       case PREP_SPEAKER:
         subLEDs.setLEDs(constLEDs.PREP_SPEAKER_COLOR);
         break;
-      case PREP_VISION:
-        subLEDs.setLEDs(constLEDs.PREP_VISION_COLOR);
-        break;
       case PREP_NONE:
         if (!subTransfer.getGamePieceStored()) {
           subLEDs.setLEDs(constLEDs.CLEAR_LEDS);
         } else {
-          subLEDs.setLEDAnimation(constLEDs.STORE_FEEDER_COLOR);
+          subLEDs.setLEDAnimation(constLEDs.STORE_FEEDER_COLOR, 0);
         }
         break;
     }

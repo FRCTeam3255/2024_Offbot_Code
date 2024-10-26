@@ -68,8 +68,15 @@ public class RobotContainer {
 
   private final Trigger gamePieceTrigger = new Trigger(() -> subTransfer.getGamePieceStored());
 
-  private final BooleanSupplier readyToShoot = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
+  private final BooleanSupplier readyToShootOperator = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
       && subShooter.readyToShoot() && subStateMachine.isCurrentStateTargetState()
+      && subTransfer.getGamePieceStored());
+
+  private final BooleanSupplier readyToShootDriver = (() -> subShooter.readyToShoot()
+      && subStateMachine.isCurrentStateTargetState() && subTransfer.getGamePieceStored());
+
+  private final BooleanSupplier readyToShootLEDs = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
+      && subShooter.readyToShoot() && subStateMachine.getRobotState() == RobotState.PREP_VISION
       && subTransfer.getGamePieceStored());
 
   private final IntakeSource comIntakeSource = new IntakeSource(subStateMachine, subShooter, subTransfer);
@@ -97,15 +104,32 @@ public class RobotContainer {
                     subElevator, subDrivetrain))))
         .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy());
 
-    new Trigger(readyToShoot).onTrue(
+    // new Trigger(readyToShootOperator).onTrue(
+    // Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
+    // constControllers.DRIVER_RUMBLE)).alongWith(
+    // Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
+    // constControllers.OPERATOR_RUMBLE))))
+    // .onFalse(
+    // Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
+    // 0)).alongWith(
+    // Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
+
+    new Trigger(readyToShootOperator).onTrue(
+        Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
+            constControllers.OPERATOR_RUMBLE)))
+        .onFalse(
+            Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0)));
+
+    new Trigger(readyToShootDriver).onTrue(
         Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
-            constControllers.DRIVER_RUMBLE)).alongWith(
-                Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble,
-                    constControllers.OPERATOR_RUMBLE))))
+            constControllers.DRIVER_RUMBLE)))
         .onFalse(
             Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
-                0)).alongWith(
-                    Commands.runOnce(() -> conOperator.setRumble(RumbleType.kBothRumble, 0))));
+                0)));
+
+    new Trigger(readyToShootLEDs)
+        .onTrue(Commands.runOnce(() -> subLEDs.setLEDAnimation(constLEDs.READY_TO_SHOOT_COLOR, 0)))
+        .onFalse(Commands.runOnce(() -> subLEDs.clearAnimation()));
 
     subDrivetrain.resetModulesToAbsolute();
 
@@ -254,14 +278,14 @@ public class RobotContainer {
             subIntake, subLEDs, subShooter, subTransfer));
     autoChooser.addOption("Wing Only Down", new WingOnly(subStateMachine,
         subClimber, subDrivetrain, subElevator,
-        subIntake, subLEDs, subTransfer, subShooter, readyToShoot, true));
+        subIntake, subLEDs, subTransfer, subShooter, readyToShootOperator, true));
     autoChooser.addOption("Wing Only Up", new WingOnly(subStateMachine,
         subClimber, subDrivetrain, subElevator,
-        subIntake, subLEDs, subTransfer, subShooter, readyToShoot, false));
+        subIntake, subLEDs, subTransfer, subShooter, readyToShootOperator, false));
 
     autoChooser.addOption("Centerline :3", new Centerline(subStateMachine,
         subClimber, subDrivetrain, subElevator,
-        subIntake, subLEDs, subTransfer, subShooter, readyToShoot, false));
+        subIntake, subLEDs, subTransfer, subShooter, readyToShootOperator, false));
 
     SmartDashboard.putData(autoChooser);
   }
@@ -295,8 +319,8 @@ public class RobotContainer {
   }
 
   public void setDisabledLEDs() {
-    subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_1);
-    subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_2);
+    subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_1, 0);
+    subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_2, 1);
   }
 
   public void clearLEDs() {

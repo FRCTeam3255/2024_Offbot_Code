@@ -36,14 +36,21 @@ public class LEDs extends SubsystemBase {
    * RgbFadeAnimation, SingleFadeAnimation, StrobeAnimation, TwinkleAnimation,
    * TwinkleOffAnimation
    * 
-   * @param animation Type of Animation desired
+   * <b>Important Note:</b>
+   * You cannot apply multiple animations to the same animation slot at the same
+   * time
+   * 
+   * @param animation     Type of Animation desired
+   * @param animationSlot The animation slot to apply the animation to (starts
+   *                      from 0).
    */
-  public void setLEDAnimation(Animation animation) {
-    CANdle.animate(animation);
+  public void setLEDAnimation(Animation animation, int animationSlot) {
+    CANdle.animate(animation, animationSlot);
   }
 
   public void clearAnimation() {
     CANdle.clearAnimation(0);
+    CANdle.clearAnimation(1);
   }
 
   @Override

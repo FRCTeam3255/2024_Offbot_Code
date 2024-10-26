@@ -38,7 +38,7 @@ public class StoreFeeder extends Command {
   @Override
   public void initialize() {
     subStateMachine.setRobotState(RobotState.STORE_FEEDER);
-    subLEDs.setLEDAnimation(constLEDs.STORE_FEEDER_COLOR);
+    subLEDs.setLEDAnimation(constLEDs.STORE_FEEDER_COLOR, 0);
     // Don't stop the feeders if we're intaking from source because it'll stop too
     // soon
     if (subStateMachine.getRobotState() != RobotState.INTAKE_SOURCE) {
