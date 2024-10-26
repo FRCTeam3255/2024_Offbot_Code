@@ -70,9 +70,13 @@ public class ManualZeroElevator extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    Elevator.hasZeroed = true;
-    subElevator.setElevatorSensorPosition(constElevator.ZEROED_POS);
-    System.out.println("Elevator Zeroing Successful!!!! Yippee and hooray!!! :3");
+    if (!interrupted) {
+      Elevator.hasZeroed = true;
+      subElevator.setElevatorSensorPosition(constElevator.ZEROED_POS);
+      System.out.println("Elevator Zeroing Successful!!!! Yippee and hooray!!! :3");
+    } else {
+      System.out.println("Elevator was never zeroed :((( blame eli");
+    }
   }
 
   @Override

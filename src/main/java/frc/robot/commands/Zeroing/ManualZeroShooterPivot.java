@@ -70,9 +70,13 @@ public class ManualZeroShooterPivot extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    Shooter.hasZeroed = true;
-    subShooter.setPivotSensorAngle(constShooter.ZEROED_ANGLE);
-    System.out.println("Shooter Zeroing Successful!!!! Yippee and hooray!!! :3");
+    if (!interrupted) {
+      Shooter.hasZeroed = true;
+      subShooter.setPivotSensorAngle(constShooter.ZEROED_ANGLE);
+      System.out.println("Shooter Zeroing Successful!!!! Yippee and hooray!!! :3");
+    } else {
+      System.out.println("Shooter was never zeroed :((( blame eli");
+    }
   }
 
   @Override

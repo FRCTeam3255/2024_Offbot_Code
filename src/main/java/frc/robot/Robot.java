@@ -56,6 +56,10 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_robotContainer.subStateMachine.setRobotState(RobotState.NONE);
     m_robotContainer.subStateMachine.setTargetState(TargetState.PREP_NONE);
+
+    Shooter.hasZeroed = false;
+    Elevator.hasZeroed = false;
+
     RobotContainer.checkForManualZeroing().schedule();
     m_robotContainer.setDisabledLEDs();
   }

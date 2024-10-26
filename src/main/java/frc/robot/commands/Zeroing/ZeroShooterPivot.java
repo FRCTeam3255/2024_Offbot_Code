@@ -48,6 +48,7 @@ public class ZeroShooterPivot extends Command {
     // Reset to the current position if this command was not interrupted
     if (!interrupted) {
       subShooter.setPivotSensorAngle(constShooter.ZEROED_ANGLE);
+      Shooter.hasZeroed = true;
     }
   }
 

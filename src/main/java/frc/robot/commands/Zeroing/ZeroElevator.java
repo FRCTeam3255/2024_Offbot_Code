@@ -51,6 +51,7 @@ public class ZeroElevator extends Command {
     // Reset to the current position if this command was not interrupted
     if (!interrupted) {
       subElevator.setElevatorSensorPosition(constElevator.ZEROED_POS);
+      Elevator.hasZeroed = true;
     }
   }
 
