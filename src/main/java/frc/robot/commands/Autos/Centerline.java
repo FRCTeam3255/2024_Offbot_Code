@@ -47,7 +47,7 @@ public class Centerline extends SequentialCommandGroup {
     String pathSuffix = "." + noteNumber;
 
     return new SequentialCommandGroup(
-        Commands.waitSeconds(0.5),
+        Commands.waitSeconds(0.25),
 
         // We are now at C5
         Commands.either(
@@ -113,11 +113,10 @@ public class Centerline extends SequentialCommandGroup {
 
   public Supplier<Pose2d> getInitialPose() {
     return () -> (!constField.isRedAlliance())
-        ? PathPlannerAuto.getStaringPoseFromAutoFile(determineInitPathName())
+        ? PathPlannerPath.fromPathFile(determineInitPathName()).getPreviewStartingHolonomicPose()
         : PathPlannerPath.fromPathFile(determineInitPathName()).flipPath().getPreviewStartingHolonomicPose();
   }
 
-  // TODO: Add goes up functionality
   public String determineInitPathName() {
     return "PsC5";
   }
