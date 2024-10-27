@@ -60,10 +60,7 @@ public class Robot extends TimedRobot {
     Shooter.hasZeroed = false;
     Elevator.hasZeroed = false;
 
-    // TODO: MAKE THIS END WHEN TELEOP STARTS
-    if (!hasAutonomousRun) {
-      RobotContainer.checkForManualZeroing().schedule();
-    }
+    RobotContainer.checkForManualZeroing().schedule();
     m_robotContainer.setDisabledLEDs();
   }
 
@@ -106,6 +103,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     bothSubsystemsZeroed = Shooter.hasZeroed && Elevator.hasZeroed;
+
+    RobotContainer.checkForManualZeroing().cancel();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

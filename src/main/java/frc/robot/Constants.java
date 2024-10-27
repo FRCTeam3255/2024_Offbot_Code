@@ -77,7 +77,7 @@ public final class Constants {
     public static final NeutralModeValue DRIVE_NEUTRAL_MODE = NeutralModeValue.Brake;
     public static final NeutralModeValue STEER_NEUTRAL_MODE = NeutralModeValue.Coast;
 
-    public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(3.966);
+    public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(3.98);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.in(Units.Meters) * Math.PI;
 
     /**
@@ -325,11 +325,11 @@ public final class Constants {
     // - Other -
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
-    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(2);
+    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(1);
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
     public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 
-    public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(1);
+    public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(0.5);
 
     public static final Measure<Dimensionless> INTAKE_SOURCE_SPEED = Units.Percent.of(-0.3);
 
@@ -429,8 +429,8 @@ public final class Constants {
       DISTANCE_MAP.put(3.4163, 19.0);
       DISTANCE_MAP.put(3.7211, 18.5);
       DISTANCE_MAP.put(4.0259, 18.0);
-      DISTANCE_MAP.put(4.3307, 17.0);
-      DISTANCE_MAP.put(4.6355, 16.5);
+      DISTANCE_MAP.put(4.3307, 16.5);
+      DISTANCE_MAP.put(4.6355, 16.0);
       DISTANCE_MAP.put(4.9403, 15.0);
       DISTANCE_MAP.put(5.2451, 14.0);
       DISTANCE_MAP.put(5.5499, 13.5);
@@ -607,13 +607,13 @@ public final class Constants {
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue FEEDER_NEUTRAL_MODE = NeutralModeValue.Brake;
 
-    public static final double INTAKING_SPEED = 0.4;
+    public static final double INTAKING_SPEED = 0.3;
     public static final double INTAKE_SOURCE_SPEED = -0.2;
     public static final double EJECTING_SPEED = -0.4;
 
     public static final double PREP_TO_AMP_SPEED = 0.2;
 
-    public static final double SHOOTING_SPEED = 0.5;
+    public static final double SHOOTING_SPEED = 1;
 
     // -- Current Limiting --
     public static final boolean ENABLE_CURRENT_LIMITING = true;
