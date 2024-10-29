@@ -20,28 +20,28 @@
         "y": 2.867
       },
       "prevControl": {
-        "x": 3.533635356439563,
-        "y": 2.68318336973815
+        "x": 3.7853677607592755,
+        "y": 2.7006830260691412
       },
       "nextControl": {
-        "x": 4.53982127337474,
-        "y": 3.0755626183617046
+        "x": 4.279723720247139,
+        "y": 3.07503511349922
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.218082231036257,
-        "y": 4.112
+        "x": 4.606,
+        "y": 3.847
       },
       "prevControl": {
-        "x": 4.609986200029381,
-        "y": 3.9950584555756006
+        "x": 4.263105913385225,
+        "y": 3.7244076388390313
       },
       "nextControl": {
-        "x": 5.712816677994281,
-        "y": 4.20714123979962
+        "x": 4.906422481152967,
+        "y": 3.954407805348813
       },
       "isLocked": false,
       "linkedName": null
@@ -52,12 +52,12 @@
         "y": 4.112
       },
       "prevControl": {
-        "x": 6.925428779632488,
-        "y": 4.081259900411539
+        "x": 7.466908283474164,
+        "y": 4.112002220446049
       },
       "nextControl": {
-        "x": 7.545582926500588,
-        "y": 4.123569749272665
+        "x": 7.285091716525836,
+        "y": 4.111997779553951
       },
       "isLocked": false,
       "linkedName": null
@@ -76,13 +76,7 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 2.45,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
@@ -104,15 +98,15 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 520.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0.0,
     "rotation": 0.0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Centerline",
@@ -120,5 +114,5 @@
     "rotation": -43.19999999999999,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

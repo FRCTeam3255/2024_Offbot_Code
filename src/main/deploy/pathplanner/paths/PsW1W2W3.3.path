@@ -3,59 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.77,
-        "y": 5.69
+        "x": 2.54,
+        "y": 5.56
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6330139385067604,
-        "y": 5.498708722241399
+        "x": 2.456797671433181,
+        "y": 5.513776484129545
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.2775116434565863,
-        "y": 4.441557160644829
+        "x": 2.5518150181599504,
+        "y": 4.198201444835939
       },
       "prevControl": {
-        "x": 2.1758091952645944,
-        "y": 4.526309200804821
-      },
-      "nextControl": {
-        "x": 2.361709555442154,
-        "y": 4.371392233990191
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.5768819971830483,
-        "y": 4.273161336673693
-      },
-      "prevControl": {
-        "x": 2.4522637993429157,
-        "y": 4.343443566734472
+        "x": 1.7449183616315946,
+        "y": 4.607496850321336
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.15,
-      "rotationDegrees": -25.75999999999999,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "W3",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.8,
       "command": {
         "type": "parallel",
         "data": {
