@@ -47,7 +47,7 @@ public class Shooting extends Command {
       subTransfer.setGamePieceCollected(false);
     } else {
       // Otherwise, shoot through the flywheels if they are up to speed
-      if (subShooter.areBothShootersUpToSpeed()) {
+      if (subShooter.readyToShoot()) {
         subTransfer.setFeederSpeed(constTransfer.SHOOTING_SPEED);
         subStateMachine.setRobotState(RobotState.SHOOTING);
         subTransfer.setGamePieceCollected(false);

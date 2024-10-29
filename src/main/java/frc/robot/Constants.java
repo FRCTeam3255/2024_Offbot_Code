@@ -302,7 +302,7 @@ public final class Constants {
       PIVOT_PID.kV = 0;
       PIVOT_PID.kG = 0.53;
       PIVOT_PID.kA = 0;
-      PIVOT_PID.kP = 90;
+      PIVOT_PID.kP = 100;
       PIVOT_PID.kD = 0;
       PIVOT_PID.GravityType = GravityTypeValue.Arm_Cosine;
     }
@@ -325,7 +325,7 @@ public final class Constants {
     // - Other -
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
-    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(1);
+    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(0.5);
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
     public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 
@@ -382,7 +382,7 @@ public final class Constants {
     }
 
     public static final ShooterPositionGroup PREP_NONE = new ShooterPositionGroup(NONE_STATE_ANGLE,
-        Units.RotationsPerSecond.of(0), Units.RotationsPerSecond.of(0), Units.Meters.of(0));
+        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
@@ -434,8 +434,8 @@ public final class Constants {
       DISTANCE_MAP.put(4.9403, 15.0);
       DISTANCE_MAP.put(5.2451, 14.0);
       DISTANCE_MAP.put(5.5499, 13.5);
-      DISTANCE_MAP.put(5.8547, 13.0);
-      DISTANCE_MAP.put(6.1595, 11.5);
+      DISTANCE_MAP.put(5.8547, 13.5);
+      DISTANCE_MAP.put(6.1595, 12.5);
     }
 
   }

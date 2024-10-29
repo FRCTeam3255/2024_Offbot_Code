@@ -19,7 +19,6 @@ import frc.robot.Constants.constClimber;
 import frc.robot.RobotMap.mapClimber;
 
 public class Climber extends SubsystemBase {
-  TalonFX climberMotor;
   TalonFXConfiguration climberConfig = new TalonFXConfiguration();
   VoltageOut voltageRequest;
 
@@ -27,7 +26,7 @@ public class Climber extends SubsystemBase {
 
   /** Creates a new Climber. */
   public Climber() {
-    climberMotor = new TalonFX(mapClimber.CLIMBER_MOTOR_CAN, "rio");
+    // climberMotor = new TalonFX(mapClimber.CLIMBER_MOTOR_CAN, "rio");
     voltageRequest = new VoltageOut(0);
 
     configure();
@@ -49,34 +48,36 @@ public class Climber extends SubsystemBase {
     climberConfig.CurrentLimits.SupplyCurrentThreshold = constClimber.CURRENT_THRESH;
     climberConfig.CurrentLimits.SupplyTimeThreshold = constClimber.CURRENT_TIME_THRESH;
 
-    climberMotor.getConfigurator().apply(climberConfig);
+    // climberMotor.getConfigurator().apply(climberConfig);
   }
 
   public void setSoftwareLimits(boolean reverse, boolean forward) {
     climberConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = reverse;
     climberConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = forward;
-    climberMotor.getConfigurator().apply(climberConfig);
+    // climberMotor.getConfigurator().apply(climberConfig);
   }
 
   public void setClimberSpeed(double speed) {
     if (isSafeToMoveClimber) {
-      climberMotor.set(speed);
+      // climberMotor.set(speed);
     }
   }
 
   public void setVoltage(Measure<Voltage> voltage) {
-    climberMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
+    // climberMotor.setControl(voltageRequest.withOutput(voltage.in(Units.Volts)));
   }
 
   /**
    * Sets the current position of the climber motor to read as the given value
    */
   public void setClimberSensorPosition(Measure<Distance> position) {
-    climberMotor.setPosition(position.in(Units.Meters));
+    // climberMotor.setPosition(position.in(Units.Meters));
   }
 
   public Measure<Velocity<Distance>> getVelocity() {
-    return Units.MetersPerSecond.of(climberMotor.getVelocity().getValueAsDouble());
+    return Units.MetersPerSecond.zero();
+    // return
+    // Units.MetersPerSecond.of(climberMotor.getVelocity().getValueAsDouble());
   }
 
   public boolean isSafeToMoveClimber() {
@@ -88,7 +89,8 @@ public class Climber extends SubsystemBase {
   }
 
   public Measure<Distance> getClimberPosition() {
-    return Units.Meters.of(climberMotor.getPosition().getValueAsDouble());
+    return Units.Meters.zero();
+    // return Units.Meters.of(climberMotor.getPosition().getValueAsDouble());
   }
 
   /**
