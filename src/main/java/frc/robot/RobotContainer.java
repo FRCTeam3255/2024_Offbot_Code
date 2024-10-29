@@ -104,7 +104,8 @@ public class RobotContainer {
             .andThen(Commands.deferredProxy(
                 () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subLEDs, subShooter, subTransfer,
                     subElevator, subDrivetrain))))
-        .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy());
+        .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy())
+        .onTrue(Commands.runOnce(() -> subTransfer.setGamePieceCollected(true)));
 
     gamePieceCollectedTrigger
         .onTrue(Commands

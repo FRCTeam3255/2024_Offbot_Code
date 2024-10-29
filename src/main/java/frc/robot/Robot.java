@@ -60,7 +60,9 @@ public class Robot extends TimedRobot {
     Shooter.hasZeroed = false;
     Elevator.hasZeroed = false;
 
-    RobotContainer.checkForManualZeroing().schedule();
+    if (!hasAutonomousRun) {
+      RobotContainer.checkForManualZeroing().schedule();
+    }
     m_robotContainer.setDisabledLEDs();
   }
 
