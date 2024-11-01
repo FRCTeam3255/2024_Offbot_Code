@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4,
-        "y": 3.48
+        "x": 3.34,
+        "y": 3.17
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3298422193087567,
-        "y": 3.5378130487437285
+        "x": 4.2145325693223485,
+        "y": 2.470161329381703
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.774318436997921,
-        "y": 1.7549564790340981
+        "x": 6.150037516465443,
+        "y": 1.9493976664732462
       },
       "prevControl": {
-        "x": 5.268770079877292,
-        "y": 1.815970935927967
+        "x": 5.524495553312456,
+        "y": 1.5163301535211762
       },
       "nextControl": {
-        "x": 6.339804413575574,
-        "y": 1.6867081715161056
+        "x": 6.714198151282935,
+        "y": 2.339970413654589
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.376,
-        "y": 2.432
+        "x": 7.607417807482779,
+        "y": 2.82162750454182
       },
       "prevControl": {
-        "x": 7.46690909015711,
-        "y": 2.4320000020679515
+        "x": 7.1655266591369315,
+        "y": 2.964886809144736
       },
       "nextControl": {
-        "x": 7.285090909842892,
-        "y": 2.4319999979320492
+        "x": 7.854923533457067,
+        "y": 2.7413871595585677
       },
       "isLocked": false,
       "linkedName": null
@@ -49,11 +49,11 @@
     {
       "anchor": {
         "x": 8.2,
-        "y": 2.43
+        "y": 2.5
       },
       "prevControl": {
-        "x": 8.290909088502747,
-        "y": 2.430000006617445
+        "x": 7.8808624934367915,
+        "y": 2.6761782035024515
       },
       "nextControl": null,
       "isLocked": false,
@@ -88,14 +88,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0,
+    "velocity": 0.0,
+    "rotation": -30.0,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "Centerline",
   "previewStartingState": {
-    "rotation": -44.370000000000005,
+    "rotation": -37.19999999999999,
     "velocity": 0
   },
   "useDefaultConstraints": false
