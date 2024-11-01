@@ -4,7 +4,6 @@
 
 package frc.robot.commands.Autos;
 
-import java.nio.file.Paths;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -12,8 +11,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -27,7 +24,6 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
 import frc.robot.subsystems.StateMachine.RobotState;
-import frc.robot.subsystems.StateMachine.TargetState;
 
 public class Centerline extends SequentialCommandGroup {
   StateMachine subStateMachine;
@@ -47,20 +43,27 @@ public class Centerline extends SequentialCommandGroup {
     String pathSuffix = "." + noteNumber;
 
     return new SequentialCommandGroup(
-        Commands.waitSeconds(0.25),
+        Commands.waitSeconds(0.5),
 
         // We are now at C5
         Commands.either(
             Commands.sequence(
                 // We got the game piece!
+                Commands.print("Game piece found!"),
                 // Drive to shoot
+                Commands.print("Running auto: " + determineScorePathName() + pathSuffix),
                 new PathPlannerAuto(determineScorePathName() + pathSuffix),
                 Commands.deferredProxy(shootSequence),
                 // Return to centerline (C4)
+                Commands.print("Running auto: " + determineReturnScorePathName() + pathSuffix),
                 new PathPlannerAuto(determineReturnScorePathName() + pathSuffix)),
 
-            // It wasnt there :<
-            new PathPlannerAuto(determineHopPathName() + pathSuffix),
+            Commands.sequence(
+                // It wasnt there :<
+                Commands.print("Game piece not found :<"),
+                Commands.print("Running auto: " + determineHopPathName() + pathSuffix),
+                new PathPlannerAuto(determineHopPathName() + pathSuffix)),
+
             () -> subTransfer.getGamePieceStored()));
   }
 
