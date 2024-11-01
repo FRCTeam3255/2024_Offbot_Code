@@ -86,8 +86,7 @@ public class Centerline extends SequentialCommandGroup {
             () -> subDrivetrain.resetPoseToPose(getInitialPose().get())),
 
         // -- PRELOAD --
-        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
-            subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
+        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING))
             .until(() -> subTransfer.getGamePieceStored()),
 
         Commands.deferredProxy(shootSequence),
