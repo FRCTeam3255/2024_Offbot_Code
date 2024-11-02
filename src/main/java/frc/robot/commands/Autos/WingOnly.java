@@ -70,31 +70,29 @@ public class WingOnly extends SequentialCommandGroup {
         // -- PRELOAD --
         Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
-        // Drive to first note (Intaking is within the path)
-        new PathPlannerAuto(determinePathName() + ".1"),
-
-        Commands.deferredProxy(shootSequence),
-
-        // -- W1 / W3 --
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING, subStateMachine, subClimber,
             subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
             .until(() -> subTransfer.getGamePieceStored()).withTimeout(1),
-        Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
+        Commands.deferredProxy(shootSequence),
+        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
+        // -- W1 / W3 --
+        // Drive to first note (Intaking is within the path)
+        new PathPlannerAuto(determinePathName() + ".1"),
         Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
         Commands.deferredProxy(shootSequence),
+        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
         // -- W2 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".2"),
-
         Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
         Commands.deferredProxy(shootSequence),
+        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
         // -- W3 / W1 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".3"),
-
         Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
         Commands.deferredProxy(shootSequence));
 

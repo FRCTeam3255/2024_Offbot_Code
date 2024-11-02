@@ -56,7 +56,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 9.259999999999991,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "Centerline",

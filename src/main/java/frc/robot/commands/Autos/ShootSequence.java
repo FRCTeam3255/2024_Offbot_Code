@@ -75,9 +75,7 @@ public class ShootSequence extends SequentialCommandGroup {
             Commands.deferredProxy(() -> subStateMachine
                 .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
                     subLEDs, subTransfer,
-                    subShooter)),
-
-            Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
+                    subShooter)))
             .unless(() -> !subTransfer.getGamePieceStored()));
 
   }
