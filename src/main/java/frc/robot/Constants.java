@@ -181,6 +181,16 @@ public final class Constants {
       }
     }
 
+    public static boolean enableVisionSnapping(Pose2d currentPosition) {
+      Measure<Distance> currentX = Units.Meters.of(currentPosition.getX());
+
+      if (isRedAlliance()) {
+        return currentX.gte(redConstants.WING_LINE_X);
+      } else {
+        return currentX.lte(blueConstants.WING_LINE_X);
+      }
+    }
+
     private static final class blueConstants {
       /**
        * The coordinate of the center of the blue speaker, in meters
@@ -208,6 +218,8 @@ public final class Constants {
 
       private static final Pose3d SHUFFLE = new Pose3d(
           new Pose2d(3.42, 6.08, Rotation2d.fromDegrees(0)));
+
+      private static final Measure<Distance> WING_LINE_X = Units.Meters.of(6.3);
     }
 
     private static final class redConstants {
@@ -235,6 +247,8 @@ public final class Constants {
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(180)));
       private static final Pose3d SHUFFLE = new Pose3d(
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 3.42, 6.08, Rotation2d.fromDegrees(0)));
+
+      private static final Measure<Distance> WING_LINE_X = FIELD_LENGTH.minus(Units.Meters.of(6.3));
     }
   }
 
@@ -382,7 +396,7 @@ public final class Constants {
     }
 
     public static final ShooterPositionGroup PREP_NONE = new ShooterPositionGroup(NONE_STATE_ANGLE,
-        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
+        Units.RotationsPerSecond.of(0), Units.RotationsPerSecond.of(0), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
@@ -598,7 +612,7 @@ public final class Constants {
     // -- Current Limiting --
     public static final boolean ENABLE_CURRENT_LIMITING = true;
     public static final double CURRENT_LIMIT = 30;
-    public static final double CURRENT_THRESH = 40;
+    public static final double CURRENT_THRESH = 35;
     public static final double CURRENT_TIME_THRESH = 0.1;
   }
 

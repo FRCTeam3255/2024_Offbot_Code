@@ -24,15 +24,14 @@ public class Drive extends Command {
   StateMachine subStateMachine;
   DoubleSupplier xAxis, yAxis, rotationAxis;
   boolean isOpenLoop;
-  Trigger slowMode, north, south, east, west, chain, source;
+  Trigger slowMode, north, south, east, west, chain, source, amp;
   Measure<Angle> northYaw, sourceYaw;
   double redAllianceMultiplier = 1;
   double slowMultiplier = 0;
 
   public Drive(Drivetrain subDrivetrain, StateMachine subStateMachine, DoubleSupplier xAxis, DoubleSupplier yAxis,
       DoubleSupplier rotationAxis, Trigger slowMode, Trigger chain, Trigger source, Trigger north, Trigger east,
-      Trigger south,
-      Trigger west) {
+      Trigger south, Trigger west, Trigger amp) {
     this.subDrivetrain = subDrivetrain;
     this.subStateMachine = subStateMachine;
     this.xAxis = xAxis;
@@ -45,6 +44,7 @@ public class Drive extends Command {
     this.south = south;
     this.west = west;
     this.chain = chain;
+    this.amp = amp;
 
     isOpenLoop = true;
 
@@ -90,6 +90,12 @@ public class Drive extends Command {
       rVelocity = subDrivetrain.getVelocityToChain();
     } else if (source.getAsBoolean()) {
       rVelocity = subDrivetrain.getVelocityToSnap(sourceYaw);
+    } else if (amp.getAsBoolean()) {
+      if (constField.isRedAlliance()) {
+        rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(270)));
+      } else {
+        rVelocity = subDrivetrain.getVelocityToSnap(northYaw.plus(Units.Degrees.of(90)));
+      }
     }
 
     // Ignore calculated rotation if a driver rotation is given
@@ -102,7 +108,9 @@ public class Drive extends Command {
         // rVelocity = subDrivetrain.getVelocityToSnap(Units.Degrees.of(90));
         // break;
         case PREP_VISION:
-          rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
+          if (constField.enableVisionSnapping(subDrivetrain.getPose())) {
+            rVelocity = subDrivetrain.getVelocityToSnap(subDrivetrain.getAngleToSpeaker());
+          }
           break;
         default:
           break;
