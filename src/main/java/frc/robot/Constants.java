@@ -346,6 +346,7 @@ public final class Constants {
     public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(0.5);
 
     public static final Measure<Dimensionless> INTAKE_SOURCE_SPEED = Units.Percent.of(-0.3);
+    public static final Measure<Velocity<Angle>> EJECTING_SPEED = Units.RotationsPerSecond.of(-10);
 
     // -- Zeroing --
     /**

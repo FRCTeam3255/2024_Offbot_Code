@@ -53,7 +53,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference driveI = new SN_DoublePreference("driveI", 0.0);
     public static final SN_DoublePreference driveD = new SN_DoublePreference("driveD", 0);
 
-    public static final SN_DoublePreference steerP = new SN_DoublePreference("steerP", 100); // 80
+    public static final SN_DoublePreference steerP = new SN_DoublePreference("steerP", 100);
     public static final SN_DoublePreference steerI = new SN_DoublePreference("steerI", 0.0);
     public static final SN_DoublePreference steerD = new SN_DoublePreference("steerD", 0.14414076246334312);
 

@@ -133,7 +133,7 @@ public class StateMachine extends SubsystemBase {
           case PREP_AMP:
           case PREP_NONE:
           case PREP_SUB_BACKWARDS:
-            return new Ejecting(subStateMachine, subIntake, subElevator, subTransfer);
+            return new Ejecting(subStateMachine, subIntake, subElevator, subTransfer, subShooter);
         }
         break;
 
