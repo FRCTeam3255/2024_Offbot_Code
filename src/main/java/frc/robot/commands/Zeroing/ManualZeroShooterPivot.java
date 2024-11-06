@@ -9,7 +9,6 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Time;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,7 +25,6 @@ public class ManualZeroShooterPivot extends Command {
 
   public ManualZeroShooterPivot(Shooter subShooter) {
     this.subShooter = subShooter;
-
     addRequirements(subShooter);
   }
 
@@ -43,29 +41,24 @@ public class ManualZeroShooterPivot extends Command {
       if (!Shooter.attemptingZeroing) {
         Shooter.attemptingZeroing = true;
         zeroingTimestamp = Units.Seconds.of(Timer.getFPGATimestamp());
-
         System.out.println("Shooter Zeroing Started!");
       }
 
-      // Check if time elapsed since previous zeroing is too high - if true, then exit
-      // zeroing mode :(
+      // Check if time elapsed is too high (zeroing timeout)
       if (Units.Seconds.of(Timer.getFPGATimestamp()).minus(zeroingTimestamp).gte(constShooter.ZEROING_TIMEOUT)) {
         Shooter.attemptingZeroing = false;
         System.out.println("Shooter Zeroing Failed :(");
-
       } else {
-        boolean rotorVelocity = subShooter.getPivotRotorVelocity().minus(lastRotorVelocity)
+        boolean deltaRotorVelocity = subShooter.getPivotRotorVelocity().minus(lastRotorVelocity)
             .lte(constShooter.MANUAL_ZEROING_DELTA_VELOCITY);
 
-        if (rotorVelocity && lastRotorVelocity.lte(Units.RotationsPerSecond.of(0))) {
+        if (deltaRotorVelocity && lastRotorVelocity.lte(Units.RotationsPerSecond.of(0))) {
           zeroingSuccess = true;
         } else {
           lastRotorVelocity = subShooter.getPivotRotorVelocity();
         }
       }
-
     }
-
   }
 
   @Override
