@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.constShooter;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
@@ -68,13 +69,13 @@ public class ShootSequence extends SequentialCommandGroup {
                     subLEDs, subTransfer, subShooter)
                 .until(() -> !subTransfer.getGamePieceStored())),
 
+            Commands.waitSeconds(constShooter.AUTO_PREP_NONE_DELAY.in(Units.Seconds)),
+
             // Reset subsystems to chill
             Commands.deferredProxy(() -> subStateMachine
                 .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
                     subLEDs, subTransfer,
-                    subShooter)),
-
-            Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
+                    subShooter)))
             .unless(() -> !subTransfer.getGamePieceStored()));
 
   }

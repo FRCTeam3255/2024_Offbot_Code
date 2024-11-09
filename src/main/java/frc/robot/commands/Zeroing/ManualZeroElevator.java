@@ -9,7 +9,6 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Time;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,36 +35,31 @@ public class ManualZeroElevator extends Command {
 
   @Override
   public void execute() {
-    // Check if we have raised the shooter above a certain speed
+    // Check if we have raised the elevator above a certain speed
     if (subElevator.getRotorVelocity().gte(constElevator.MANUAL_ZEROING_START_VELOCITY)
         || Elevator.attemptingZeroing) {
       // Enter zeroing mode!
       if (!Elevator.attemptingZeroing) {
         Elevator.attemptingZeroing = true;
         zeroingTimestamp = Units.Seconds.of(Timer.getFPGATimestamp());
-
         System.out.println("Elevator Zeroing Started!");
       }
 
-      // Check if time elapsed since previous zeroing is too high - if true, then exit
-      // zeroing mode :(
+      // Check if time elapsed is too high (zeroing timeout)
       if (Units.Seconds.of(Timer.getFPGATimestamp()).minus(zeroingTimestamp).gte(constElevator.ZEROING_TIMEOUT)) {
         Elevator.attemptingZeroing = false;
         System.out.println("Elevator Zeroing Failed :(");
-
       } else {
-        boolean rotorVelocity = subElevator.getRotorVelocity().minus(lastRotorVelocity)
+        boolean deltaRotorVelocity = subElevator.getRotorVelocity().minus(lastRotorVelocity)
             .lte(constElevator.MANUAL_ZEROING_DELTA_VELOCITY);
 
-        if (rotorVelocity && lastRotorVelocity.lte(Units.RotationsPerSecond.of(0))) {
+        if (deltaRotorVelocity && lastRotorVelocity.lte(Units.RotationsPerSecond.of(0))) {
           zeroingSuccess = true;
         } else {
           lastRotorVelocity = subElevator.getRotorVelocity();
         }
       }
-
     }
-
   }
 
   @Override
@@ -84,6 +78,5 @@ public class ManualZeroElevator extends Command {
     boolean rotorVelocityIsZero = subElevator.getRotorVelocity().isNear(Units.RotationsPerSecond.zero(), 0.01);
     SmartDashboard.putBoolean("Zeroing/Pivot/Is Rotor Velocity Zero", rotorVelocityIsZero);
     return zeroingSuccess && rotorVelocityIsZero;
-
   }
 }

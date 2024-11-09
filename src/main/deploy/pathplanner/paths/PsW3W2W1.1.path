@@ -8,20 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9468795694348142,
-        "y": 4.520659852130516
+        "x": 1.6747534349769553,
+        "y": 4.513943614781817
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.648044732709184,
-        "y": 4.2058191158635845
+        "x": 2.0893462116158186,
+        "y": 4.559963245229321
       },
       "prevControl": {
-        "x": 2.649477010665733,
-        "y": 4.1878505378632385
+        "x": 1.5630321876377289,
+        "y": 4.802931559324585
+      },
+      "nextControl": {
+        "x": 2.2764406870557226,
+        "y": 4.473592699883443
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.65,
+        "y": 4.3
+      },
+      "prevControl": {
+        "x": 2.433597653039695,
+        "y": 4.399900270583313
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +48,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "W3",
-      "waypointRelativePos": 0.65,
+      "name": "Preload",
+      "waypointRelativePos": 0.05,
       "command": {
         "type": "parallel",
         "data": {
@@ -58,7 +74,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": -24.779999999999973,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Wing Up",

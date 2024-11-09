@@ -6,8 +6,10 @@ package frc.robot.commands.States;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.constElevator;
+import frc.robot.Constants.constIntake;
 import frc.robot.Constants.constTransfer;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
@@ -19,13 +21,16 @@ public class Shooting extends Command {
   Elevator subElevator;
   Shooter subShooter;
   Transfer subTransfer;
+  Intake subIntake;
 
   /** Creates a new Shooting. */
-  public Shooting(StateMachine subStateMachine, Elevator subElevator, Shooter subShooter, Transfer subTransfer) {
+  public Shooting(StateMachine subStateMachine, Elevator subElevator, Shooter subShooter, Transfer subTransfer,
+      Intake subIntake) {
     this.subStateMachine = subStateMachine;
     this.subElevator = subElevator;
     this.subShooter = subShooter;
     this.subTransfer = subTransfer;
+    this.subIntake = subIntake;
 
     addRequirements(subStateMachine);
   }
@@ -47,9 +52,10 @@ public class Shooting extends Command {
       subTransfer.setGamePieceCollected(false);
     } else {
       // Otherwise, shoot through the flywheels if they are up to speed
-      if (subShooter.areBothShootersUpToSpeed()) {
+      if (subShooter.readyToShoot()) {
         subTransfer.setFeederSpeed(constTransfer.SHOOTING_SPEED);
         subStateMachine.setRobotState(RobotState.SHOOTING);
+        subIntake.setIntakeRollerSpeed(constIntake.INTAKING_SPEED);
         subTransfer.setGamePieceCollected(false);
       }
     }
