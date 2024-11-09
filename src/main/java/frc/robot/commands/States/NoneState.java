@@ -60,7 +60,7 @@ public class NoneState extends Command {
     subLEDs.clearAnimation();
     subLEDs.setLEDs(constLEDs.CLEAR_LEDS);
     subShooter.setDesiredVelocities(desiredShooterPosition.leftVelocity, desiredShooterPosition.rightVelocity);
-    subShooter.getUpToSpeed();
+    subShooter.setShootingNeutralOutput();
 
     if (subShooter.isSafeToMoveElevator()) {
       subShooter.setPivotNeutralOutput();

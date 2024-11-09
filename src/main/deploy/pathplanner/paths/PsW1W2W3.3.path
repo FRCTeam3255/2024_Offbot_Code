@@ -3,37 +3,75 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.54,
-        "y": 5.56
+        "x": 2.77,
+        "y": 5.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.456797671433181,
-        "y": 5.513776484129545
+        "x": 2.5042495310643846,
+        "y": 5.4111158103551364
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5518150181599504,
-        "y": 4.198201444835939
+        "x": 2.3209540765874896,
+        "y": 4.650634669440361
       },
       "prevControl": {
-        "x": 1.7449183616315946,
-        "y": 4.607496850321336
+        "x": 2.278461170442448,
+        "y": 4.942014597292088
+      },
+      "nextControl": {
+        "x": 2.3482533995946864,
+        "y": 4.46343931167672
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.77,
+        "y": 4.2
+      },
+      "prevControl": {
+        "x": 2.6940563685046612,
+        "y": 4.2265680911409325
+      },
+      "nextControl": {
+        "x": 2.845943631495339,
+        "y": 4.173431908859068
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.430151368616278,
+        "y": 4.406890714018958
+      },
+      "prevControl": {
+        "x": 2.615396774736544,
+        "y": 4.241144824332404
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.7,
+      "rotationDegrees": -35.0,
+      "rotateFast": true
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "W3",
-      "waypointRelativePos": 0.8,
+      "waypointRelativePos": 1.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,13 +95,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -25.75999999999999,
+    "rotation": -35.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Wing Down",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": -56.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

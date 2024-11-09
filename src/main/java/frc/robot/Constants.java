@@ -77,7 +77,7 @@ public final class Constants {
     public static final NeutralModeValue DRIVE_NEUTRAL_MODE = NeutralModeValue.Brake;
     public static final NeutralModeValue STEER_NEUTRAL_MODE = NeutralModeValue.Coast;
 
-    public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(3.966);
+    public static final Measure<Distance> WHEEL_DIAMETER = Units.Inches.of(3.98);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER.in(Units.Meters) * Math.PI;
 
     /**
@@ -181,6 +181,16 @@ public final class Constants {
       }
     }
 
+    public static boolean enableVisionSnapping(Pose2d currentPosition) {
+      Measure<Distance> currentX = Units.Meters.of(currentPosition.getX());
+
+      if (isRedAlliance()) {
+        return currentX.gte(redConstants.WING_LINE_X);
+      } else {
+        return currentX.lte(blueConstants.WING_LINE_X);
+      }
+    }
+
     private static final class blueConstants {
       /**
        * The coordinate of the center of the blue speaker, in meters
@@ -208,6 +218,8 @@ public final class Constants {
 
       private static final Pose3d SHUFFLE = new Pose3d(
           new Pose2d(3.42, 6.08, Rotation2d.fromDegrees(0)));
+
+      private static final Measure<Distance> WING_LINE_X = Units.Meters.of(6.3);
     }
 
     private static final class redConstants {
@@ -235,6 +247,8 @@ public final class Constants {
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 1.35, 5.50, Rotation2d.fromDegrees(180)));
       private static final Pose3d SHUFFLE = new Pose3d(
           new Pose2d(FIELD_LENGTH.in(Units.Meters) - 3.42, 6.08, Rotation2d.fromDegrees(0)));
+
+      private static final Measure<Distance> WING_LINE_X = FIELD_LENGTH.minus(Units.Meters.of(6.3));
     }
   }
 
@@ -302,7 +316,7 @@ public final class Constants {
       PIVOT_PID.kV = 0;
       PIVOT_PID.kG = 0.53;
       PIVOT_PID.kA = 0;
-      PIVOT_PID.kP = 90;
+      PIVOT_PID.kP = 100;
       PIVOT_PID.kD = 0;
       PIVOT_PID.GravityType = GravityTypeValue.Arm_Cosine;
     }
@@ -325,13 +339,14 @@ public final class Constants {
     // - Other -
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
-    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(2);
+    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(0.5);
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
     public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 
-    public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(1);
+    public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(0.5);
 
     public static final Measure<Dimensionless> INTAKE_SOURCE_SPEED = Units.Percent.of(-0.3);
+    public static final Measure<Velocity<Angle>> EJECTING_SPEED = Units.RotationsPerSecond.of(-10);
 
     // -- Zeroing --
     /**
@@ -382,7 +397,7 @@ public final class Constants {
     }
 
     public static final ShooterPositionGroup PREP_NONE = new ShooterPositionGroup(NONE_STATE_ANGLE,
-        Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
+        Units.RotationsPerSecond.of(0), Units.RotationsPerSecond.of(0), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_AMP_SHOOTER = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0));
     // Amping w/ amper
@@ -429,13 +444,13 @@ public final class Constants {
       DISTANCE_MAP.put(3.4163, 19.0);
       DISTANCE_MAP.put(3.7211, 18.5);
       DISTANCE_MAP.put(4.0259, 18.0);
-      DISTANCE_MAP.put(4.3307, 17.0);
-      DISTANCE_MAP.put(4.6355, 16.5);
+      DISTANCE_MAP.put(4.3307, 16.5);
+      DISTANCE_MAP.put(4.6355, 16.0);
       DISTANCE_MAP.put(4.9403, 15.0);
       DISTANCE_MAP.put(5.2451, 14.0);
       DISTANCE_MAP.put(5.5499, 13.5);
-      DISTANCE_MAP.put(5.8547, 13.0);
-      DISTANCE_MAP.put(6.1595, 11.5);
+      DISTANCE_MAP.put(5.8547, 13.5);
+      DISTANCE_MAP.put(6.1595, 12.5);
     }
 
   }
@@ -598,7 +613,7 @@ public final class Constants {
     // -- Current Limiting --
     public static final boolean ENABLE_CURRENT_LIMITING = true;
     public static final double CURRENT_LIMIT = 30;
-    public static final double CURRENT_THRESH = 40;
+    public static final double CURRENT_THRESH = 35;
     public static final double CURRENT_TIME_THRESH = 0.1;
   }
 
@@ -607,13 +622,13 @@ public final class Constants {
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue FEEDER_NEUTRAL_MODE = NeutralModeValue.Brake;
 
-    public static final double INTAKING_SPEED = 0.4;
+    public static final double INTAKING_SPEED = 0.3;
     public static final double INTAKE_SOURCE_SPEED = -0.2;
     public static final double EJECTING_SPEED = -0.4;
 
     public static final double PREP_TO_AMP_SPEED = 0.2;
 
-    public static final double SHOOTING_SPEED = 0.5;
+    public static final double SHOOTING_SPEED = 1;
 
     // -- Current Limiting --
     public static final boolean ENABLE_CURRENT_LIMITING = true;

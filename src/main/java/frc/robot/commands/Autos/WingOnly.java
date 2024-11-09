@@ -68,30 +68,35 @@ public class WingOnly extends SequentialCommandGroup {
             getInitialPose().get())),
 
         // -- PRELOAD --
-        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING))
-            .until(() -> subTransfer.getGamePieceStored()).withTimeout(1),
+        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
-        Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
+        // Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKING,
+        // subStateMachine, subClimber,
+        // subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
+        // .until(() -> subTransfer.getGamePieceStored()).withTimeout(1),
+        Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.INTAKING)),
+        Commands.runOnce(() -> subTransfer.setGamePieceCollected(true)),
+
         Commands.deferredProxy(shootSequence),
+        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
         // -- W1 / W3 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".1"),
-
         Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
         Commands.deferredProxy(shootSequence),
+        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
         // -- W2 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".2"),
-
         Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
         Commands.deferredProxy(shootSequence),
+        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 
         // -- W3 / W1 --
         // Drive to first note (Intaking is within the path)
         new PathPlannerAuto(determinePathName() + ".3"),
-
         Commands.waitUntil(() -> subTransfer.getGamePieceStored()).withTimeout(2),
         Commands.deferredProxy(shootSequence));
 
@@ -103,7 +108,7 @@ public class WingOnly extends SequentialCommandGroup {
 
   public Supplier<Pose2d> getInitialPose() {
     return () -> (!constField.isRedAlliance())
-        ? PathPlannerAuto.getStaringPoseFromAutoFile(determinePathName())
+        ? PathPlannerPath.fromPathFile(determinePathName()).getPreviewStartingHolonomicPose()
         : PathPlannerPath.fromPathFile(determinePathName()).flipPath().getPreviewStartingHolonomicPose();
   }
 }

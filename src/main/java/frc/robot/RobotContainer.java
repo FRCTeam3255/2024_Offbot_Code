@@ -78,8 +78,16 @@ public class RobotContainer {
   private final BooleanSupplier readyToShootDriver = (() -> subShooter.readyToShoot()
       && subStateMachine.isCurrentStateTargetState() && subTransfer.getGamePieceStored());
 
-  private final BooleanSupplier readyToShootLEDs = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
+  private final BooleanSupplier readyToShootAuto = (() -> (subDrivetrain.isDrivetrainFacingSpeaker()
+      || subDrivetrain.isDrivetrainFacingShuffle())
+      && subShooter.readyToShoot());
+
+  private final BooleanSupplier readyToShootSpeakerLEDs = (() -> subDrivetrain.isDrivetrainFacingSpeaker()
       && subShooter.readyToShoot() && subStateMachine.getRobotState() == RobotState.PREP_VISION
+      && subTransfer.getGamePieceStored());
+
+  private final BooleanSupplier readyToShootShuffleLEDs = (() -> subDrivetrain.isDrivetrainFacingShuffle()
+      && subShooter.readyToShoot() && subStateMachine.getRobotState() == RobotState.PREP_SHUFFLE
       && subTransfer.getGamePieceStored());
 
   private final IntakeSource comIntakeSource = new IntakeSource(subStateMachine, subShooter, subTransfer);
@@ -94,7 +102,7 @@ public class RobotContainer {
             new Drive(subDrivetrain, subStateMachine, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
                 conDriver.btn_LeftBumper, conDriver.btn_RightBumper, conDriver.btn_RightTrigger,
                 conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A,
-                new Trigger(() -> conDriver.btn_X.getAsBoolean() || conDriver.btn_LeftTrigger.getAsBoolean())));
+                conDriver.btn_X, conDriver.btn_LeftTrigger));
 
     // - Manual Triggers -
     gamePieceStoredTrigger
@@ -104,7 +112,8 @@ public class RobotContainer {
             .andThen(Commands.deferredProxy(
                 () -> subStateMachine.tryTargetState(subStateMachine, subIntake, subLEDs, subShooter, subTransfer,
                     subElevator, subDrivetrain))))
-        .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy());
+        .onTrue(new GamePieceRumble(conDriver, conOperator).asProxy())
+        .onTrue(Commands.runOnce(() -> subTransfer.setGamePieceCollected(true)));
 
     gamePieceCollectedTrigger
         .onTrue(Commands
@@ -126,7 +135,11 @@ public class RobotContainer {
             Commands.runOnce(() -> conDriver.setRumble(RumbleType.kBothRumble,
                 0)));
 
-    new Trigger(readyToShootLEDs)
+    new Trigger(readyToShootSpeakerLEDs)
+        .onTrue(Commands.runOnce(() -> subLEDs.setLEDAnimation(constLEDs.READY_TO_SHOOT_COLOR, 0)))
+        .onFalse(Commands.runOnce(() -> subLEDs.clearAnimation()));
+
+    new Trigger(readyToShootShuffleLEDs)
         .onTrue(Commands.runOnce(() -> subLEDs.setLEDAnimation(constLEDs.READY_TO_SHOOT_COLOR, 0)))
         .onFalse(Commands.runOnce(() -> subLEDs.clearAnimation()));
 
@@ -267,8 +280,7 @@ public class RobotContainer {
 
     autoChooser.addOption("Centerline :3", new Centerline(subStateMachine,
         subClimber, subDrivetrain, subElevator,
-        subIntake, subLEDs, subTransfer, subShooter, readyToShootOperator, false));
-
+        subIntake, subLEDs, subTransfer, subShooter, readyToShootAuto, false));
     SmartDashboard.putData(autoChooser);
   }
 
