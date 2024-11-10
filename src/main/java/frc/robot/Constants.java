@@ -117,6 +117,9 @@ public final class Constants {
     public static final double DRIVE_CURRENT_LIMIT = 30;
     public static final double DRIVE_CURRENT_TIME_THRESH = 0.1;
 
+    public static final boolean DRIVE_ENABLE_STATOR_CURRENT_LIMITING = true;
+    public static final double DRIVE_STATOR_CURRENT_LIMIT = 80;
+
     public static final boolean STEER_ENABLE_CURRENT_LIMITING = true;
     public static final double STEER_CURRENT_THRESH = 40;
     public static final double STEER_CURRENT_LIMIT = 30;

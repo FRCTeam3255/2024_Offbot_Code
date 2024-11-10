@@ -63,5 +63,7 @@ public class Transfer extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Game Piece Stored", getGamePieceStored());
+    SmartDashboard.putNumber("Transfer/Supply Current", feederMotor.getSupplyCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Transfer/Stator Current", feederMotor.getStatorCurrent().getValueAsDouble());
   }
 }

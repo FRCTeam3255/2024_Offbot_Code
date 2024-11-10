@@ -371,16 +371,21 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Left/Desired Velocity RPS", desiredLeftVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Left/Up to Speed", isLeftShooterUpToSpeed());
     SmartDashboard.putNumber("Shooter/Left/PID Slot", currentLeftSlot);
+    SmartDashboard.putNumber("Shooter/Left/Stator Current", leftMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Left/Supply Current", leftMotor.getSupplyCurrent().getValueAsDouble());
 
     SmartDashboard.putNumber("Shooter/Right/Velocity RPS", getRightShooterVelocity().in(Units.RotationsPerSecond));
     SmartDashboard.putNumber("Shooter/Right/Desired Velocity RPS", desiredRightVelocity.in(Units.RotationsPerSecond));
     SmartDashboard.putBoolean("Shooter/Right/Up to Speed", isRightShooterUpToSpeed());
     SmartDashboard.putNumber("Shooter/Right/PID Slot", currentRightSlot);
+    SmartDashboard.putNumber("Shooter/Right/Stator Current", rightMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Right/Supply Current", rightMotor.getSupplyCurrent().getValueAsDouble());
 
     SmartDashboard.putNumber("Shooter/Pivot/Position", getShooterPosition().in(Units.Degrees));
     SmartDashboard.putNumber("Shooter/Pivot/Last Desired Angle", lastDesiredPivotAngle.in(Units.Degrees));
     SmartDashboard.putBoolean("Shooter/Pivot/At Desired Position", isShooterAtPosition(lastDesiredPivotAngle));
     SmartDashboard.putNumber("Shooter/Pivot/Stator Current", pivotMotor.getStatorCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter/Pivot/Supply Current", pivotMotor.getSupplyCurrent().getValueAsDouble());
     SmartDashboard.putNumber("Shooter/Pivot/Rotor Velocity", pivotMotor.getRotorVelocity().getValueAsDouble());
 
     SmartDashboard.putBoolean("Shooter/Safe to Move Elevator", isSafeToMoveElevator());

@@ -61,6 +61,7 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Game Piece Detected", getGamePieceCollected());
+    SmartDashboard.putNumber("Intake/Supply Current", rollerMotor.getSupplyCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Intake/Stator Current", rollerMotor.getStatorCurrent().getValueAsDouble());
   }
-
 }
