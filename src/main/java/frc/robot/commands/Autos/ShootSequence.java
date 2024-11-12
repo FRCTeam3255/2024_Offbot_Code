@@ -52,8 +52,7 @@ public class ShootSequence extends SequentialCommandGroup {
 
             Commands.parallel(
                 Commands.deferredProxy(() -> subStateMachine
-                    .tryState(RobotState.PREP_VISION, subStateMachine, subClimber, subDrivetrain, subElevator,
-                        subIntake, subLEDs, subTransfer, subShooter)
+                    .tryState(RobotState.PREP_VISION)
                     .repeatedly()),
 
                 Commands.runOnce(() -> subDrivetrain.drive(
@@ -65,17 +64,14 @@ public class ShootSequence extends SequentialCommandGroup {
 
             // Shoot! (Ends when we don't have a game piece anymore)
             Commands.deferredProxy(() -> subStateMachine
-                .tryState(RobotState.SHOOTING, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-                    subLEDs, subTransfer, subShooter)
+                .tryState(RobotState.SHOOTING)
                 .until(() -> !subTransfer.getGamePieceStored())),
 
             Commands.waitSeconds(constShooter.AUTO_PREP_NONE_DELAY.in(Units.Seconds)),
 
             // Reset subsystems to chill
             Commands.deferredProxy(() -> subStateMachine
-                .tryState(RobotState.NONE, subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
-                    subLEDs, subTransfer,
-                    subShooter)))
+                .tryState(RobotState.NONE)))
             .unless(() -> !subTransfer.getGamePieceStored()));
 
   }

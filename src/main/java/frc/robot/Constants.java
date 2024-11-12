@@ -686,7 +686,7 @@ public final class Constants {
         (LED_NUMBER / 2) - 5,
         TwinklePercent.Percent100,
         8);
-    public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 100, 0, 0, 0.5,
+    public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 255, 0, 0, 0.5,
         (LED_NUMBER / 2),
         TwinklePercent.Percent100, (LED_NUMBER / 2) + 3);
 
