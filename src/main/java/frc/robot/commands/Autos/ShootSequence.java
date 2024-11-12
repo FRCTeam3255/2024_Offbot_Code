@@ -71,9 +71,7 @@ public class ShootSequence extends SequentialCommandGroup {
 
             // Reset subsystems to chill
             Commands.deferredProxy(() -> subStateMachine
-                .tryState(RobotState.NONE))
-
-            .unless(() -> !subTransfer.getGamePieceStored()));
+                .tryState(RobotState.NONE)).unless(() -> !subTransfer.getGamePieceStored())));
 
   }
 }
