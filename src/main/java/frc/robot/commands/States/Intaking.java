@@ -4,17 +4,24 @@
 
 package frc.robot.commands.States;
 
+import java.util.HashMap;
+import java.util.List;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
+import frc.robot.StatefulCommand;
+import frc.robot.Constants;
 import frc.robot.Constants.constIntake;
 import frc.robot.Constants.constShooter;
 import frc.robot.Constants.constTransfer;
+import frc.robot.subsystems.StateMachine.RobotStateInterface;
 import frc.robot.subsystems.StateMachine.RobotState;
 import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.Transfer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
-public class Intaking extends Command {
+public class Intaking extends StatefulCommand {
   StateMachine subStateMachine;
   Intake subIntake;
   Transfer subTransfer;
@@ -63,4 +70,15 @@ public class Intaking extends Command {
   public boolean isFinished() {
     return subTransfer.getGamePieceStored();
   }
+
+  @Override
+  protected RobotStateInterface getState() {
+    return RobotState.INTAKING;
+  }
+
+  @Override
+  protected HashMap<RobotStateInterface, List<RobotStateInterface>> getTransitions() {
+    return Constants.stateTransitionMap;
+  }
+
 }

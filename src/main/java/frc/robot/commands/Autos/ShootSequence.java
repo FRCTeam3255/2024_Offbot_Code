@@ -48,7 +48,7 @@ public class ShootSequence extends SequentialCommandGroup {
 
     addCommands(
         new SequentialCommandGroup(
-            Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
+            Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_VISION)),
 
             Commands.parallel(
                 Commands.deferredProxy(() -> subStateMachine

@@ -66,7 +66,7 @@ public class Shooting extends Command {
   public void end(boolean interrupted) {
     // If we don't have a game piece anymore, set the target state back to NONE
     if (!subTransfer.getGamePieceStored()) {
-      subStateMachine.setTargetState(TargetState.PREP_NONE);
+      subStateMachine.setQueueState(TargetState.PREP_NONE);
     }
   }
 

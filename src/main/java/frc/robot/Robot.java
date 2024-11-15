@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.subStateMachine.setRobotState(RobotState.NONE);
-    m_robotContainer.subStateMachine.setTargetState(TargetState.PREP_NONE);
+    m_robotContainer.subStateMachine.setQueueState(TargetState.PREP_NONE);
 
     Shooter.hasZeroed = false;
     Elevator.hasZeroed = false;

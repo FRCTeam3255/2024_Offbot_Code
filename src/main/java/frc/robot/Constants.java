@@ -44,7 +44,9 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants.constShooter.ShooterPositionGroup;
+import frc.robot.subsystems.StateMachine;
 import frc.robot.subsystems.StateMachine.RobotState;
+import frc.robot.subsystems.StateMachine.RobotStateInterface;
 import frc.robot.subsystems.StateMachine.TargetState;
 
 public final class Constants {
@@ -698,5 +700,181 @@ public final class Constants {
     public static final int[] SHOOTER_ATTEMPTING_ZERO = { 0, 0, 255 };
     public static final int[] SHOOTER_ZEROED = { 0, 255, 0 };
 
+  }
+
+  public static HashMap<StateMachine.RobotStateInterface, List<StateMachine.RobotStateInterface>> stateTransitionMap = new HashMap<StateMachine.RobotStateInterface, List<StateMachine.RobotStateInterface>>();
+  static {
+    stateTransitionMap.put(RobotState.NONE, List.of(
+        RobotState.INTAKE_SOURCE,
+        RobotState.INTAKING,
+        RobotState.EJECTING,
+        RobotState.SHOOTING,
+        RobotState.NONE));
+
+    stateTransitionMap.put(RobotState.INTAKING, List.of(
+        RobotState.NONE,
+        RobotState.INTAKE_SOURCE,
+        RobotState.SHOOTING));
+
+    stateTransitionMap.put(RobotState.INTAKE_SOURCE, List.of(
+        RobotState.NONE,
+        RobotState.INTAKE_SOURCE));
+
+    stateTransitionMap.put(RobotState.STORE_FEEDER, List.of(
+        RobotState.STORE_FEEDER,
+        RobotState.INTAKING,
+        RobotState.INTAKE_SOURCE,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_VISION,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_WING,
+        RobotState.PREP_AMP,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
+
+    stateTransitionMap.put(RobotState.EJECTING, List.of(
+        RobotState.NONE,
+        RobotState.INTAKING,
+        RobotState.INTAKE_SOURCE,
+        RobotState.STORE_FEEDER,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_VISION,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_WING,
+        RobotState.PREP_AMP,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
+
+    stateTransitionMap.put(RobotState.SHOOTING, List.of(
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_VISION,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_AMP,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_WING,
+        RobotState.PREP_SUB_BACKWARDS,
+        RobotState.PREP_NONE,
+        RobotState.CLIMBING,
+        RobotState.SHOOTING));
+
+    stateTransitionMap.put(RobotState.PREP_SHUFFLE, List.of(
+        RobotState.NONE,
+        RobotState.STORE_FEEDER,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_VISION,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_WING,
+        RobotState.PREP_AMP,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
+
+    stateTransitionMap.put(RobotState.PREP_SPEAKER, List.of(
+        RobotState.NONE,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_VISION,
+        RobotState.STORE_FEEDER,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_WING,
+        RobotState.PREP_AMP,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
+
+    stateTransitionMap.put(RobotState.PREP_AMP, List.of(
+        RobotState.NONE,
+        RobotState.STORE_FEEDER,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_VISION,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_WING,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
+
+    stateTransitionMap.put(RobotState.PREP_AMP_SHOOTER, List.of(
+        RobotState.NONE,
+        RobotState.STORE_FEEDER,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_VISION,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_WING,
+        RobotState.PREP_AMP,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
+
+    stateTransitionMap.put(RobotState.PREP_SPIKE, List.of(
+        RobotState.NONE,
+        RobotState.STORE_FEEDER,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_VISION,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_WING,
+        RobotState.PREP_AMP,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
+
+    stateTransitionMap.put(RobotState.PREP_WING, List.of(
+        RobotState.NONE,
+        RobotState.STORE_FEEDER,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_WING,
+        RobotState.PREP_VISION,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_AMP,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
+
+    stateTransitionMap.put(RobotState.PREP_SUB_BACKWARDS, List.of(
+        RobotState.NONE,
+        RobotState.STORE_FEEDER,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_WING,
+        RobotState.PREP_VISION,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_AMP,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
+
+    stateTransitionMap.put(RobotState.PREP_VISION, List.of(
+        RobotState.NONE,
+        RobotState.STORE_FEEDER,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_WING,
+        RobotState.PREP_VISION,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_AMP,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
+
+    stateTransitionMap.put(RobotState.PREP_NONE, List.of(
+        RobotState.NONE,
+        RobotState.STORE_FEEDER,
+        RobotState.PREP_SHUFFLE,
+        RobotState.PREP_SPEAKER,
+        RobotState.PREP_WING,
+        RobotState.PREP_VISION,
+        RobotState.PREP_SPIKE,
+        RobotState.PREP_AMP_SHOOTER,
+        RobotState.PREP_AMP,
+        RobotState.PREP_NONE,
+        RobotState.PREP_SUB_BACKWARDS));
   }
 }

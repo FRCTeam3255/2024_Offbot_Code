@@ -74,7 +74,7 @@ public class PreloadOnly extends SequentialCommandGroup {
         Commands.runOnce(() -> subDrivetrain.resetPoseToPose(
             getInitialPose().get())),
 
-        Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)),
+        Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_SPEAKER)),
 
         Commands.waitSeconds(secondSupplier.getAsDouble()),
 

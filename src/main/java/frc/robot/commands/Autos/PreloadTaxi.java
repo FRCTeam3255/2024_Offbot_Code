@@ -48,7 +48,7 @@ public class PreloadTaxi extends SequentialCommandGroup {
 
   SequentialCommandGroup shootSequence = new SequentialCommandGroup(
       Commands.waitUntil(() -> subTransfer.getGamePieceStored()),
-      Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
+      Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_VISION)),
 
       Commands.deferredProxy(() -> subStateMachine
           .tryState(RobotState.PREP_VISION)
@@ -68,7 +68,7 @@ public class PreloadTaxi extends SequentialCommandGroup {
       Commands.deferredProxy(() -> subStateMachine
           .tryState(RobotState.NONE)),
 
-      Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)));
+      Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_VISION)));
 
   /** Creates a new PreloadTaxi. */
   public PreloadTaxi(StateMachine subStateMachine, Climber subClimber, Drivetrain subDrivetrain, Elevator subElevator,

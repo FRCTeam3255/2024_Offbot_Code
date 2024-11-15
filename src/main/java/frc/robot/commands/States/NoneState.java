@@ -50,7 +50,7 @@ public class NoneState extends Command {
   public void initialize() {
     ShooterPositionGroup desiredShooterPosition = constStateMachine.TARGET_TO_PRESET_GROUP.get(TargetState.PREP_NONE);
 
-    subStateMachine.setTargetState(TargetState.PREP_NONE);
+    subStateMachine.setQueueState(TargetState.PREP_NONE);
     subStateMachine.setRobotState(RobotState.NONE);
     subIntake.setIntakeRollerSpeed(Units.Percent.zero());
     subTransfer.setGamePieceCollected(false);

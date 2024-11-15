@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants;
 import frc.robot.Constants.constClimber;
 import frc.robot.Constants.constStateMachine;
 
@@ -21,9 +22,11 @@ import frc.robot.commands.States.PrepVision;
 import frc.robot.commands.States.Shooting;
 import frc.robot.commands.States.StoreFeeder;
 
+import java.util.List;
+
 public class StateMachine extends SubsystemBase {
   public static RobotState currentState;
-  public static TargetState currentTargetState;
+  public static RobotState currentQueueState;
   Climber subClimber;
   Drivetrain subDrivetrain;
   Elevator subElevator;
@@ -38,7 +41,7 @@ public class StateMachine extends SubsystemBase {
       Drivetrain subDrivetrain, Elevator subElevator, Intake subIntake, LEDs subLEDs, Transfer subTransfer,
       Shooter subShooter) {
     currentState = RobotState.NONE;
-    currentTargetState = TargetState.PREP_NONE;
+    currentQueueState = TargetState.PREP_NONE;
 
     this.subClimber = subClimber;
     this.subDrivetrain = subDrivetrain;
@@ -53,8 +56,8 @@ public class StateMachine extends SubsystemBase {
     currentState = robotState;
   }
 
-  public void setTargetState(TargetState targetState) {
-    currentTargetState = targetState;
+  public void setQueueState(RobotState targetState) {
+    currentQueueState = targetState;
   }
 
   public RobotState getRobotState() {
@@ -62,7 +65,7 @@ public class StateMachine extends SubsystemBase {
   }
 
   public TargetState getTargetState() {
-    return currentTargetState;
+    return currentQueueState;
   }
 
   /**
@@ -338,10 +341,10 @@ public class StateMachine extends SubsystemBase {
 
   public Command tryTargetState(StateMachine subStateMachine, Intake subIntake, LEDs subLEDs,
       Shooter subShooter, Transfer subTransfer, Elevator subElevator, Drivetrain subDrivetrain) {
-    if (currentTargetState.equals(TargetState.PREP_VISION)) {
+    if (currentQueueState.equals(TargetState.PREP_VISION)) {
       return new PrepVision(subStateMachine, subDrivetrain, subShooter);
     }
-    return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs, currentTargetState);
+    return new PrepTargetState(subElevator, subStateMachine, subShooter, subTransfer, subLEDs, currentQueueState);
   }
 
   /**
@@ -362,7 +365,13 @@ public class StateMachine extends SubsystemBase {
     return false;
   }
 
-  public static enum RobotState {
+  /**
+   * BaseRobotState
+   */
+  public interface RobotStateInterface {
+  }
+
+  public static enum RobotState implements RobotStateInterface {
     NONE,
     INTAKING,
     INTAKE_SOURCE,

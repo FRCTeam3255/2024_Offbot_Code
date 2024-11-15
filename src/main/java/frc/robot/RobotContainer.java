@@ -13,7 +13,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.util.concurrent.Event;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -38,6 +41,7 @@ import frc.robot.commands.Zeroing.ManualZeroShooterPivot;
 import frc.robot.commands.Zeroing.ZeroElevator;
 import frc.robot.commands.Zeroing.ZeroShooterPivot;
 import frc.robot.commands.States.IntakeSource;
+import frc.robot.commands.States.Intaking;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
@@ -51,6 +55,11 @@ import frc.robot.subsystems.StateMachine.TargetState;
 import frc.robot.subsystems.Limelight;
 
 public class RobotContainer {
+  private final EventLoop stateMachine = new EventLoop();
+
+  BooleanEvent m_event = new BooleanEvent(stateMachine, () -> {
+    return true;
+  });
 
   private final SN_XboxController conDriver = new SN_XboxController(mapControllers.DRIVER_USB);
   private final SN_XboxController conOperator = new SN_XboxController(mapControllers.OPERATOR_USB);
@@ -95,6 +104,7 @@ public class RobotContainer {
   SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   public RobotContainer() {
+
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
 
     subDrivetrain
@@ -189,7 +199,7 @@ public class RobotContainer {
             .unless(gamePieceStoredTrigger));
 
     // Prep with vision
-    controller.btn_RightBumper.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
+    controller.btn_RightBumper.onTrue(Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_VISION)))
         .onTrue(Commands
             .deferredProxy(
                 () -> subStateMachine.tryState(RobotState.PREP_VISION)));
@@ -201,37 +211,37 @@ public class RobotContainer {
             () -> subStateMachine.tryState(RobotState.NONE)));
 
     // Prep spike
-    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPIKE)))
+    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_SPIKE)))
         .onTrue(
             Commands.deferredProxy(
                 () -> subStateMachine.tryState(RobotState.PREP_SPIKE)));
 
-    controller.btn_B.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP)))
+    controller.btn_B.onTrue(Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_AMP)))
         .onTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.PREP_AMP)));
 
-    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SUB_BACKWARDS)))
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_SUB_BACKWARDS)))
         .onTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.PREP_SUB_BACKWARDS)));
 
     // "Unalive Shooter"
     controller.btn_A.onTrue(
         Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_NONE))
-            .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))))
+            .alongWith(Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_NONE))))
         .onFalse(Commands.runOnce(() -> subShooter.setShootingNeutralOutput()));
 
     // Prep subwoofer
-    controller.btn_South.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
+    controller.btn_South.onTrue(Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_SPEAKER)))
         .onTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.PREP_SPEAKER)));
 
     // Prep wing
-    controller.btn_North.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_WING)))
+    controller.btn_North.onTrue(Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_WING)))
         .onTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.PREP_WING)));
 
     // Prep shuffle
-    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
+    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setQueueState(TargetState.PREP_SHUFFLE)))
         .onTrue(Commands.deferredProxy(
             () -> subStateMachine.tryState(RobotState.PREP_SHUFFLE)));
 
