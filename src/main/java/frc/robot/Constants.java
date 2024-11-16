@@ -51,6 +51,14 @@ import frc.robot.subsystems.StateMachine.TargetState;
 public final class Constants {
   public static final Measure<Voltage> MAX_VOLTAGE = Units.Volts.of(12);
 
+  // TODO: Update w/ real motor names
+  public static final String[] PDH_DEVICES = {
+      "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+      "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+      "20", "21", "22", "23" };
+
+  public static final boolean ENABLE_PDH_LOGGING = true;
+
   public static class constControllers {
     public static final double DRIVER_LEFT_STICK_DEADBAND = 0.05;
     public static final boolean SILENCE_JOYSTICK_WARNINGS = true;
@@ -61,7 +69,7 @@ public final class Constants {
     public static final double DRIVER_GP_COLLECTED_RUMBLE = 0.3;
     public static final double OPERATOR_GP_COLLECTED_RUMBLE = 0.3;
 
-    public static final boolean SOLO_DRIVER = true;
+    public static final boolean SOLO_DRIVER = false;
   }
 
   public static class constDrivetrain {

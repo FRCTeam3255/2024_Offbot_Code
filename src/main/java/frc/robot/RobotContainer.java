@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -68,8 +70,8 @@ public class RobotContainer {
       subElevator, subIntake, subLEDs, subTransfer, subShooter);
 
   private final Trigger falseTrigger = new Trigger(() -> false);
-  private final Trigger gamePieceStoredTrigger = falseTrigger;
-  private final Trigger gamePieceCollectedTrigger = new Trigger(() -> subIntake.getGamePieceCollected());
+  private final Trigger gamePieceStoredTrigger = new Trigger(() -> subTransfer.getGamePieceStored());
+  private final Trigger gamePieceCollectedTrigger = falseTrigger;
 
   private final BooleanSupplier readyToShootOperator = (() -> (subDrivetrain.isDrivetrainFacingSpeaker()
       || subDrivetrain.isDrivetrainFacingShuffle())
@@ -94,6 +96,8 @@ public class RobotContainer {
   private final IntakeSource comIntakeSource = new IntakeSource(subStateMachine, subShooter, subTransfer);
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();
+
+  private static PowerDistribution PDH = new PowerDistribution(1, ModuleType.kRev);
 
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
@@ -407,6 +411,26 @@ public class RobotContainer {
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).ignoringDisable(true);
   }
 
+  // -- PDH --
+  /**
+   * Updates the values supplied to the PDH to SmartDashboard. Should be called
+   * periodically.
+   */
+  public static void logPDHValues() {
+    SmartDashboard.putNumber("PDH/Input Voltage", PDH.getVoltage());
+    SmartDashboard.putBoolean("PDH/Is Switchable Channel Powered", PDH.getSwitchableChannel());
+    SmartDashboard.putNumber("PDH/Total Current", PDH.getTotalCurrent());
+    SmartDashboard.putNumber("PDH/Total Power", PDH.getTotalPower());
+    SmartDashboard.putNumber("PDH/Total Energy", PDH.getTotalEnergy());
+
+    if (Constants.ENABLE_PDH_LOGGING) {
+      for (int i = 0; i < Constants.PDH_DEVICES.length; i++) {
+        SmartDashboard.putNumber("PDH/" + Constants.PDH_DEVICES[i] + " Current", PDH.getCurrent(i));
+      }
+    }
+  }
+
+  // -- LEDS --
   public void setDisabledLEDs() {
     subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_1, 0);
     subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_2, 1);
