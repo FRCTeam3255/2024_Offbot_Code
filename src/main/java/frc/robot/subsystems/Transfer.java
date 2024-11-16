@@ -8,7 +8,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constTransfer;
@@ -17,14 +17,14 @@ import frc.robot.RobotMap.mapTransfer;
 public class Transfer extends SubsystemBase {
   TalonFX feederMotor;
   TalonFXConfiguration feederConfig = new TalonFXConfiguration();
-  DigitalInput noteSensor;
+  LaserCan noteSensor;
   boolean hasGamePiece;
 
   /** Creates a new Transfer. */
   public Transfer() {
     feederMotor = new TalonFX(mapTransfer.TRANSFER_MOTOR_CAN, "rio");
 
-    noteSensor = new DigitalInput(mapTransfer.NOTE_SENSOR_DIO);
+    noteSensor = new LaserCan(mapTransfer.NOTE_SENSOR_CAN);
 
     configure();
   }
@@ -51,8 +51,7 @@ public class Transfer extends SubsystemBase {
   }
 
   public boolean getGamePieceStored() {
-    boolean noteSensorValue = (constTransfer.NOTE_SENSOR_INVERT) ? !noteSensor.get() : noteSensor.get();
-    return (noteSensorValue || hasGamePiece);
+    return noteSensor.getMeasurement() != null;
   }
 
   public void setGamePieceCollected(boolean isCollected) {
@@ -63,5 +62,8 @@ public class Transfer extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Game Piece Stored", getGamePieceStored());
+    if (noteSensor.getMeasurement() != null) {
+      SmartDashboard.putNumber("Laser Can Distance", noteSensor.getMeasurement().distance_mm);
+    }
   }
 }
