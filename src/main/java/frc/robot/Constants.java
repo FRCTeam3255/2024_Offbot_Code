@@ -51,11 +51,13 @@ import frc.robot.subsystems.StateMachine.TargetState;
 public final class Constants {
   public static final Measure<Voltage> MAX_VOLTAGE = Units.Volts.of(12);
 
-  // TODO: Update w/ real motor names
   public static final String[] PDH_DEVICES = {
-      "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-      "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
-      "20", "21", "22", "23" };
+      "Back Right Steer (0)", "Back Right Drive (1)", "Radio Auxiliary Power (2)", "GrappleCAN (3)", "(4)", "LEDS (5)",
+      "Transfer Roller (6)", "Shooter Pivot(7)",
+      "Back Left Steer (8)", "Back Left Drive (9)",
+      "Front Left Steer (10)", "Front Left Drive (11)", "(12)", "Drainpipe (13)", "Elevator (14)", "Shooter Right (15)",
+      "Shooter Left (16)", "Intake (17)", "Front Right Steer (18)", "Front Right Drive (19)",
+      "Swerve CANCoders & Pigeon (20)", "Radio POE (21)", "RoboRIO Power (22)", "(23)" };
 
   public static final boolean ENABLE_PDH_LOGGING = true;
 
