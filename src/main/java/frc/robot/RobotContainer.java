@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -67,8 +69,9 @@ public class RobotContainer {
   public final static StateMachine subStateMachine = new StateMachine(subClimber, subDrivetrain,
       subElevator, subIntake, subLEDs, subTransfer, subShooter);
 
+  private final Trigger falseTrigger = new Trigger(() -> false);
   private final Trigger gamePieceStoredTrigger = new Trigger(() -> subTransfer.getGamePieceStored());
-  private final Trigger gamePieceCollectedTrigger = new Trigger(() -> subIntake.getGamePieceCollected());
+  private final Trigger gamePieceCollectedTrigger = falseTrigger;
 
   private final BooleanSupplier readyToShootOperator = (() -> (subDrivetrain.isDrivetrainFacingSpeaker()
       || subDrivetrain.isDrivetrainFacingShuffle())
@@ -94,15 +97,29 @@ public class RobotContainer {
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();
 
+  private static PowerDistribution PDH = new PowerDistribution(1, ModuleType.kRev);
+
   public RobotContainer() {
     conDriver.setLeftDeadband(constControllers.DRIVER_LEFT_STICK_DEADBAND);
 
-    subDrivetrain
-        .setDefaultCommand(
-            new Drive(subDrivetrain, subStateMachine, conDriver.axis_LeftY, conDriver.axis_LeftX, conDriver.axis_RightX,
-                conDriver.btn_LeftBumper, conDriver.btn_RightBumper, conDriver.btn_RightTrigger,
-                conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A,
-                conDriver.btn_X, conDriver.btn_LeftTrigger));
+    if (constControllers.SOLO_DRIVER) {
+      subDrivetrain
+          .setDefaultCommand(
+              new Drive(subDrivetrain, subStateMachine, conDriver.axis_LeftY, conDriver.axis_LeftX,
+                  conDriver.axis_RightX,
+                  conDriver.btn_LeftBumper, falseTrigger, falseTrigger,
+                  falseTrigger, falseTrigger, falseTrigger,
+                  falseTrigger, falseTrigger));
+
+    } else {
+      subDrivetrain
+          .setDefaultCommand(
+              new Drive(subDrivetrain, subStateMachine, conDriver.axis_LeftY, conDriver.axis_LeftX,
+                  conDriver.axis_RightX,
+                  conDriver.btn_LeftBumper, conDriver.btn_RightBumper, conDriver.btn_RightTrigger,
+                  conDriver.btn_Y, conDriver.btn_B, conDriver.btn_A,
+                  conDriver.btn_X, conDriver.btn_LeftTrigger));
+    }
 
     // - Manual Triggers -
     gamePieceStoredTrigger
@@ -153,7 +170,11 @@ public class RobotContainer {
 
     SmartDashboard.putNumber("Preload Only Delay", 0);
 
-    configureDriverBindings(conDriver);
+    if (constControllers.SOLO_DRIVER) {
+      configureSoloDriverBindings(conDriver);
+    } else {
+      configureDriverBindings(conDriver);
+    }
     configureOperatorBindings(conOperator);
     configureTestBindings(conTestOperator);
 
@@ -169,6 +190,80 @@ public class RobotContainer {
     controller.btn_East.whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKE_SOURCE)))
         .onFalse(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE))
             .unless(() -> comIntakeSource.getIntakeSourceGamePiece()));
+  }
+
+  private void configureSoloDriverBindings(SN_XboxController controller) {
+    // Reset Pose
+    controller.btn_Start.onTrue(
+        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(constField.getFieldPositions().get()[6].toPose2d())));
+
+    // -- States --
+    // Intake
+    controller.btn_LeftTrigger
+        .whileTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.INTAKING)))
+        .onFalse(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.NONE))
+            .unless(gamePieceStoredTrigger));
+
+    // Shoot
+    controller.btn_RightTrigger.whileTrue(
+        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.SHOOTING)))
+        .onFalse(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.NONE))
+            .unless(gamePieceStoredTrigger));
+
+    // Prep with vision
+    controller.btn_RightBumper.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
+        .onTrue(Commands
+            .deferredProxy(
+                () -> subStateMachine.tryState(RobotState.PREP_VISION)));
+
+    // Ejecting
+    controller.btn_Back.whileTrue(Commands.deferredProxy(
+        () -> subStateMachine.tryState(RobotState.EJECTING)))
+        .onFalse(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.NONE)));
+
+    // Prep spike
+    controller.btn_X.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPIKE)))
+        .onTrue(
+            Commands.deferredProxy(
+                () -> subStateMachine.tryState(RobotState.PREP_SPIKE)));
+
+    controller.btn_B.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_AMP)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_AMP)));
+
+    controller.btn_Y.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SUB_BACKWARDS)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_SUB_BACKWARDS)));
+
+    // "Unalive Shooter"
+    controller.btn_A.onTrue(
+        Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.PREP_NONE))
+            .alongWith(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_NONE))))
+        .onFalse(Commands.runOnce(() -> subShooter.setShootingNeutralOutput()));
+
+    // Prep subwoofer
+    controller.btn_South.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SPEAKER)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_SPEAKER)));
+
+    // Prep wing
+    controller.btn_North.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_WING)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_WING)));
+
+    // Prep shuffle
+    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
+        .onTrue(Commands.deferredProxy(
+            () -> subStateMachine.tryState(RobotState.PREP_SHUFFLE)));
+
+    // Game Piece Override
+    controller.btn_East.onTrue(Commands.runOnce(() -> subTransfer.setGamePieceCollected(true))
+        .alongWith(Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.STORE_FEEDER))));
+
   }
 
   private void configureOperatorBindings(SN_XboxController controller) {
@@ -316,6 +411,26 @@ public class RobotContainer {
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).ignoringDisable(true);
   }
 
+  // -- PDH --
+  /**
+   * Updates the values supplied to the PDH to SmartDashboard. Should be called
+   * periodically.
+   */
+  public static void logPDHValues() {
+    SmartDashboard.putNumber("PDH/Input Voltage", PDH.getVoltage());
+    SmartDashboard.putBoolean("PDH/Is Switchable Channel Powered", PDH.getSwitchableChannel());
+    SmartDashboard.putNumber("PDH/Total Current", PDH.getTotalCurrent());
+    SmartDashboard.putNumber("PDH/Total Power", PDH.getTotalPower());
+    SmartDashboard.putNumber("PDH/Total Energy", PDH.getTotalEnergy());
+
+    if (Constants.ENABLE_PDH_LOGGING) {
+      for (int i = 0; i < Constants.PDH_DEVICES.length; i++) {
+        SmartDashboard.putNumber("PDH/" + Constants.PDH_DEVICES[i] + " Current", PDH.getCurrent(i));
+      }
+    }
+  }
+
+  // -- LEDS --
   public void setDisabledLEDs() {
     subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_1, 0);
     subLEDs.setLEDAnimation(constLEDs.DISABLED_COLOR_2, 1);
