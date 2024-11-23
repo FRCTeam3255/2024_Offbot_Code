@@ -29,6 +29,7 @@ import frc.robot.RobotMap.mapControllers;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.commands.GamePieceRumble;
+import frc.robot.commands.LongShotRapidFire;
 import frc.robot.commands.ManualElevator;
 import frc.robot.commands.Autos.Centerline;
 import frc.robot.commands.Autos.PreloadOnly;
@@ -218,6 +219,8 @@ public class RobotContainer {
         .onTrue(Commands
             .deferredProxy(
                 () -> subStateMachine.tryState(RobotState.PREP_VISION)));
+
+    controller.btn_LeftBumper.whileTrue(new LongShotRapidFire(subStateMachine, subIntake, subShooter, subTransfer));
 
     // Ejecting
     controller.btn_Back.whileTrue(Commands.deferredProxy(

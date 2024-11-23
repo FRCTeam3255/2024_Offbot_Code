@@ -91,7 +91,7 @@ public class Shooter extends SubsystemBase {
     rightConfig.Slot0 = constShooter.RIGHT_PID_SLOT_0_FAST;
     rightConfig.Slot1 = constShooter.RIGHT_PID_SLOT_1_SLOW;
 
-    rightConfig.MotionMagic.MotionMagicCruiseVelocity = 60;
+    rightConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
     rightConfig.MotionMagic.MotionMagicAcceleration = 600;
     rightConfig.MotionMagic.MotionMagicJerk = 6000;
     rightMotor.getConfigurator().apply(rightConfig);

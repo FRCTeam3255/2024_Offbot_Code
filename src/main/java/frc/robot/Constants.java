@@ -71,7 +71,7 @@ public final class Constants {
     public static final double DRIVER_GP_COLLECTED_RUMBLE = 0.3;
     public static final double OPERATOR_GP_COLLECTED_RUMBLE = 0.3;
 
-    public static final boolean SOLO_DRIVER = false;
+    public static final boolean SOLO_DRIVER = true;
   }
 
   public static class constDrivetrain {
@@ -418,8 +418,11 @@ public final class Constants {
         Units.RotationsPerSecond.of(10), Units.RotationsPerSecond.of(10), Units.Meters.of(0.46));
     public static final ShooterPositionGroup PREP_SUB_BACKWARDS = new ShooterPositionGroup(Units.Degrees.of(111),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0.46));
-    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(34),
-        Units.RotationsPerSecond.of(30), Units.RotationsPerSecond.of(30), Units.Meters.of(0));
+    // THE REAL PREP SHUFFLE
+    // public static final ShooterPositionGroup PREP_SHUFFLE = new
+    // ShooterPositionGroup(Units.Degrees.of(34),
+    // Units.RotationsPerSecond.of(30), Units.RotationsPerSecond.of(30),
+    // Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SUB = new ShooterPositionGroup(Units.Degrees.of(45),
         Units.RotationsPerSecond.of(35), Units.RotationsPerSecond.of(35), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_SPIKE = new ShooterPositionGroup(Units.Degrees.of(27),
@@ -428,6 +431,11 @@ public final class Constants {
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
     public static final ShooterPositionGroup PREP_WING = new ShooterPositionGroup(Units.Degrees.of(10.5),
         Units.RotationsPerSecond.of(60), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
+    public static final ShooterPositionGroup LONG_SHOT = new ShooterPositionGroup(Units.Degrees.of(12),
+        Units.RotationsPerSecond.of(63), Units.RotationsPerSecond.of(45), Units.Meters.of(0));
+    // Note Ring Toss Preset
+    public static final ShooterPositionGroup PREP_SHUFFLE = new ShooterPositionGroup(Units.Degrees.of(45),
+        Units.RotationsPerSecond.of(25), Units.RotationsPerSecond.of(25), Units.Meters.of(0));
 
     public static final ShooterPositionGroup CLIMBING = new ShooterPositionGroup(Units.Degrees.of(115),
         Units.RotationsPerSecond.of(-30), Units.RotationsPerSecond.of(-30), constElevator.FORWARD_LIMIT);
