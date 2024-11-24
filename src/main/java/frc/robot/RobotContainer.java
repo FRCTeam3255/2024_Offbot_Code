@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 
 import com.frcteam3255.joystick.SN_XboxController;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -377,6 +378,8 @@ public class RobotContainer {
         subClimber, subDrivetrain, subElevator,
         subIntake, subLEDs, subTransfer, subShooter, readyToShootAuto, false));
     SmartDashboard.putData(autoChooser);
+
+    autoChooser.addOption("TESTING TESTING Wing Only Up", new PathPlannerAuto("PsW3W2W1"));
   }
 
   public Command getAutonomousCommand() {

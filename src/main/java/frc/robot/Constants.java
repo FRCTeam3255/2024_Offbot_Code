@@ -71,7 +71,7 @@ public final class Constants {
     public static final double DRIVER_GP_COLLECTED_RUMBLE = 0.3;
     public static final double OPERATOR_GP_COLLECTED_RUMBLE = 0.3;
 
-    public static final boolean SOLO_DRIVER = false;
+    public static final boolean SOLO_DRIVER = true;
   }
 
   public static class constDrivetrain {
@@ -356,7 +356,7 @@ public final class Constants {
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
     public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 
-    public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(0.5);
+    public static final Measure<Time> AUTO_PREP_NONE_DELAY = Units.Seconds.of(0.3);
 
     public static final Measure<Dimensionless> INTAKE_SOURCE_SPEED = Units.Percent.of(-0.3);
     public static final Measure<Velocity<Angle>> EJECTING_SPEED = Units.RotationsPerSecond.of(-10);

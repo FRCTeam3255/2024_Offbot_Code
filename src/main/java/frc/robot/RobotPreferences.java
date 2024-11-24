@@ -62,7 +62,7 @@ public class RobotPreferences {
     public static final SN_DoublePreference driveKv = new SN_DoublePreference("driveKv", (1 / driveSpeed.getValue()));
 
     // This PID is implemented on the Drivetrain subsystem
-    public static final double autoDriveP = 5;
+    public static final double autoDriveP = 6;
     public static final double autoDriveI = 0;
     public static final double autoDriveD = 0;
 

@@ -74,7 +74,7 @@ public class WingOnly extends SequentialCommandGroup {
         // subStateMachine, subClimber,
         // subDrivetrain, subElevator, subIntake, subLEDs, subTransfer, subShooter))
         // .until(() -> subTransfer.getGamePieceStored()).withTimeout(1),
-        Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.INTAKING)),
+        Commands.runOnce(() -> subStateMachine.setRobotState(RobotState.STORE_FEEDER)),
         Commands.runOnce(() -> subTransfer.setGamePieceCollected(true)),
 
         Commands.deferredProxy(shootSequence),

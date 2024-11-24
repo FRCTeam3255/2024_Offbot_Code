@@ -51,7 +51,19 @@
       "rotateFast": false
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 1.6,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 5.0,
+        "maxAngularVelocity": 520.0,
+        "maxAngularAcceleration": 750.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "W2",
@@ -72,10 +84,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 520.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 3.5,
+    "maxAcceleration": 5.5,
+    "maxAngularVelocity": 500.0,
+    "maxAngularAcceleration": 750.0
   },
   "goalEndState": {
     "velocity": 0,
@@ -88,5 +100,5 @@
     "rotation": -24.779999999999973,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

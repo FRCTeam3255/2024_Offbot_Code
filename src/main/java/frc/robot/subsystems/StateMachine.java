@@ -166,6 +166,7 @@ public class StateMachine extends SubsystemBase {
           case PREP_NONE:
           case CLIMBING:
           case SHOOTING:
+          case NONE:
             return new Shooting(subStateMachine, subElevator, subShooter, subTransfer, subIntake);
         }
         break;
