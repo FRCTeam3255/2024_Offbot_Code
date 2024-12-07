@@ -105,13 +105,15 @@ public class Drivetrain extends SN_SuperSwerve {
     driveConfiguration.Slot0.kI = prefDrivetrain.driveI.getValue();
     driveConfiguration.Slot0.kD = prefDrivetrain.driveD.getValue();
 
+    driveConfiguration.CurrentLimits.StatorCurrentLimitEnable = constDrivetrain.DRIVE_ENABLE_STATOR_CURRENT_LIMITING;
+    driveConfiguration.CurrentLimits.StatorCurrentLimit = constDrivetrain.DRIVE_STATOR_CURRENT_LIMIT;
+
     driveConfiguration.CurrentLimits.SupplyCurrentLimitEnable = constDrivetrain.DRIVE_ENABLE_CURRENT_LIMITING;
-    driveConfiguration.CurrentLimits.SupplyCurrentThreshold = constDrivetrain.DRIVE_CURRENT_THRESH;
     driveConfiguration.CurrentLimits.SupplyCurrentLimit = constDrivetrain.DRIVE_CURRENT_LIMIT;
     driveConfiguration.CurrentLimits.SupplyTimeThreshold = constDrivetrain.DRIVE_CURRENT_TIME_THRESH;
 
-    driveConfiguration.CurrentLimits.StatorCurrentLimitEnable = constDrivetrain.DRIVE_ENABLE_STATOR_CURRENT_LIMITING;
-    driveConfiguration.CurrentLimits.StatorCurrentLimit = constDrivetrain.DRIVE_STATOR_CURRENT_LIMIT;
+    driveConfiguration.Voltage.PeakForwardVoltage = constDrivetrain.DRIVE_PEAK_FORWARD_VOLTAGE;
+    driveConfiguration.Voltage.PeakReverseVoltage = constDrivetrain.DRIVE_PEAK_REVERSE_VOLTAGE;
 
     driveConfiguration.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.1;
     driveConfiguration.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.1;
@@ -121,10 +123,15 @@ public class Drivetrain extends SN_SuperSwerve {
     steerConfiguration.Slot0.kI = prefDrivetrain.steerI.getValue();
     steerConfiguration.Slot0.kD = prefDrivetrain.steerD.getValue();
 
+    steerConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
+    steerConfiguration.CurrentLimits.StatorCurrentLimit = 80;
+
     steerConfiguration.CurrentLimits.SupplyCurrentLimitEnable = constDrivetrain.STEER_ENABLE_CURRENT_LIMITING;
     steerConfiguration.CurrentLimits.SupplyCurrentThreshold = constDrivetrain.STEER_CURRENT_THRESH;
-    steerConfiguration.CurrentLimits.SupplyCurrentLimit = constDrivetrain.STEER_CURRENT_LIMIT;
     steerConfiguration.CurrentLimits.SupplyTimeThreshold = constDrivetrain.STEER_CURRENT_TIME_THRESH;
+
+    steerConfiguration.Voltage.PeakForwardVoltage = 12.0;
+    steerConfiguration.Voltage.PeakReverseVoltage = -12.0;
 
     steerConfiguration.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.1;
     steerConfiguration.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.1;

@@ -114,10 +114,13 @@ public class Shooter extends SubsystemBase {
     pivotConfig.MotionMagic.MotionMagicJerk = 1600;
 
     // - Current Limits -
-    pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = constShooter.PIVOT_ENABLE_CURRENT_LIMITING;
-    pivotConfig.CurrentLimits.SupplyCurrentThreshold = constShooter.PIVOT_CURRENT_THRESH;
-    pivotConfig.CurrentLimits.SupplyCurrentLimit = constShooter.PIVOT_CURRENT_LIMIT;
+    pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    pivotConfig.CurrentLimits.SupplyCurrentThreshold = 40;
+    pivotConfig.CurrentLimits.SupplyCurrentLimit = 40;
     pivotConfig.CurrentLimits.SupplyTimeThreshold = constShooter.PIVOT_CURRENT_TIME_THRESH;
+
+    pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    pivotConfig.CurrentLimits.StatorCurrentLimit = 50;
 
     pivotMotor.getConfigurator().apply(pivotConfig);
   }
