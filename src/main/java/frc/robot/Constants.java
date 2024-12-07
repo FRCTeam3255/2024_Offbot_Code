@@ -26,6 +26,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.frcteam3255.components.swerve.SN_SwerveConstants;
 
+import au.grapplerobotics.LaserCan.TimingBudget;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -50,6 +51,16 @@ import frc.robot.subsystems.StateMachine.TargetState;
 public final class Constants {
   public static final Measure<Voltage> MAX_VOLTAGE = Units.Volts.of(12);
 
+  public static final String[] PDH_DEVICES = {
+      "Back Right Steer (0)", "Back Right Drive (1)", "Radio Auxiliary Power (2)", "GrappleCAN (3)", "(4)", "LEDS (5)",
+      "Transfer Roller (6)", "Shooter Pivot(7)",
+      "Back Left Steer (8)", "Back Left Drive (9)",
+      "Front Left Steer (10)", "Front Left Drive (11)", "(12)", "Drainpipe (13)", "Elevator (14)", "Shooter Right (15)",
+      "Shooter Left (16)", "Intake (17)", "Front Right Steer (18)", "Front Right Drive (19)",
+      "Swerve CANCoders & Pigeon (20)", "Radio POE (21)", "RoboRIO Power (22)", "(23)" };
+
+  public static final boolean ENABLE_PDH_LOGGING = true;
+
   public static class constControllers {
     public static final double DRIVER_LEFT_STICK_DEADBAND = 0.05;
     public static final boolean SILENCE_JOYSTICK_WARNINGS = true;
@@ -59,6 +70,8 @@ public final class Constants {
 
     public static final double DRIVER_GP_COLLECTED_RUMBLE = 0.3;
     public static final double OPERATOR_GP_COLLECTED_RUMBLE = 0.3;
+
+    public static final boolean SOLO_DRIVER = false;
   }
 
   public static class constDrivetrain {
@@ -622,6 +635,9 @@ public final class Constants {
 
   public static class constTransfer {
     public static final boolean NOTE_SENSOR_INVERT = true;
+    public static final Measure<Distance> PIECE_DETECTED_DIST_THRESH = Units.Millimeters.of(320);
+    public static final TimingBudget TIMING_BUDGET = TimingBudget.TIMING_BUDGET_20MS;
+
     public static final InvertedValue MOTOR_INVERT = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue FEEDER_NEUTRAL_MODE = NeutralModeValue.Brake;
 
@@ -689,7 +705,7 @@ public final class Constants {
         (LED_NUMBER / 2) - 5,
         TwinklePercent.Percent100,
         8);
-    public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 100, 0, 0, 0.5,
+    public static final TwinkleAnimation DISABLED_COLOR_2 = new TwinkleAnimation(255, 255, 0, 0, 0.5,
         (LED_NUMBER / 2),
         TwinklePercent.Percent100, (LED_NUMBER / 2) + 3);
 

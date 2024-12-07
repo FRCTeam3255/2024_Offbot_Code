@@ -8,7 +8,11 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import au.grapplerobotics.ConfigurationFailedException;
+import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.LaserCan.Measurement;
+import au.grapplerobotics.LaserCan.TimingBudget;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.constTransfer;
@@ -17,14 +21,14 @@ import frc.robot.RobotMap.mapTransfer;
 public class Transfer extends SubsystemBase {
   TalonFX feederMotor;
   TalonFXConfiguration feederConfig = new TalonFXConfiguration();
-  DigitalInput noteSensor;
+  LaserCan noteSensor;
   boolean hasGamePiece;
 
   /** Creates a new Transfer. */
   public Transfer() {
     feederMotor = new TalonFX(mapTransfer.TRANSFER_MOTOR_CAN, "rio");
 
-    noteSensor = new DigitalInput(mapTransfer.NOTE_SENSOR_DIO);
+    noteSensor = new LaserCan(mapTransfer.NOTE_SENSOR_CAN);
 
     configure();
   }
@@ -40,6 +44,13 @@ public class Transfer extends SubsystemBase {
     feederConfig.CurrentLimits.SupplyTimeThreshold = constTransfer.CURRENT_TIME_THRESH;
 
     feederMotor.getConfigurator().apply(feederConfig);
+
+    try {
+      noteSensor.setTimingBudget(constTransfer.TIMING_BUDGET);
+    } catch (ConfigurationFailedException e) {
+      System.out.println("LaserCAN could not be initialized :<");
+
+    }
   }
 
   public void setFeederSpeed(double speed) {
@@ -51,8 +62,16 @@ public class Transfer extends SubsystemBase {
   }
 
   public boolean getGamePieceStored() {
-    boolean noteSensorValue = (constTransfer.NOTE_SENSOR_INVERT) ? !noteSensor.get() : noteSensor.get();
-    return (noteSensorValue || hasGamePiece);
+    Measurement measurement = noteSensor.getMeasurement();
+    if (hasGamePiece) {
+      return hasGamePiece;
+    }
+
+    if (measurement != null) {
+      return measurement.distance_mm <= constTransfer.PIECE_DETECTED_DIST_THRESH.in(Units.Millimeters);
+    }
+
+    return false;
   }
 
   public void setGamePieceCollected(boolean isCollected) {
@@ -65,5 +84,10 @@ public class Transfer extends SubsystemBase {
     SmartDashboard.putBoolean("Game Piece Stored", getGamePieceStored());
     SmartDashboard.putNumber("Transfer/Supply Current", feederMotor.getSupplyCurrent().getValueAsDouble());
     SmartDashboard.putNumber("Transfer/Stator Current", feederMotor.getStatorCurrent().getValueAsDouble());
+    if (noteSensor.getMeasurement() != null) {
+      SmartDashboard.putNumber("Transfer/Laser Can/Distance", noteSensor.getMeasurement().distance_mm);
+      SmartDashboard.putNumber("Transfer/Laser Can/Ambient Light", noteSensor.getMeasurement().ambient);
+      SmartDashboard.putNumber("Transfer/Laser Can/Timing Budget", noteSensor.getMeasurement().budget_ms);
+    }
   }
 }

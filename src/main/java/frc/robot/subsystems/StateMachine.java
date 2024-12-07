@@ -24,11 +24,29 @@ import frc.robot.commands.States.StoreFeeder;
 public class StateMachine extends SubsystemBase {
   public static RobotState currentState;
   public static TargetState currentTargetState;
+  Climber subClimber;
+  Drivetrain subDrivetrain;
+  Elevator subElevator;
+  Intake subIntake;
+  LEDs subLEDs;
+  Transfer subTransfer;
+  Shooter subShooter;
+  StateMachine subStateMachine = this;
 
   /** Creates a new StateMachine. */
-  public StateMachine() {
+  public StateMachine(Climber subClimber,
+      Drivetrain subDrivetrain, Elevator subElevator, Intake subIntake, LEDs subLEDs, Transfer subTransfer,
+      Shooter subShooter) {
     currentState = RobotState.NONE;
     currentTargetState = TargetState.PREP_NONE;
+
+    this.subClimber = subClimber;
+    this.subDrivetrain = subDrivetrain;
+    this.subElevator = subElevator;
+    this.subIntake = subIntake;
+    this.subLEDs = subLEDs;
+    this.subTransfer = subTransfer;
+    this.subShooter = subShooter;
   }
 
   public void setRobotState(RobotState robotState) {
@@ -59,9 +77,7 @@ public class StateMachine extends SubsystemBase {
    *                     possible from your current state
    * @return The Command to run for that desired state
    */
-  public Command tryState(RobotState desiredState, StateMachine subStateMachine, Climber subClimber,
-      Drivetrain subDrivetrain, Elevator subElevator, Intake subIntake, LEDs subLEDs, Transfer subTransfer,
-      Shooter subShooter) {
+  public Command tryState(RobotState desiredState) {
 
     // TODO: Write this functionality in a later pr
     if (isGivenStateTargetState(desiredState)) {
