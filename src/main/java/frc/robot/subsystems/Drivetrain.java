@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.frcteam3255.components.swerve.SN_SuperSwerve;
 import com.frcteam3255.components.swerve.SN_SwerveModule;
 import com.pathplanner.lib.util.PIDConstants;
@@ -26,6 +27,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
@@ -41,6 +43,7 @@ public class Drivetrain extends SN_SuperSwerve {
   private static TalonFXConfiguration steerConfiguration = new TalonFXConfiguration();
   private static PIDController yawSnappingController;
   private static String[] moduleNames = { "Front Left", "Front Right", "Back Left", "Back Right" };
+  VoltageOut voltageRequest;
 
   StructPublisher<Pose2d> robotPosePublisher = NetworkTableInstance.getDefault()
       .getStructTopic("/SmartDashboard/Drivetrain/Robot Pose", Pose2d.struct).publish();
@@ -92,6 +95,8 @@ public class Drivetrain extends SN_SuperSwerve {
         () -> constField.isRedAlliance(),
         Robot.isSimulation());
 
+    voltageRequest = new VoltageOut(0);
+
   }
 
   @Override
@@ -100,10 +105,15 @@ public class Drivetrain extends SN_SuperSwerve {
     driveConfiguration.Slot0.kI = prefDrivetrain.driveI.getValue();
     driveConfiguration.Slot0.kD = prefDrivetrain.driveD.getValue();
 
+    driveConfiguration.CurrentLimits.StatorCurrentLimitEnable = constDrivetrain.DRIVE_ENABLE_STATOR_CURRENT_LIMITING;
+    driveConfiguration.CurrentLimits.StatorCurrentLimit = constDrivetrain.DRIVE_STATOR_CURRENT_LIMIT;
+
     driveConfiguration.CurrentLimits.SupplyCurrentLimitEnable = constDrivetrain.DRIVE_ENABLE_CURRENT_LIMITING;
-    driveConfiguration.CurrentLimits.SupplyCurrentThreshold = constDrivetrain.DRIVE_CURRENT_THRESH;
     driveConfiguration.CurrentLimits.SupplyCurrentLimit = constDrivetrain.DRIVE_CURRENT_LIMIT;
     driveConfiguration.CurrentLimits.SupplyTimeThreshold = constDrivetrain.DRIVE_CURRENT_TIME_THRESH;
+
+    driveConfiguration.Voltage.PeakForwardVoltage = constDrivetrain.DRIVE_PEAK_FORWARD_VOLTAGE;
+    driveConfiguration.Voltage.PeakReverseVoltage = constDrivetrain.DRIVE_PEAK_REVERSE_VOLTAGE;
 
     driveConfiguration.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.1;
     driveConfiguration.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.1;
@@ -113,10 +123,15 @@ public class Drivetrain extends SN_SuperSwerve {
     steerConfiguration.Slot0.kI = prefDrivetrain.steerI.getValue();
     steerConfiguration.Slot0.kD = prefDrivetrain.steerD.getValue();
 
+    steerConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
+    steerConfiguration.CurrentLimits.StatorCurrentLimit = 80;
+
     steerConfiguration.CurrentLimits.SupplyCurrentLimitEnable = constDrivetrain.STEER_ENABLE_CURRENT_LIMITING;
     steerConfiguration.CurrentLimits.SupplyCurrentThreshold = constDrivetrain.STEER_CURRENT_THRESH;
-    steerConfiguration.CurrentLimits.SupplyCurrentLimit = constDrivetrain.STEER_CURRENT_LIMIT;
     steerConfiguration.CurrentLimits.SupplyTimeThreshold = constDrivetrain.STEER_CURRENT_TIME_THRESH;
+
+    steerConfiguration.Voltage.PeakForwardVoltage = 12.0;
+    steerConfiguration.Voltage.PeakReverseVoltage = -12.0;
 
     steerConfiguration.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.1;
     steerConfiguration.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.1;
@@ -275,6 +290,11 @@ public class Drivetrain extends SN_SuperSwerve {
       SmartDashboard.putNumber(
           "Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Absolute Encoder Raw Value (Rotations)",
           mod.getRawAbsoluteEncoder());
+
+      SmartDashboard.putNumber("Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Stator Current",
+          mod.driveMotor.getStatorCurrent().getValueAsDouble());
+      SmartDashboard.putNumber("Drivetrain/Module " + moduleNames[mod.moduleNumber] + "/Supply Current",
+          mod.driveMotor.getSupplyCurrent().getValueAsDouble());
     }
 
     robotPosePublisher.set(getPose());
