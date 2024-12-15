@@ -79,9 +79,9 @@ public class Drivetrain extends SN_SuperSwerve {
             prefDrivetrain.measurementStdDevsPosition.getValue(),
             prefDrivetrain.measurementStdDevsHeading.getValue()),
         VecBuilder.fill(
-            prefVision.multiTagStdDevsPosition.getValue(),
-            prefVision.multiTagStdDevsPosition.getValue(),
-            prefVision.multiTagStdDevsHeading.getValue()),
+            prefVision.megaTag2StdDevsPosition.getValue(),
+            prefVision.megaTag2StdDevsPosition.getValue(),
+            prefVision.megaTag2StdDevsHeading.getValue()),
         new PIDConstants(prefDrivetrain.autoDriveP,
             prefDrivetrain.autoDriveI,
             prefDrivetrain.autoDriveD),
