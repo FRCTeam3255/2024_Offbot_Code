@@ -12,6 +12,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -26,6 +27,7 @@ import frc.robot.Constants.constField;
 import frc.robot.Constants.constLEDs;
 import frc.robot.Constants.constShooter;
 import frc.robot.RobotMap.mapControllers;
+import frc.robot.RobotPreferences.prefVision;
 import frc.robot.commands.AddVisionMeasurement;
 import frc.robot.commands.Drive;
 import frc.robot.commands.GamePieceRumble;
@@ -409,6 +411,23 @@ public class RobotContainer {
   public static Command AddVisionMeasurement() {
     return new AddVisionMeasurement(subDrivetrain, subLimelight)
         .withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).ignoringDisable(true);
+  }
+
+  public void setMegaTag2(boolean setMegaTag2) {
+
+    if (setMegaTag2) {
+      subDrivetrain.swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(
+          prefVision.megaTag2StdDevsPosition.getValue(),
+          prefVision.megaTag2StdDevsPosition.getValue(),
+          prefVision.megaTag2StdDevsHeading.getValue()));
+    } else {
+      // Use MegaTag 1
+      subDrivetrain.swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(
+          prefVision.megaTag1StdDevsPosition.getValue(),
+          prefVision.megaTag1StdDevsPosition.getValue(),
+          prefVision.megaTag1StdDevsHeading.getValue()));
+    }
+    subLimelight.setMegaTag2(setMegaTag2);
   }
 
   // -- PDH --

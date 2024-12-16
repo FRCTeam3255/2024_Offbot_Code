@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_robotContainer.subStateMachine.setRobotState(RobotState.NONE);
     m_robotContainer.subStateMachine.setTargetState(TargetState.PREP_NONE);
+    m_robotContainer.setMegaTag2(false);
 
     Shooter.hasZeroed = false;
     Elevator.hasZeroed = false;
@@ -81,6 +82,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    m_robotContainer.setMegaTag2(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     bothSubsystemsZeroed = Shooter.hasZeroed && Elevator.hasZeroed;
 
@@ -106,6 +108,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     bothSubsystemsZeroed = Shooter.hasZeroed && Elevator.hasZeroed;
+    m_robotContainer.setMegaTag2(true);
 
     RobotContainer.checkForManualZeroing().cancel();
 

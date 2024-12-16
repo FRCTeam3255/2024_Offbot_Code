@@ -63,10 +63,6 @@ public class WingOnly extends SequentialCommandGroup {
     shootSequence = () -> new ShootSequence(subStateMachine, subClimber, subDrivetrain, subElevator, subIntake,
         subLEDs, subTransfer, subShooter, readyToShoot);
     addCommands(
-        // Resetting pose
-        Commands.runOnce(() -> subDrivetrain.resetPoseToPose(
-            getInitialPose().get())),
-
         // -- PRELOAD --
         Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)),
 

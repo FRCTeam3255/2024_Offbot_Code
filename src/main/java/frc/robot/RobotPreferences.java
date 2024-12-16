@@ -85,23 +85,18 @@ public class RobotPreferences {
   }
 
   public static final class prefVision {
-    /**
-     * <p>
-     * Pose estimator standard deviation for vision data using Multi-tag
-     * <p>
-     * <b>Units:</b> Meters
-     */
-    public static final SN_DoublePreference multiTagStdDevsPosition = new SN_DoublePreference(
-        "multiTagStdDevsPosition", 0.7);
+    public static final SN_DoublePreference megaTag2StdDevsPosition = new SN_DoublePreference(
+        "megaTag2StdDevsPosition", 0.7);
 
-    /**
-     * <p>
-     * Pose estimator standard deviation for vision data using Multi-Tag
-     * </p>
-     * <b>Units:</b> Radians
-     */
-    public static final SN_DoublePreference multiTagStdDevsHeading = new SN_DoublePreference(
-        "multiTagStdDevsHeading", 9999999);
+    public static final SN_DoublePreference megaTag2StdDevsHeading = new SN_DoublePreference(
+        "megaTag2StdDevsHeading", 9999999);
+
+    public static final SN_DoublePreference megaTag1StdDevsPosition = new SN_DoublePreference(
+        "megaTag1StdDevsPosition", 0.3);
+
+    public static final SN_DoublePreference megaTag1StdDevsHeading = new SN_DoublePreference(
+        "megaTag1StdDevsHeading", 0.1);
+
   }
 
   public static final class prefIntake {

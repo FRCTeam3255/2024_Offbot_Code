@@ -17,12 +17,17 @@ import frc.robot.Constants.constLimelight;
 
 public class Limelight extends SubsystemBase {
   PoseEstimate lastEstimate = new PoseEstimate();
+  private boolean useMegaTag2 = false;
 
   public Limelight() {
   }
 
   public PoseEstimate getPoseEstimate() {
     return lastEstimate;
+  }
+
+  public void setMegaTag2(boolean useMegaTag2) {
+    this.useMegaTag2 = useMegaTag2;
   }
 
   /**
@@ -34,6 +39,11 @@ public class Limelight extends SubsystemBase {
    * @return True if the estimate should be rejected
    */
   public boolean rejectUpdate(PoseEstimate poseEstimate, Measure<Velocity<Angle>> gyroRate) {
+    // We only use MegaTag 1 in disabled, so we have full faith in our position
+    if (!useMegaTag2 && (poseEstimate.tagCount != 0)) {
+      return false;
+    }
+
     // Angular velocity is too high to have accurate vision
     if (gyroRate.compareTo(constLimelight.MAX_ANGULAR_VELOCITY) > 0) {
       return true;
@@ -56,7 +66,13 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    PoseEstimate currentEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    PoseEstimate currentEstimate;
+    if (useMegaTag2) {
+      currentEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    } else {
+      currentEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    }
+
     if (currentEstimate != null) {
       lastEstimate = currentEstimate;
     }
