@@ -92,10 +92,10 @@ public class RobotPreferences {
         "megaTag2StdDevsHeading", 9999999);
 
     public static final SN_DoublePreference megaTag1StdDevsPosition = new SN_DoublePreference(
-        "megaTag2StdDevsPosition", 0.3);
+        "megaTag1StdDevsPosition", 0.3);
 
     public static final SN_DoublePreference megaTag1StdDevsHeading = new SN_DoublePreference(
-        "megaTag2StdDevsHeading", 0.1);
+        "megaTag1StdDevsHeading", 0.1);
 
   }
 
