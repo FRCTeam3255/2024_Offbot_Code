@@ -65,18 +65,19 @@ public class Elevator extends SubsystemBase {
     elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     elevatorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = constElevator.BACKWARD_LIMIT.in(Units.Meters);
 
-    elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = constElevator.ELEVATOR_ENABLE_CURRENT_LIMITING;
-    elevatorConfig.CurrentLimits.SupplyCurrentLimit = constElevator.ELEVATOR_CURRENT_LIMIT;
-    elevatorConfig.CurrentLimits.SupplyCurrentThreshold = constElevator.ELEVATOR_CURRENT_THRESH;
-    elevatorConfig.CurrentLimits.SupplyTimeThreshold = constElevator.ELEVATOR_CURRENT_TIME_THRESH;
+    elevatorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    elevatorConfig.CurrentLimits.SupplyCurrentLimit = 40;
+    elevatorConfig.CurrentLimits.SupplyCurrentThreshold = 40;
+    elevatorConfig.CurrentLimits.SupplyTimeThreshold = 0.01;
 
     elevatorMotor.getConfigurator().apply(elevatorConfig);
 
     // -- Drainpipe Motor --
-    drainpipeConfig.CurrentLimits.SupplyCurrentLimitEnable = constElevator.DRAINPIPE_ENABLE_CURRENT_LIMITING;
-    drainpipeConfig.CurrentLimits.SupplyCurrentLimit = constElevator.DRAINPIPE_CURRENT_LIMIT;
-    drainpipeConfig.CurrentLimits.SupplyCurrentThreshold = constElevator.DRAINPIPE_CURRENT_THRESH;
-    drainpipeConfig.CurrentLimits.SupplyTimeThreshold = constElevator.DRAINPIPE_CURRENT_TIME_THRESH;
+    drainpipeConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    drainpipeConfig.CurrentLimits.StatorCurrentLimit = 80;
+
+    drainpipeConfig.Voltage.PeakForwardVoltage = 12.0;
+    drainpipeConfig.Voltage.PeakReverseVoltage = -12.0;
 
     drainpipeMotor.getConfigurator().apply(drainpipeConfig);
   }

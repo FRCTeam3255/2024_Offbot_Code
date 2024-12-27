@@ -38,10 +38,11 @@ public class Transfer extends SubsystemBase {
     feederConfig.MotorOutput.Inverted = constTransfer.MOTOR_INVERT;
     feederConfig.MotorOutput.NeutralMode = constTransfer.FEEDER_NEUTRAL_MODE;
 
-    feederConfig.CurrentLimits.SupplyCurrentLimitEnable = constTransfer.ENABLE_CURRENT_LIMITING;
-    feederConfig.CurrentLimits.SupplyCurrentLimit = constTransfer.CURRENT_LIMIT;
-    feederConfig.CurrentLimits.SupplyCurrentThreshold = constTransfer.CURRENT_THRESH;
-    feederConfig.CurrentLimits.SupplyTimeThreshold = constTransfer.CURRENT_TIME_THRESH;
+    feederConfig.CurrentLimits.StatorCurrentLimitEnable = false;
+    feederConfig.CurrentLimits.StatorCurrentLimit = 80;
+
+    feederConfig.Voltage.PeakForwardVoltage = 12.0;
+    feederConfig.Voltage.PeakReverseVoltage = -12.0;
 
     feederMotor.getConfigurator().apply(feederConfig);
 
@@ -82,6 +83,8 @@ public class Transfer extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Game Piece Stored", getGamePieceStored());
+    SmartDashboard.putNumber("Transfer/Supply Current", feederMotor.getSupplyCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Transfer/Stator Current", feederMotor.getStatorCurrent().getValueAsDouble());
     if (noteSensor.getMeasurement() != null) {
       SmartDashboard.putNumber("Transfer/Laser Can/Distance", noteSensor.getMeasurement().distance_mm);
       SmartDashboard.putNumber("Transfer/Laser Can/Ambient Light", noteSensor.getMeasurement().ambient);
