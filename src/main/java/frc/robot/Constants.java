@@ -79,7 +79,7 @@ public final class Constants {
     // and
     // copy-pasting the Raw Absolute Encoder value
     public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = -0.283936;
-    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.250244;
+    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.413330;
     public static final double BACK_LEFT_ABS_ENCODER_OFFSET = -0.254395;
     public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = 0.418701;
 
@@ -100,7 +100,7 @@ public final class Constants {
      * </p>
      * <b>Units:</b> Meters Per Second
      */
-    public static final double THEORETICAL_MAX_DRIVE_SPEED = SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters;
+    public static final double THEORETICAL_MAX_DRIVE_SPEED = SN_SwerveConstants.MK4I.FALCON.L3.maxSpeedMeters;
 
     /**
      * <p>
@@ -116,10 +116,10 @@ public final class Constants {
     public static final double WHEELBASE = Units.Meters.convertFrom(19.75, Units.Inches);
 
     public static final SN_SwerveConstants SWERVE_CONSTANTS = new SN_SwerveConstants(
-        SN_SwerveConstants.MK4I.KRAKEN.L3.steerGearRatio,
+        SN_SwerveConstants.MK4I.FALCON.L3.steerGearRatio,
         WHEEL_CIRCUMFERENCE,
-        SN_SwerveConstants.MK4I.KRAKEN.L3.driveGearRatio,
-        SN_SwerveConstants.MK4I.KRAKEN.L3.maxSpeedMeters);
+        SN_SwerveConstants.MK4I.FALCON.L3.driveGearRatio,
+        SN_SwerveConstants.MK4I.FALCON.L3.maxSpeedMeters);
 
     public static final Measure<Angle> AUTO_PRELOAD_TAXI_ROTATION = Units.Degrees.of(119.62);
 
