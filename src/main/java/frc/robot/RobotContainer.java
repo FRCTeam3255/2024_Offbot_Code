@@ -258,9 +258,10 @@ public class RobotContainer {
             () -> subStateMachine.tryState(RobotState.PREP_WING)));
 
     // Prep shuffle
-    controller.btn_West.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
-        .onTrue(Commands.deferredProxy(
-            () -> subStateMachine.tryState(RobotState.PREP_SHUFFLE)));
+    // controller.btn_West.onTrue(Commands.runOnce(() ->
+    // subStateMachine.setTargetState(TargetState.PREP_SHUFFLE)))
+    // .onTrue(Commands.deferredProxy(
+    // () -> subStateMachine.tryState(RobotState.PREP_SHUFFLE)));
 
     // Game Piece Override
     controller.btn_East.onTrue(Commands.runOnce(() -> subTransfer.setGamePieceCollected(true))
@@ -286,10 +287,11 @@ public class RobotContainer {
             .unless(gamePieceStoredTrigger));
 
     // Prep with vision
-    controller.btn_RightBumper.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
-        .onTrue(Commands
-            .deferredProxy(
-                () -> subStateMachine.tryState(RobotState.PREP_VISION)));
+    // controller.btn_RightBumper.onTrue(Commands.runOnce(() ->
+    // subStateMachine.setTargetState(TargetState.PREP_VISION)))
+    // .onTrue(Commands
+    // .deferredProxy(
+    // () -> subStateMachine.tryState(RobotState.PREP_VISION)));
 
     // Ejecting
     controller.btn_LeftBumper.whileTrue(Commands.deferredProxy(
