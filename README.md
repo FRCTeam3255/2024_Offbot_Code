@@ -25,11 +25,12 @@ Interested in learning more about CRESCENDO? Visit [FIRST's website](https://www
 ## Code Details
 This offseason, we chose to control our robot using a state machine! Prior to staring our code, we mapped out and dicussed every state that our robot could be in during a match and how those states should interact with eachother. This allowed us to create a framework of our commands, sort of like pseudocode, before we even opened VSCode!
 
-Check out our diagram below or visit the interactive link [here.](https://www.tldraw.com/ro/DX06u039erL_iV6q0ARSn?d=v-1103.-1504.5212.2506.page)
+Check out our diagram below, [view in VSCode](StateMachineMap.tldr), or [visit the interactive web link](https://www.tldraw.com/ro/DX06u039erL_iV6q0ARSn?d=v-1103.-1504.5212.2506.page)
+
 ![State Machine Diagram](src/main/assets/StateMachine.png)
+
+*Viewing TLDraw in VSCode requires the [TLDraw VSCode Extension](https://marketplace.visualstudio.com/items?itemName=tldraw-org.tldraw-vscode)*
 
 ## Controls
 ![Controller Map](src/main/assets/Controller_Map.png)
 
-## Robot Simulation
-Coming Soon!
