@@ -78,9 +78,9 @@ public final class Constants {
     // In Rotations: Obtain by aligning all of the wheels in the correct direction
     // and
     // copy-pasting the Raw Absolute Encoder value
-    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = -0.283936;
-    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.413330;
-    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = -0.254395;
+    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = -0.286133;
+    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.244141;
+    public static final double BACK_LEFT_ABS_ENCODER_OFFSET = -0.254883;
     public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = 0.418701;
 
     public static final InvertedValue DRIVE_MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
