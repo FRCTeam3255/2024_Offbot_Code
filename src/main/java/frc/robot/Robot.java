@@ -55,6 +55,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+    Elastic.selectTab("Disabled");
+
     m_robotContainer.subStateMachine.setRobotState(RobotState.NONE);
     m_robotContainer.subStateMachine.setTargetState(TargetState.PREP_NONE);
     m_robotContainer.setMegaTag2(false);
@@ -82,6 +84,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    Elastic.selectTab("Autonomous");
+
     m_robotContainer.setMegaTag2(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     bothSubsystemsZeroed = Shooter.hasZeroed && Elevator.hasZeroed;
@@ -107,6 +111,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Elastic.selectTab("Teleoperated");
+
     bothSubsystemsZeroed = Shooter.hasZeroed && Elevator.hasZeroed;
     m_robotContainer.setMegaTag2(true);
 
@@ -140,5 +146,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testExit() {
+  }
+
+  public double getMatchTime() {
+    return DriverStation.getMatchTime();
   }
 }
