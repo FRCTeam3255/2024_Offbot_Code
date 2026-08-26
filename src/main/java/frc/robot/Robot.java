@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.frcteam3255.components.swerve.SN_SwerveModule;
 import com.frcteam3255.preferences.SN_Preferences;
 
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -29,6 +30,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    SN_SwerveModule.CANBusName = "rio";
+
     m_robotContainer = new RobotContainer();
 
     // Set out log file to be in its own folder

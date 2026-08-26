@@ -71,17 +71,17 @@ public final class Constants {
     public static final double DRIVER_GP_COLLECTED_RUMBLE = 0.3;
     public static final double OPERATOR_GP_COLLECTED_RUMBLE = 0.3;
 
-    public static final boolean SOLO_DRIVER = false;
+    public static final boolean SOLO_DRIVER = true;
   }
 
   public static class constDrivetrain {
     // In Rotations: Obtain by aligning all of the wheels in the correct direction
     // and
     // copy-pasting the Raw Absolute Encoder value
-    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = -0.283936;
-    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.413330;
     public static final double BACK_LEFT_ABS_ENCODER_OFFSET = -0.254395;
     public static final double BACK_RIGHT_ABS_ENCODER_OFFSET = 0.418701;
+    public static final double FRONT_LEFT_ABS_ENCODER_OFFSET = -0.283936;
+    public static final double FRONT_RIGHT_ABS_ENCODER_OFFSET = 0.243896;
 
     public static final InvertedValue DRIVE_MOTOR_INVERT = InvertedValue.CounterClockwise_Positive;
     public static final InvertedValue STEER_MOTOR_INVERT = InvertedValue.Clockwise_Positive;
@@ -356,7 +356,7 @@ public final class Constants {
     // - Other -
     public static final double MANUAL_PIVOT_PERCENTAGE = 0.2;
 
-    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(0.5);
+    public static final Measure<Velocity<Angle>> UP_TO_SPEED_TOLERANCE = Units.RotationsPerSecond.of(1000);
     public static final Measure<Dimensionless> PREP_TO_AMP_SPEED = Units.Percent.of(0.2);
     public static final Measure<Angle> TRANSFER_TO_AMPER_ANGLE = Units.Degrees.of(110);
 

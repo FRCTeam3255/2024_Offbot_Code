@@ -215,12 +215,11 @@ public class RobotContainer {
             () -> subStateMachine.tryState(RobotState.NONE))
             .unless(gamePieceStoredTrigger));
 
-    // Prep with vision
-    controller.btn_RightBumper.onTrue(Commands.runOnce(() -> subStateMachine.setTargetState(TargetState.PREP_VISION)))
-        .onTrue(Commands
-            .deferredProxy(
-                () -> subStateMachine.tryState(RobotState.PREP_VISION)));
-
+    // Inake from source
+    controller.btn_RightBumper
+        .whileTrue(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.INTAKE_SOURCE)))
+        .onFalse(Commands.deferredProxy(() -> subStateMachine.tryState(RobotState.NONE))
+            .unless(() -> comIntakeSource.getIntakeSourceGamePiece()));
     // Ejecting
     controller.btn_Back.whileTrue(Commands.deferredProxy(
         () -> subStateMachine.tryState(RobotState.EJECTING)))
